@@ -1,7 +1,8 @@
 package main
 
 import (
-	"net/http"      // HTTPサーバーを構築するため
+	"net/http" // HTTPサーバーを構築するため
+
 	"github.com/gin-gonic/gin" // ginです。webフレームワーク
 )
 
@@ -18,10 +19,10 @@ func healthHandler(c *gin.Context) {
 }
 
 func main() {
-  router := gin.Default()
-	
-	// GETメソッドかつ/health にリクエストが来たらこのルーティングが実行されて、healthHandlerが呼び出される
-  router.GET("/health", healthHandler)
+	router := gin.Default()
 
-  router.Run() // デフォルトで0.0.0.0:8080でリッスンします
+	// GETメソッドかつ/health にリクエストが来たらこのルーティングが実行されて、healthHandlerが呼び出される
+	router.GET("/health", healthHandler)
+
+	router.Run() // デフォルトで0.0.0.0:8080でリッスンします
 }
