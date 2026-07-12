@@ -3,5 +3,21 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile
+    volumes: 
+      - ./backend:/app
+    command: go run main.go
     ports:
       - "8080:8080"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/frontend
+      - node_modules:/frontend/node_modules
+    command: pnpm dev --host # --hostはhostマシーンからも接続するための設定.
+    ports:
+      - "5173:5173"
+
+volumes:
+  node_modules:
