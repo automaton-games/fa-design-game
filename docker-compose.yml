@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     volumes: 
       - ./backend:/app
-    command: go run main.go
+    command: go tool air # ホットリロードを実現するためにairを選択.
     ports:
       - "8080:8080"
   frontend:
