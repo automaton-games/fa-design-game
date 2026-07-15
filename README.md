@@ -89,9 +89,9 @@ DFAの受理
 - 2026-05-17: 延長した場合のMVP完成目標
 
 ## 開発メンバー
-- @lovemeasure：フロントエンド・バックエンド色々担当
-- @ymn2525 : バックエンドをちょろっと。勉強メインで頑張りたい
-- @kwryusei : チーム開発のGitの使い方を学びたい。
-- @kosuke215135：TypeScriptとGoに積極的に触れていきたい！
-- @Mekann2904：チーム開発に慣れたいです！
+- [@lovemeasure](https://github.com/lovemeasure)：フロントエンド・バックエンド色々担当
+- [@ymn2525](https://github.com/ymn2525)：バックエンドをちょろっと。勉強メインで頑張りたい
+- [@kwryusei](https://github.com/kwryusei)：チーム開発のGitの使い方を学びたい。
+- [@kosuke215135](https://github.com/kosuke215135)：TypeScriptとGoに積極的に触れていきたい！
+- [@Mekann2904](https://github.com/Mekann2904)：チーム開発に慣れたいです！
 - 追記予定
