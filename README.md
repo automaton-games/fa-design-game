@@ -2,9 +2,9 @@
 有限オートマトン版の競技プログラミング みたいなWebサイトのリポジトリです。
 
 名称及び略称
-- 日本語仮名称：有限オートマトン設計ゲーム
-- 英語仮名称：finite automaton design game
-- 英語略称：FADG
+- 日本語仮名称： 有限オートマトン設計ゲーム
+- 英語仮名称： finite automaton design game
+- 英語略称： FADG
 
 ## 概要
 ユーザーは問題文を読み、条件を満たす有限オートマトンをJSON形式で提出します。
@@ -59,11 +59,11 @@
 - データベース: MySQL
 - コンテナ: Docker / Docker Compose
 - プロジェクト管理: GitHub Issues / GitHub Projects / Pull Request
-- ブランチ戦略：GitHub Flow
+- ブランチ戦略： GitHub Flow
 
 
 ## 用語説明
-DFA：決定性有限オートマトン(Deterministic Finite Automaton)の略称です。
+DFA： 決定性有限オートマトン(Deterministic Finite Automaton)の略称です。
 ### DFAの定義
 DFA とは，以下の 5 つ組 $(Q, \Sigma, \delta, q_0, F)$ であって，次の性質を満たすものをいう。
 
@@ -81,16 +81,17 @@ DFAの受理
 開発環境のセットアップ手順は準備中です。
 
 ## 開発履歴・予定
-- 2026-04-24: @lovemeasure が何かを開発したいと思いたつ
-- 2026-04-26: 企画決定(有限オートマトン版の競技プログラミング)
-- 2026-04-27: 開発メンバーの募集開始
-- 2026-04-28: リポジトリの作成
-- 2026-05-10: MVP完成目標
-- 2026-05-17: 延長した場合のMVP完成目標
+- 2026-04-24： @lovemeasure が何かを開発したいと思いたつ
+- 2026-04-26： 企画決定(有限オートマトン版の競技プログラミング)
+- 2026-04-27： 開発メンバーの募集開始
+- 2026-04-28： リポジトリの作成
+- 2026-05-10： MVP完成目標
+- 2026-05-17： 延長した場合のMVP完成目標
 
 ## 開発メンバー
-- @lovemeasure：フロントエンド・バックエンド色々担当
-- @ymn2525 : バックエンドをちょろっと。勉強メインで頑張りたい
-- @kwryusei : チーム開発のGitの使い方を学びたい。
-- @kosuke215135：TypeScriptとGoに積極的に触れていきたい！
+- [@lovemeasure](https://github.com/lovemeasure)： フロントエンド・バックエンド色々担当
+- [@ymn2525](https://github.com/ymn2525)： バックエンドをちょろっと。勉強メインで頑張りたい
+- [@kwryusei](https://github.com/kwryusei)： チーム開発のGitの使い方を学びたい。
+- [@kosuke215135](https://github.com/kosuke215135)： TypeScriptとGoに積極的に触れていきたい！
+- [@Mekann2904](https://github.com/Mekann2904)： チーム開発に慣れたいです！
 - 追記予定
