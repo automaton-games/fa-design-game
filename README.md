@@ -67,11 +67,11 @@ DFA：決定性有限オートマトン(Deterministic Finite Automaton)の略称
 ### DFAの定義
 DFA とは，以下の 5 つ組 $(Q, \Sigma, \delta, q_0, F)$ であって，次の性質を満たすものをいう。
 
-- 状態集合：$Q$（有限集合）
-- 文字集合：$\Sigma$（有限集合）
-- 遷移関数：$\delta \colon Q \times \Sigma \to Q$
-- 開始状態：$q_0 \in Q$
-- 受理状態の集合：$F \subseteq Q$
+- 状態集合： $`Q`$（有限集合）
+- 文字集合： $`\Sigma`$（有限集合）
+- 遷移関数： $`\delta \colon Q \times \Sigma \to Q`$
+- 開始状態： $`q_0 \in Q`$
+- 受理状態の集合： $`F \subseteq Q`$
 
 DFAの受理
 - 準備中です。
@@ -91,9 +91,6 @@ DFAの受理
 ## 開発メンバー
 - @lovemeasure：フロントエンド・バックエンド色々担当
 - @ymn2525 : バックエンドをちょろっと。勉強メインで頑張りたい
-<<<<<<< HEAD
 - @kwryusei : チーム開発のGitの使い方を学びたい。
-=======
 - @kosuke215135：TypeScriptとGoに積極的に触れていきたい！
->>>>>>> main
 - 追記予定
