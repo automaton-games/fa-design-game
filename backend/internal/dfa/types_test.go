@@ -25,28 +25,20 @@ func TestDFA_JSON(t *testing.T) {
 		t.Fatalf("unmarshal failed: %v", err)
 	}
 
-	// startが"q0"であることを確認（.が「〜の中の」という意味）
-	if dfa.Start != "q0" {
-		t.Errorf("Expected start state 'q0', got '%s'", dfa.Start)
+	// 期待する DFA の完成形
+	want := DFA{
+		States:   []string{"q0", "q1"},
+		Alphabet: []string{"0", "1"},
+		Start:    "q0",
+		Accept:   []string{"q0"},
+		Transitions: map[string]map[string]string{
+			"q0": {"0": "q1", "1": "q1"},
+			"q1": {"0": "q0", "1": "q0"},
+		},
 	}
-	// states を確認
-	if !reflect.DeepEqual(dfa.States, []string{"q0", "q1"}) {
-		t.Errorf("States = %v, want %v", dfa.States, []string{"q0", "q1"})
-	}
-	// alphabet を確認
-	if !reflect.DeepEqual(dfa.Alphabet, []string{"0", "1"}) {
-		t.Errorf("Alphabet = %v, want %v", dfa.Alphabet, []string{"0", "1"})
-	}
-	// accept を確認
-	if !reflect.DeepEqual(dfa.Accept, []string{"q0"}) {
-		t.Errorf("Accept = %v, want %v", dfa.Accept, []string{"q0"})
-	}
-	// transitions を確認
-	expectedTransitions := map[string]map[string]string{
-		"q0": {"0": "q1", "1": "q1"},
-		"q1": {"0": "q0", "1": "q0"},
-	}
-	if !reflect.DeepEqual(dfa.Transitions, expectedTransitions) {
-		t.Errorf("Transitions = %v, want %v", dfa.Transitions, expectedTransitions)
+
+	// 構造体全体を一度に比較する
+	if !reflect.DeepEqual(dfa, want) {
+		t.Errorf("DFA = %#v, want %#v", dfa, want)
 	}
 }
