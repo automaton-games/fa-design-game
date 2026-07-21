@@ -1,6 +1,6 @@
 # Projectのステータスを動かす
 
-> [← 目次に戻る](README.md) | [前: 08 レビューを受けてマージする](08-review-and-merge.md)
+> [← 目次に戻る](README.md) | [前: 09 レビューを受けてマージする](09-review-and-merge.md)
 
 ## このページで扱うこと
 

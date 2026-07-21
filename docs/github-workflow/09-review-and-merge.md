@@ -1,6 +1,6 @@
 # レビューを受けてマージする
 
-> [← 目次に戻る](README.md) | [前: 07 Pull Requestを作る](07-create-pull-request.md) | [次: 09 Projectのステータスを動かす](09-update-project-status.md)
+> [← 目次に戻る](README.md) | [前: 08 Pull Requestを作る](08-create-pull-request.md) | [次: 10 Projectのステータスを動かす](10-update-project-status.md)
 
 ## このページで扱うこと
 
@@ -46,7 +46,7 @@ PRを作ったら、レビュアーがコメントを書くのを待ちます。
 
 レビューで指摘を受けたら、同じブランチで修正します。
 修正は、これまでと同じ手順でコミットしてpushします。
-詳しくは [06 変更をコミットしてpushする](06-commit-and-push.md) を見てください。
+詳しくは [06 コミットする](06-commit.md) を見てください。
 
 pushすると、変更が同じPRに自動で追加されます。
 新しくPRを作り直す必要はありません。
@@ -85,9 +85,9 @@ git branch -d <ブランチ名>
 ## 次のステップ
 
 マージまで終わったら、進捗をProjectに反映します。
-[09 Projectのステータスを動かす](09-update-project-status.md) へ進んでください。
+[10 Projectのステータスを動かす](10-update-project-status.md) へ進んでください。
 
 ## 関連
 
-- [06 変更をコミットしてpushする](06-commit-and-push.md)
+- [06 コミットする](06-commit.md)
 - [CONTRIBUTING.md - 開発の流れ](../CONTRIBUTING.md#開発の流れ)

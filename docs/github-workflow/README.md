@@ -11,10 +11,11 @@
 3. [Issueを選ぶ](03-choose-issue.md)：作業の単位であるIssueを探し、読む
 4. [自分をAssignする](04-assign-yourself.md)：担当者として名乗りを上げる
 5. [作業ブランチを作る](05-create-branch.md)：mainから分岐して作業場所を確保する
-6. [変更をコミットしてpushする](06-commit-and-push.md)：変更を記録し、リモートに送る
-7. [Pull Requestを作る](07-create-pull-request.md)：変更をレビューに出す
-8. [レビューを受けてマージする](08-review-and-merge.md)：指摘に対応し、mainに取り込む
-9. [Projectのステータスを動かす](09-update-project-status.md)：進捗をボードに反映する
+6. [コミットする](06-commit.md)：変更を記録する
+7. [pushする](07-push.md)：変更をリモートに送る
+8. [Pull Requestを作る](08-create-pull-request.md)：変更をレビューに出す
+9. [レビューを受けてマージする](09-review-and-merge.md)：指摘に対応し、mainに取り込む
+10. [Projectのステータスを動かす](10-update-project-status.md)：進捗をボードに反映する
 
 1と2で全体像と用語を押さえたあと、3からが実際の手順です。
 各ページの先頭には「← 目次に戻る」と、前後のページへのリンクがあり、行き来できます。

@@ -1,6 +1,6 @@
 # Pull Requestを作る
 
-> [← 目次に戻る](README.md) | [前: 06 変更をコミットしてpushする](06-commit-and-push.md) | [次: 08 レビューを受けてマージする](08-review-and-merge.md)
+> [← 目次に戻る](README.md) | [前: 07 pushする](07-push.md) | [次: 09 レビューを受けてマージする](09-review-and-merge.md)
 
 ## このページで扱うこと
 
@@ -62,7 +62,7 @@ PR作成画面では、テンプレートが自動で入力されます。
 ## 次のステップ
 
 PRを作ったら、レビューに対応します。
-[08 レビューを受けてマージする](08-review-and-merge.md) へ進んでください。
+[09 レビューを受けてマージする](09-review-and-merge.md) へ進んでください。
 
 ## 関連
 

@@ -1,6 +1,6 @@
 # 作業ブランチを作る
 
-> [← 目次に戻る](README.md) | [前: 04 自分をAssignする](04-assign-yourself.md) | [次: 06 変更をコミットしてpushする](06-commit-and-push.md)
+> [← 目次に戻る](README.md) | [前: 04 自分をAssignする](04-assign-yourself.md) | [次: 06 コミットする](06-commit.md)
 
 ## このページで扱うこと
 
@@ -65,7 +65,7 @@ git branch --show-current
 ## 次のステップ
 
 ブランチができたら、ファイルを編集して変更を記録します。
-[06 変更をコミットしてpushする](06-commit-and-push.md) へ進んでください。
+[06 コミットする](06-commit.md) へ進んでください。
 
 ## 関連
 
