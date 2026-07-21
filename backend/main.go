@@ -1,19 +1,19 @@
 package main
 
 import (
+	"log"
 	"net/http" // HTTPサーバーを構築するため
 
 	"github.com/gin-gonic/gin" // ginです。webフレームワーク
 )
 
-type HealthResponse struct {
+type healthResponse struct {
 	Status string `json:"status"`
 }
 
-// HealthAPIの実装
+// healthHandlerは、HTTPサーバーの生存確認用レスポンスを返す
 func healthHandler(c *gin.Context) {
-	c.Header("Content-Type", "application/json; charset=utf-8")
-	c.JSON(http.StatusOK, HealthResponse{
+	c.JSON(http.StatusOK, healthResponse{
 		Status: "ok",
 	})
 }
@@ -21,8 +21,12 @@ func healthHandler(c *gin.Context) {
 func main() {
 	router := gin.Default()
 
-	// GETメソッドかつ/health にリクエストが来たらこのルーティングが実行されて、healthHandlerが呼び出される
+	// GET /healthへのリクエストをhealthHandlerで処理する
 	router.GET("/health", healthHandler)
 
-	router.Run() // デフォルトで0.0.0.0:8080でリッスンします
+	// Ginのrouter.Runは、待受アドレスを省略すると0.0.0.0:8080でHTTPサーバーを起動する
+	// HTTPサーバーの起動に失敗した場合は、エラーをログに出力してプログラムを終了する
+	if err := router.Run(); err != nil {
+		log.Fatalf("failed to start HTTP server: %v", err)
+	}
 }
