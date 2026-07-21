@@ -39,7 +39,7 @@ git push -u origin HEAD
 
 `-u` で対応づけを一度設定すれば、次からは `git push` だけで送れます。
 
-実際の様子を、このドキュメントを作っているブランチ `docs/13-add-github-workflow` で見ます。
+初回pushの前後を、このドキュメントを作っているブランチ `docs/13-add-github-workflow` を例に見ます。
 
 まず `git remote -v` で、originが指す先を確認します。
 

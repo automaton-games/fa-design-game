@@ -45,6 +45,8 @@ PR作成画面では、テンプレートが自動で入力されます。
 - このPRでIssueを閉じたいとき：`Closes #Issue番号`
 - 関連として紐づけるだけのとき：`Refs #Issue番号`
 
+テンプレートには両方の行があるため、使わないほうは削除します。
+
 `Closes` を書いておくと、PRがマージされたときにIssueも自動で閉じます。
 このリポジトリでは「1 Issue = 1 Pull Request」を基本にするため、多くの場合 `Closes` を使います。
 紐づけの規則は [CONTRIBUTING.md の「Pull Requestの運用」](../CONTRIBUTING.md#pull-requestの運用) を参照してください。
