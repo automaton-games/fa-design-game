@@ -41,15 +41,16 @@ git switch -c docs/13-add-github-workflow
 ```
 
 ブランチ名の付け方は [CONTRIBUTING.md の「ブランチ運用」](../CONTRIBUTING.md#ブランチ運用) で規定しています。
-`type` はIssueのラベルに合わせて選びます。主な `type` は次のとおりです。
+`type` はIssueのラベルに合わせて選びます。
+主な `type` は次のとおりです。
 
 | ブランチ名のtype | Issueラベル | 使う場面 |
 |---|---|---|
 | `fix` | `bug` | 不具合や意図しない動作の修正 |
 | `feature` | `feature` | 新機能の追加や既存機能の改善 |
-| `docs` | `documentation` | ドキュメントの追加・修正 |
+| `docs` | `documentation` | ドキュメントの追加と修正 |
 | `refactor` | `refactor` | 外部の動作を変えないコード整理 |
-| `test` | `test` | テストの追加・修正 |
+| `test` | `test` | テストの追加と修正 |
 | `chore` | `chore` | 開発環境、設定、依存関係、CIなどの保守作業 |
 
 ## いまのブランチを確認する
