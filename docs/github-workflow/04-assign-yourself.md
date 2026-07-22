@@ -21,7 +21,7 @@ Assignには2つの役割があります。
 
 Issue本文の右上にある `Assignees` を開きます。
 
-<!-- スクリーンショット: Assigneesの設定画面 -->
+![Assigneesの設定画面](images/assignees-setting.png)
 
 表示された一覧から自分のアカウントを選びます。
 Assignees欄に自分のアイコンが表示されれば完了です。

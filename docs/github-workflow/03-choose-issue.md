@@ -24,7 +24,7 @@ Issueを選んで担当を決めると、誰が何をしているかがチーム
 リポジトリの `Issues` タブを開きます。
 既定ではOpen（未完了）のIssue一覧が表示されます。
 
-<!-- スクリーンショット: IssuesタブとOpenの一覧 -->
+![IssuesタブとOpenの一覧](images/issues-open-list.png)
 
 着手できそうなIssueを探します。
 次の点を確認してください。

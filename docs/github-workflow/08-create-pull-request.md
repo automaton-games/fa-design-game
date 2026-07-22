@@ -20,7 +20,9 @@ Pull Requestを作ると、変更をレビューに出せます。
 pushした直後、GitHubの該当ブランチの画面に `Compare & pull request` ボタンが出ます。
 これを押すとPR作成画面が開きます。
 
-<!-- スクリーンショット: Compare & pull request ボタン -->
+![Compare & pull request ボタン（1）](images/compare-pull-request-01.png)
+![Compare & pull request ボタン（2）](images/compare-pull-request-02.png)
+![Compare & pull request ボタン（3）](images/compare-pull-request-03.png)
 
 ボタンが見当たらなければ、リポジトリの `Pull requests` タブから `New pull request` を選び、ブランチを指定します。
 

@@ -17,7 +17,8 @@ Assignした時点、PRを作った時点、マージした時点で、カード
 リポジトリの `Projects` タブから、使っているボードを開きます。
 自分のIssueのカードを探します。
 
-<!-- スクリーンショット: Projectsボード -->
+![Projectsボード（1）](images/projects-board-01.png)
+![Projectsボード（2）](images/projects-board-02.png)
 
 ## カードを動かす
 
