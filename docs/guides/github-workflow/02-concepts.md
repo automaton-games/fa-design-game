@@ -51,5 +51,5 @@
 
 ## 関連
 
-- [CONTRIBUTING.md - 開発の流れ](../CONTRIBUTING.md#開発の流れ)
-- [CONTRIBUTING.md - ブランチ運用](../CONTRIBUTING.md#ブランチ運用)
+- [CONTRIBUTING.md - 開発の流れ](../../../CONTRIBUTING.md#開発の流れ)
+- [CONTRIBUTING.md - ブランチ運用](../../../CONTRIBUTING.md#ブランチ運用)

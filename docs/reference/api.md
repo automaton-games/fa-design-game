@@ -19,9 +19,11 @@ MVPで使用するAPIを定義します。
 
 バックエンドが起動しているか確認するためのAPIです。
 
+```json
 {
   "status": "ok"
 }
+```
 
 
 ## GET /api/contests
@@ -30,6 +32,7 @@ MVPで使用するAPIを定義します。
 
 MVPではPracticeだけなので、例えばこうです。
 
+```json
 {
   "contests": [
     {
@@ -39,11 +42,13 @@ MVPではPracticeだけなので、例えばこうです。
     }
   ]
 }
+```
 
 ## GET /api/contests/practice/tasks
 
 Practiceコンテストの問題一覧を取得します。
 
+```json
 {
   "tasks": [
     {
@@ -56,6 +61,7 @@ Practiceコンテストの問題一覧を取得します。
     }
   ]
 }
+```
 
 ## GET /api/contests/practice/tasks/:taskID
 
@@ -63,16 +69,20 @@ Practiceコンテストの問題一覧を取得します。
 
 例えば：
 
+```http
 GET /api/contests/practice/tasks/A
+```
 
 レスポンス例：
 
+```json
 {
   "id": "A",
   "title": "文字列長が偶数",
   "statement": "0と1からなる文字列Sについて、Sの長さが偶数であるとき受理するDFAを構成してください。",
   "alphabet": ["0", "1"]
 }
+```
 
 正解DFAはフロントエンドに返さない方がよいです。
 バックエンド側だけで持っておきます。
@@ -83,10 +93,13 @@ DFAを提出します。
 
 例えば：
 
+```http
 POST /api/contests/practice/tasks/A/submit
+```
 
 リクエスト：
 
+```json
 {
   "dfa": {
     "states": ["q0", "q1"],
@@ -99,10 +112,13 @@ POST /api/contests/practice/tasks/A/submit
     }
   }
 }
+```
 
 レスポンス例：
 
+```json
 {
   "accepted": true,
   "message": "Accepted"
 }
+```

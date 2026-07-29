@@ -92,4 +92,4 @@ git branch -d <ブランチ名>
 ## 関連
 
 - [06 コミットする](06-commit.md)
-- [CONTRIBUTING.md - 開発の流れ](../CONTRIBUTING.md#開発の流れ)
+- [CONTRIBUTING.md - 開発の流れ](../../../CONTRIBUTING.md#開発の流れ)

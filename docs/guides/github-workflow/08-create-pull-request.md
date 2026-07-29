@@ -51,7 +51,7 @@ PR作成画面では、テンプレートが自動で入力されます。
 
 `Closes` を書いておくと、PRがマージされたときにIssueも自動で閉じます。
 このリポジトリでは「1 Issue = 1 Pull Request」を基本にするため、多くの場合 `Closes` を使います。
-紐づけの規則は [CONTRIBUTING.md の「Pull Requestの運用」](../CONTRIBUTING.md#pull-requestの運用) を参照してください。
+紐づけの規則は [CONTRIBUTING.md の「Pull Requestの運用」](../../../CONTRIBUTING.md#pull-requestの運用) を参照してください。
 
 ## レビュアーを指定する
 
@@ -70,4 +70,4 @@ PRを作ったら、レビューに対応します。
 
 ## 関連
 
-- [CONTRIBUTING.md - Pull Requestの運用](../CONTRIBUTING.md#pull-requestの運用)
+- [CONTRIBUTING.md - Pull Requestの運用](../../../CONTRIBUTING.md#pull-requestの運用)

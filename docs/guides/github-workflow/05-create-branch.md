@@ -40,7 +40,7 @@ git switch -c <type>/<issue番号>-<要約>
 git switch -c docs/13-add-github-workflow
 ```
 
-ブランチ名の付け方は [CONTRIBUTING.md の「ブランチ運用」](../CONTRIBUTING.md#ブランチ運用) で規定しています。
+ブランチ名の付け方は [CONTRIBUTING.md の「ブランチ運用」](../../../CONTRIBUTING.md#ブランチ運用) で規定しています。
 `type` はIssueのラベルに合わせて選びます。
 主な `type` は次のとおりです。
 
@@ -70,4 +70,4 @@ git branch --show-current
 
 ## 関連
 
-- [CONTRIBUTING.md - ブランチ運用](../CONTRIBUTING.md#ブランチ運用)
+- [CONTRIBUTING.md - ブランチ運用](../../../CONTRIBUTING.md#ブランチ運用)

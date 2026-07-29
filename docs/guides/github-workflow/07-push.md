@@ -89,4 +89,4 @@ pushすると、GitHubにPull Requestを作る案内が出ます。
 ## 関連
 
 - [06 コミットする](06-commit.md)：pushの前に変更をコミットする
-- [CONTRIBUTING.md - ブランチ運用](../CONTRIBUTING.md#ブランチ運用)
+- [CONTRIBUTING.md - ブランチ運用](../../../CONTRIBUTING.md#ブランチ運用)

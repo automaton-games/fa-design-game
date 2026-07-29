@@ -2,7 +2,7 @@
 
 このドキュメントでは、FA Design Game の開発に参加するときの基本的な進め方をまとめます。
 
-GitHubでの開発が初めての人は、先に [GitHubを使った開発手順](github-workflow/README.md) を読んでください。
+GitHubでの開発が初めての人は、先に [GitHubを使った開発手順](docs/guides/github-workflow/README.md) を読んでください。
 Issueの選び方からPull Requestのマージまでを、順を追って説明しています。
 このドキュメントは運用の規則をまとめた参照用で、手順の詳細は上記の手順書にあります。
 

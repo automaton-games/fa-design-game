@@ -41,4 +41,4 @@ Issueにコメントして管理者に相談してください。
 
 ## 関連
 
-- [CONTRIBUTING.md - Issueの運用](../CONTRIBUTING.md#issueの運用)
+- [CONTRIBUTING.md - Issueの運用](../../../CONTRIBUTING.md#issueの運用)
