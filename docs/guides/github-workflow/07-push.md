@@ -1,8 +1,8 @@
 # pushする
 
-> [← 目次に戻る](README.md) | [前: 06 コミットする](06-commit.md) | [次: 08 Pull Requestを作る](08-create-pull-request.md)
+> [← 目次に戻る](README.md) | [前：06 コミットする](06-commit.md) | [次：08 Pull Requestを作る](08-create-pull-request.md)
 
-## このページで扱うこと
+## pushの流れ
 
 **push** は、コミットした変更をリモート（GitHub）へ送る操作です。
 このページでは、コミットをpushする手順と、そのために必要な設定を説明します。
@@ -84,9 +84,9 @@ pushしたあと、もう一度 `git branch -vv` を見ます。
 ## 次のステップ
 
 pushすると、GitHubにPull Requestを作る案内が出ます。
-[08 Pull Requestを作る](08-create-pull-request.md) へ進んでください。
+[08 Pull Requestを作る](08-create-pull-request.md)へ進んでください。
 
 ## 関連
 
 - [06 コミットする](06-commit.md)：pushの前に変更をコミットする
-- [CONTRIBUTING.md - ブランチ運用](../../../CONTRIBUTING.md#ブランチ運用)
+- [CONTRIBUTING.md「ブランチ運用」](../../../CONTRIBUTING.md#ブランチ運用)

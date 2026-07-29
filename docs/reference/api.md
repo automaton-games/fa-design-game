@@ -2,22 +2,24 @@
 
 ## 概要
 
-MVPで使用するAPIを定義します。
+MVPで使用するAPIのエンドポイントを定義します。
 
 ## エンドポイント一覧
 
-| Method | Path | 説明 |
+| メソッド | パス | 説明 |
 |---|---|---|
-| GET | `/health` | ヘルスチェック |
-| GET | `/api/contests` | コンテスト一覧取得 |
-| GET | `/api/contests/practice` | Practiceコンテスト取得 |
-| GET | `/api/contests/practice/tasks` | Practiceコンテストの問題一覧取得 |
-| GET | `/api/contests/practice/tasks/:taskID` | 問題詳細取得 |
-| POST | `/api/contests/practice/tasks/:taskID/submit` | DFA提出 |
+| `GET` | `/health` | ヘルスチェック |
+| `GET` | `/api/contests` | コンテスト一覧の取得 |
+| `GET` | `/api/contests/practice` | Practiceコンテストの取得 |
+| `GET` | `/api/contests/practice/tasks` | Practiceコンテストの問題一覧の取得 |
+| `GET` | `/api/contests/practice/tasks/:taskID` | 問題詳細の取得 |
+| `POST` | `/api/contests/practice/tasks/:taskID/submit` | DFAの提出 |
 
-## GET /health
+## `GET /health`
 
-バックエンドが起動しているか確認するためのAPIです。
+バックエンドの稼働状態を確認します。
+
+### レスポンス例
 
 ```json
 {
@@ -25,12 +27,12 @@ MVPで使用するAPIを定義します。
 }
 ```
 
-
-## GET /api/contests
+## `GET /api/contests`
 
 コンテスト一覧を取得します。
+MVPでは、Practiceコンテストのみを返します。
 
-MVPではPracticeだけなので、例えばこうです。
+### レスポンス例
 
 ```json
 {
@@ -44,9 +46,17 @@ MVPではPracticeだけなので、例えばこうです。
 }
 ```
 
-## GET /api/contests/practice/tasks
+## `GET /api/contests/practice`
+
+Practiceコンテストの情報を取得します。
+レスポンス形式は未定義です。
+実装前に、返却するフィールドとデータ形式を決める必要があります。
+
+## `GET /api/contests/practice/tasks`
 
 Practiceコンテストの問題一覧を取得します。
+
+### レスポンス例
 
 ```json
 {
@@ -63,17 +73,17 @@ Practiceコンテストの問題一覧を取得します。
 }
 ```
 
-## GET /api/contests/practice/tasks/:taskID
+## `GET /api/contests/practice/tasks/:taskID`
 
-問題詳細を取得します。
+指定した問題の詳細を取得します。
 
-例えば：
+### リクエスト例
 
 ```http
 GET /api/contests/practice/tasks/A
 ```
 
-レスポンス例：
+### レスポンス例
 
 ```json
 {
@@ -84,20 +94,19 @@ GET /api/contests/practice/tasks/A
 }
 ```
 
-正解DFAはフロントエンドに返さない方がよいです。
-バックエンド側だけで持っておきます。
+正解DFAは判定に使用する内部データです。
+フロントエンドには返さず、バックエンドで保持する設計を推奨します。
 
-## POST /api/contests/practice/tasks/:taskID/submit
+## `POST /api/contests/practice/tasks/:taskID/submit`
 
-DFAを提出します。
+指定した問題にDFAを提出します。
+DFAのデータ形式は、[DFA JSON形式](dfa-json-format.md)を参照してください。
 
-例えば：
+### リクエスト例
 
 ```http
 POST /api/contests/practice/tasks/A/submit
 ```
-
-リクエスト：
 
 ```json
 {
@@ -114,7 +123,7 @@ POST /api/contests/practice/tasks/A/submit
 }
 ```
 
-レスポンス例：
+### レスポンス例
 
 ```json
 {

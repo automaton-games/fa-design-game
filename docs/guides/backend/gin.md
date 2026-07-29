@@ -1,42 +1,71 @@
 # Ginの使い方
 
 ## Ginについて
-GinはGo言語（Golang）で書かれたWebフレームワークです。
-### 特徴
-- 高速
-- ミドルウェアサポート
-- クラッシュサポート
-- JSONバリデーション
-- ルートグルーピング
+
+Ginは、GoでWebアプリケーションを構築するためのフレームワークです。
+このプロジェクトでは、バックエンドのHTTPサーバーとAPIルーティングに使用します。
+
+### 主な特徴
+
+- 高速なHTTPルーティング
+- ミドルウェアのサポート
+- クラッシュリカバリー
+- JSONのバリデーション
+- ルートのグループ化
 - エラー管理
 - 組み込みレンダリング
-- 拡張可能
+- 機能の拡張
 
 ## 使用バージョン
-github.com/gin-gonic/gin v1.12.0
 
-## 実行方法
-`$ go run main.go`
+使用しているバージョンは、`github.com/gin-gonic/gin v1.12.0`です。
 
-`$ curl http://127.0.0.1:8080/health`
+## 起動方法
 
-これでhealthAPIを呼び出せます。
+通常の開発では、リポジトリのルートからDocker Composeでバックエンドを起動します。
 
+```bash
+docker compose up -d backend
+```
 
-## テストコマンド
+バックエンドだけをGoで直接起動する場合は、`backend`ディレクトリで次のコマンドを実行します。
+この方法では、ホストに対象バージョンのGoが必要です。
 
-新たなAPIやルーティングを追加した場合
+```bash
+go run main.go
+```
 
-`curl http://127.0.0.1:8080/path`
+## 動作確認
 
-POSTメソッドを利用するAPIを追加した場合は以下のように記述すればテストできます。
+ヘルスチェックAPIを呼び出します。
 
-`curl -X POST -H "Content-Type: application/json" -d '{"name": "太郎", "age": 30}' http://127.0.0.1:8080/path`
+```bash
+curl http://127.0.0.1:8080/health
+```
 
-- `-X` : メソッドを指定できます。
-- `-H` : ヘッダーを編集/追加できます。この例では`Content-Type`を`application/json`と指定し、送信するデータがJSON形式であることを指定しています。
-- `-d` : 実際のデータです。
+ほかの`GET`エンドポイントを確認する場合は、URLのパスを変更します。
 
+```bash
+curl http://127.0.0.1:8080/path
+```
 
-## 公式ドキュメント
-[Gin Web Framework](https://gin-gonic.com/ja/docs/)
+JSONを受け取る`POST`エンドポイントは、次のように確認できます。
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"name":"太郎","age":30}' \
+  http://127.0.0.1:8080/path
+```
+
+各オプションの役割は次のとおりです。
+
+- `-X`：HTTPメソッドを指定する
+- `-H`：リクエストヘッダーを指定する
+- `-d`：リクエストボディを指定する
+
+## 関連ドキュメント
+
+- [バックエンド開発ガイド](README.md)
+- [API仕様](../../reference/api.md)
+- [Gin公式ドキュメント](https://gin-gonic.com/ja/docs/)

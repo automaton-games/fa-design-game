@@ -17,9 +17,9 @@ MVPでは、以下のページを実装します。
 
 #### 目的
 
-初めて訪れたユーザーに、FA Design Game が何をするサイトかを伝えます。
+初めて訪れたユーザーに、FA Design Gameがどのようなサイトかを伝えます。
 
-#### 表示するもの
+#### 表示内容
 
 - サイト概要
 - チュートリアルページへのリンク
@@ -35,7 +35,7 @@ MVPでは、以下のページを実装します。
 
 ユーザーに、DFAと提出形式の基本を説明します。
 
-#### 表示するもの
+#### 表示内容
 
 - このサイトでやること
 - DFAの簡単な説明
@@ -53,12 +53,12 @@ MVPでは、以下のページを実装します。
 
 MVPでは、Practiceコンテストのみを表示します。
 
-#### 表示するもの
+#### 表示内容
 
 - 常設コンテスト一覧
   - Practice Contest
 
-#### MVP後に検討するもの
+#### MVP後の検討事項
 
 - 開催予定のコンテスト一覧
 - 開催中のコンテスト一覧
@@ -66,7 +66,7 @@ MVPでは、Practiceコンテストのみを表示します。
 
 #### 参考
 
-https://atcoder.jp/contests/
+- [AtCoderのコンテスト一覧](https://atcoder.jp/contests/)
 
 ---
 
@@ -78,13 +78,13 @@ Practiceコンテストの概要を表示します。
 
 MVPでは、Practiceコンテストを時間制限のない練習用問題セットとして扱います。
 
-#### 表示するもの
+#### 表示内容
 
 - Practiceコンテストの説明
 - 問題一覧ページへのリンク
 - チュートリアルページへのリンク
 
-#### MVP後に検討するもの
+#### MVP後の検討事項
 
 - コンテスト開始時刻
 - コンテスト終了時刻
@@ -95,7 +95,7 @@ MVPでは、Practiceコンテストを時間制限のない練習用問題セッ
 
 #### 参考
 
-https://atcoder.jp/contests/practice
+- [AtCoderの練習用コンテスト](https://atcoder.jp/contests/practice)
 
 ---
 
@@ -105,7 +105,7 @@ https://atcoder.jp/contests/practice
 
 Practiceコンテストに含まれる問題の一覧を表示します。
 
-#### 表示するもの
+#### 表示内容
 
 - 問題ID
 - 問題タイトル
@@ -121,7 +121,7 @@ Practiceコンテストに含まれる問題の一覧を表示します。
 
 #### 参考
 
-https://atcoder.jp/contests/practice/tasks
+- [AtCoderの練習用コンテストの問題一覧](https://atcoder.jp/contests/practice/tasks)
 
 ---
 
@@ -133,7 +133,7 @@ https://atcoder.jp/contests/practice/tasks
 
 MVPでは、問題文表示・提出・判定結果表示を同じページで行います。
 
-#### 表示するもの
+#### 表示内容
 
 - 問題ID
 - 問題タイトル
@@ -144,7 +144,7 @@ MVPでは、問題文表示・提出・判定結果表示を同じページで�
 - 判定結果
 - 不正解時の反例
 
-#### MVP後に検討するもの
+#### MVP後の検討事項
 
 - 提出結果一覧へのリンク
 - 解説へのリンク
@@ -153,7 +153,7 @@ MVPでは、問題文表示・提出・判定結果表示を同じページで�
 
 #### 参考
 
-https://atcoder.jp/contests/practice/tasks/practice_1
+- [AtCoderの練習問題](https://atcoder.jp/contests/practice/tasks/practice_1)
 
 ## 画面遷移
 
@@ -165,3 +165,4 @@ https://atcoder.jp/contests/practice/tasks/practice_1
     └── /contests/practice
         └── /contests/practice/tasks
             └── /contests/practice/tasks/:taskID
+```

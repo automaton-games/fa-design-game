@@ -1,89 +1,116 @@
 # 開発環境ガイド
-# 初回セットアップ
-dockerを作業PCにインストールしてください。
-Macの場合は[こちら](https://docs.docker.com/desktop/setup/install/mac-install/)からDocker Desktopをダウンロードしてください。
 
-以下のコマンドを実行するとコンテナが立ち上がります。
+## 初回セットアップ
+
+開発環境の起動にはDockerを使用します。
+作業するPCにDockerをインストールしてください。
+macOSでは、[Docker Desktopのインストール手順](https://docs.docker.com/desktop/setup/install/mac-install/)を参照できます。
+
+リポジトリのルートで、次のコマンドを実行します。
+
 ```bash
 docker compose up -d
 ```
-コンテナ起動後、`http://localhost:5173/`でブラウザからfrontendにアクセスできます。
-backendは`http://localhost:8080`で起動しています。ターミナルから動作確認したい場合は、例えば以下のように実行できます。
+
+コンテナが起動したら、次のURLにアクセスできます。
+
+- フロントエンド：<http://localhost:5173/>
+- バックエンド：<http://localhost:8080>
+
+バックエンドの稼働状態は、次のコマンドで確認できます。
+
 ```bash
 curl http://localhost:8080/health
 ```
 
-コンテナを停止する際は以下のコマンドを実行してください。
+## コンテナの停止と再ビルド
+
+コンテナを停止するには、次のコマンドを実行します。
+
 ```bash
 docker compose down
 ```
 
-Dockerfileに変更があった場合(pullで取り込んだ場合を含む)は、再ビルド付きで起動してください。
+Dockerfileを変更した場合や、Dockerfileの変更をpullで取り込んだ場合は、イメージを再ビルドして起動します。
+
 ```bash
 docker compose up -d --build
 ```
 
-# 開発の際に新たなパッケージを追加する場合
-開発環境はDocker Composeで統一しています。パッケージの追加・削除は**必ずコンテナ内で実行**してください。
+## 依存パッケージの管理
 
-## なぜコンテナ内で実行するのか
+開発環境はDocker Composeで統一しています。
+依存パッケージの追加と削除は、コンテナ内で実行してください。
 
-1. **frontendは必須**: `node_modules` はDockerボリュームにあるため、ホストで `pnpm add` してもコンテナ内には反映されません。また、ホスト(macOS)とコンテナ(Linux)ではネイティブモジュールのバイナリが非互換です。
-2. **バージョン統一**: コンテナ内のGo / Node / pnpmのバージョンで依存解決されるため、メンバー間の手元のバージョン違いでlockfileが変わる事故が起きません。
-3. **ホストにツール不要**: GoやpnpmをホストにインストールしていないメンバーでもDockerだけで作業できます。
+コンテナ内で操作する理由は次のとおりです。
 
-## パッケージの追加方法
+1. フロントエンドの`node_modules`はDockerボリュームに保存されるため、ホスト側の`node_modules`への変更はコンテナに反映されない
+2. コンテナ内のGo、Node.js、pnpmを使うことで、メンバー間のバージョン差を避けられる
+3. ホストにGoやpnpmをインストールせずに開発できる
 
-### Go(backend)
+### Goの依存パッケージ
+
+コンテナが起動している場合は、次のコマンドを実行します。
 
 ```bash
-# コンテナ起動中
 docker compose exec backend go get github.com/some/package
+```
 
-# コンテナ停止中(使い捨てコンテナで実行)
+コンテナが停止している場合は、使い捨てコンテナを使用します。
+
+```bash
 docker compose run --rm backend go get github.com/some/package
 ```
 
-関連コマンド:
+開発ツールを追加する場合は、次のコマンドを実行します。
 
 ```bash
-# 開発ツール(CLI)を追加する場合(airと同じ方式)
 docker compose exec backend go get -tool github.com/some/tool
+```
 
-# 使われていない依存の掃除(go.mod / go.sum の整理)
+不要な依存関係を削除し、`go.mod`と`go.sum`を整理するには、次のコマンドを実行します。
+
+```bash
 docker compose exec backend go mod tidy
 ```
 
-`go.mod` / `go.sum` はバインドマウント経由でホスト側にも反映されるので、そのままコミットしてください。
+`go.mod`と`go.sum`への変更は、バインドマウントを通じてホストにも反映されます。
+変更されたファイルはコミットしてください。
 
-### TypeScript(frontend)
+### TypeScriptの依存パッケージ
+
+コンテナが起動している場合は、次のコマンドを実行します。
 
 ```bash
-# コンテナ起動中
 docker compose exec frontend pnpm add package-name
+```
 
-# 開発時のみ使うもの(型定義、ビルドツールなど)は -D
+開発時だけ使用するパッケージは、`-D`オプションを付けます。
+
+```bash
 docker compose exec frontend pnpm add -D @types/package-name
+```
 
-# コンテナ停止中
+コンテナが停止している場合は、使い捨てコンテナを使用します。
+
+```bash
 docker compose run --rm frontend pnpm add package-name
 ```
 
-削除は `pnpm remove package-name`(同じく `exec` / `run --rm` 経由)。
+パッケージを削除する場合も、`pnpm remove package-name`を`exec`または`run --rm`で実行します。
 
-`package.json` / `pnpm-lock.yaml` はバインドマウントでホストに反映され、パッケージの実体は `node_modules` ボリュームに入ります。
+`package.json`と`pnpm-lock.yaml`への変更はホストにも反映されます。
+パッケージ本体は`node_modules`ボリュームに保存されます。
 
-## pull後の同期(パッケージを取り込む側)
+## pull後の依存パッケージの同期
 
-他のメンバーが追加したパッケージを取り込むときの手順です。
+フロントエンドの依存パッケージが更新されていた場合は、lockfileに合わせて`node_modules`を同期します。
 
 ```bash
-# frontend: lockfileに合わせてボリューム内のnode_modulesを同期(必須)
 docker compose exec frontend pnpm install --frozen-lockfile
-
-# backend: 何もしなくてよい(次回起動時にビルドが自動でダウンロードする)
 ```
 
-> **注意**: Goは足りない依存をビルド時に自動取得しますが、frontendは `pnpm install` を明示的に実行しないとボリューム内が古いままです。pull後にfrontendが起動しなくなったら、まずこれを疑ってください。
+`--frozen-lockfile`を付けると、`pnpm-lock.yaml`を書き換えず、内容に不整合があれば処理を停止します。
+依存パッケージを追加する`pnpm add`では、このオプションは不要です。
 
-`--frozen-lockfile` は「lockfileに書かれている通りにインストールし、不整合があればエラーで止める」オプションです。同期目的ではこれを付けることで、lockfileが意図せず書き換わるのを防げます(パッケージ追加時の `pnpm add` には不要です)。
+Goの依存パッケージは、次回のビルド時に自動でダウンロードされるため、pull後の同期操作は不要です。

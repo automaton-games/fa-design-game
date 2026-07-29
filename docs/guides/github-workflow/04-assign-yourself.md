@@ -1,8 +1,8 @@
 # 自分をAssignする
 
-> [← 目次に戻る](README.md) | [前: 03 Issueを選ぶ](03-choose-issue.md) | [次: 05 作業ブランチを作る](05-create-branch.md)
+> [← 目次に戻る](README.md) | [前：03 Issueを選ぶ](03-choose-issue.md) | [次：05 作業ブランチを作る](05-create-branch.md)
 
-## このページで扱うこと
+## 担当者を設定する流れ
 
 **Assign（アサイン）** は、Issueの担当者を設定する機能です。
 このページでは、自分を担当にする意味と手順を説明します。
@@ -37,8 +37,8 @@ Issueにコメントして管理者に相談してください。
 ## 次のステップ
 
 担当が決まったら、作業場所を確保します。
-[05 作業ブランチを作る](05-create-branch.md) へ進んでください。
+[05 作業ブランチを作る](05-create-branch.md)へ進んでください。
 
 ## 関連
 
-- [CONTRIBUTING.md - Issueの運用](../../../CONTRIBUTING.md#issueの運用)
+- [CONTRIBUTING.md「Issueの運用」](../../../CONTRIBUTING.md#issueの運用)

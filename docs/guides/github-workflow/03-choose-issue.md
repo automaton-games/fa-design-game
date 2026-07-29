@@ -1,8 +1,8 @@
 # Issueを選ぶ
 
-> [← 目次に戻る](README.md) | [次: 04 自分をAssignする](04-assign-yourself.md)
+> [← 目次に戻る](README.md) | [次：04 自分をAssignする](04-assign-yourself.md)
 
-## このページで扱うこと
+## Issueを選ぶまでの流れ
 
 Issueとは、GitHub上で作業を記録し、管理するためのものです。
 「この不具合を直す」「このドキュメントを書く」など、ひとまとまりの作業を1つのIssueとして扱います。
@@ -34,7 +34,7 @@ Issueを選んで担当を決めると、誰が何をしているかがチーム
 - Assignees：すでに誰かが担当していないか
 - `blocked` ラベル：今は着手できないIssueの印
 
-ラベルの意味は [CONTRIBUTING.md の「ラベル」](../../../CONTRIBUTING.md#ラベル) にまとまっています。
+ラベルの意味は[CONTRIBUTING.md の「ラベル」](../../../CONTRIBUTING.md#ラベル)にまとまっています。
 GitHub初心者は、`documentation` や `chore` など、コードを大きく変えないIssueから始めると着手しやすいです。
 
 ## Issueを読む
@@ -52,9 +52,9 @@ GitHub初心者は、`documentation` や `chore` など、コードを大きく�
 ## 次のステップ
 
 作業できそうなIssueが見つかったら、次は自分をAssignします。
-[04 自分をAssignする](04-assign-yourself.md) へ進んでください。
+[04 自分をAssignする](04-assign-yourself.md)へ進んでください。
 
 ## 関連
 
-- [CONTRIBUTING.md - Issueの運用](../../../CONTRIBUTING.md#issueの運用)
-- [CONTRIBUTING.md - ラベル](../../../CONTRIBUTING.md#ラベル)
+- [CONTRIBUTING.md「Issueの運用」](../../../CONTRIBUTING.md#issueの運用)
+- [CONTRIBUTING.md「ラベル」](../../../CONTRIBUTING.md#ラベル)

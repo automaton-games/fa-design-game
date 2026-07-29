@@ -1,8 +1,8 @@
 # GitとGitHubの基礎
 
-> [← 目次に戻る](README.md) | [前: 01 はじめに](01-introduction.md) | [次: 03 Issueを選ぶ](03-choose-issue.md)
+> [← 目次に戻る](README.md) | [前：01 はじめに](01-introduction.md) | [次：03 Issueを選ぶ](03-choose-issue.md)
 
-## このページで扱うこと
+## 学習の到達点
 
 ここでは、この手順書を読むために必要な基礎知識を説明します。
 具体的な手順に入る前に、開発が全体としてどう進むかを押さえます。
@@ -47,9 +47,9 @@
 ## 次のステップ
 
 基礎を押さえたら、最初の手順に進みます。
-[03 Issueを選ぶ](03-choose-issue.md) へ進んでください。
+[03 Issueを選ぶ](03-choose-issue.md)へ進んでください。
 
 ## 関連
 
-- [CONTRIBUTING.md - 開発の流れ](../../../CONTRIBUTING.md#開発の流れ)
-- [CONTRIBUTING.md - ブランチ運用](../../../CONTRIBUTING.md#ブランチ運用)
+- [CONTRIBUTING.md「開発の流れ」](../../../CONTRIBUTING.md#開発の流れ)
+- [CONTRIBUTING.md「ブランチ運用」](../../../CONTRIBUTING.md#ブランチ運用)
