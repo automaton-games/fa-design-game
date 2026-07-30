@@ -10,10 +10,18 @@ MVPで使用するAPIのエンドポイントを定義します。
 |---|---|---|
 | `GET` | `/health` | ヘルスチェック |
 | `GET` | `/api/contests` | コンテスト一覧の取得 |
-| `GET` | `/api/contests/practice` | Practiceコンテストの取得 |
-| `GET` | `/api/contests/practice/tasks` | Practiceコンテストの問題一覧の取得 |
-| `GET` | `/api/contests/practice/tasks/:taskID` | 問題詳細の取得 |
-| `POST` | `/api/contests/practice/tasks/:taskID/submit` | DFAの提出 |
+| `GET` | `/api/contests/:contestSlug` | コンテストの取得 |
+| `GET` | `/api/contests/:contestSlug/tasks` | コンテストの問題一覧の取得 |
+| `GET` | `/api/contests/:contestSlug/tasks/:taskCode` | 問題詳細の取得 |
+| `POST` | `/api/contests/:contestSlug/tasks/:taskCode/submit` | DFAの提出 |
+
+## 公開識別子
+
+コンテストの公開識別子には `slug`、問題の公開識別子には `code` を使用します。
+`slug` はURLでコンテストを指定する安定した値です。
+`code` はコンテスト内で問題を識別する値であり、異なるコンテストでは同じ値を使用できます。
+
+`id` は、将来データベースを導入した際の内部主キーを表す名前として予約します。
 
 ## `GET /health`
 
@@ -38,7 +46,7 @@ MVPでは、Practiceコンテストのみを返します。
 {
   "contests": [
     {
-      "id": "practice",
+      "slug": "practice",
       "title": "Practice Contest",
       "description": "練習用の常設コンテストです。"
     }
@@ -46,15 +54,31 @@ MVPでは、Practiceコンテストのみを返します。
 }
 ```
 
-## `GET /api/contests/practice`
+## `GET /api/contests/:contestSlug`
 
-Practiceコンテストの情報を取得します。
-レスポンス形式は未定義です。
-実装前に、返却するフィールドとデータ形式を決める必要があります。
+指定したコンテストの情報を取得します。
+MVPでは、`contestSlug` に `practice` を指定します。
 
-## `GET /api/contests/practice/tasks`
+### リクエスト例
 
-Practiceコンテストの問題一覧を取得します。
+```http
+GET /api/contests/practice
+```
+
+### レスポンス例
+
+```json
+{
+  "slug": "practice",
+  "title": "Practice Contest",
+  "description": "練習用の常設コンテストです。"
+}
+```
+
+## `GET /api/contests/:contestSlug/tasks`
+
+指定したコンテストの問題一覧を取得します。
+MVPでは、`contestSlug` に `practice` を指定します。
 
 ### レスポンス例
 
@@ -62,20 +86,20 @@ Practiceコンテストの問題一覧を取得します。
 {
   "tasks": [
     {
-      "id": "A",
+      "code": "A",
       "title": "文字列長が偶数"
     },
     {
-      "id": "B",
+      "code": "B",
       "title": "1の個数が3の倍数"
     }
   ]
 }
 ```
 
-## `GET /api/contests/practice/tasks/:taskID`
+## `GET /api/contests/:contestSlug/tasks/:taskCode`
 
-指定した問題の詳細を取得します。
+指定したコンテスト内の問題の詳細を取得します。
 
 ### リクエスト例
 
@@ -87,7 +111,7 @@ GET /api/contests/practice/tasks/A
 
 ```json
 {
-  "id": "A",
+  "code": "A",
   "title": "文字列長が偶数",
   "statement": "0と1からなる文字列Sについて、Sの長さが偶数であるとき受理するDFAを構成してください。",
   "alphabet": ["0", "1"]
@@ -97,9 +121,9 @@ GET /api/contests/practice/tasks/A
 正解DFAは判定に使用する内部データです。
 フロントエンドには返さず、バックエンドで保持する設計を推奨します。
 
-## `POST /api/contests/practice/tasks/:taskID/submit`
+## `POST /api/contests/:contestSlug/tasks/:taskCode/submit`
 
-指定した問題にDFAを提出します。
+指定したコンテスト内の問題にDFAを提出します。
 DFAのデータ形式は、[DFA JSON形式](dfa-json-format.md)を参照してください。
 
 ### リクエスト例

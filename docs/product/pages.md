@@ -11,6 +11,9 @@ MVPでは、以下のページを実装します。
 - 問題一覧ページ
 - 問題詳細・提出ページ
 
+ルーティングでは、コンテストの公開識別子を `:contestSlug`、コンテスト内の問題コードを `:taskCode` として表します。
+MVPでは `:contestSlug` に `practice` を指定します。
+
 ## ページ一覧
 
 ### トップページ `/`
@@ -70,7 +73,7 @@ MVPでは、Practiceコンテストのみを表示します。
 
 ---
 
-### Practiceコンテストページ `/contests/practice`
+### Practiceコンテストページ `/contests/:contestSlug`
 
 #### 目的
 
@@ -99,7 +102,7 @@ MVPでは、Practiceコンテストを時間制限のない練習用問題セッ
 
 ---
 
-### 問題一覧ページ `/contests/practice/tasks`
+### 問題一覧ページ `/contests/:contestSlug/tasks`
 
 #### 目的
 
@@ -107,13 +110,13 @@ Practiceコンテストに含まれる問題の一覧を表示します。
 
 #### 表示内容
 
-- 問題ID
+- 問題コード
 - 問題タイトル
 - 各問題詳細ページへのリンク
 
 #### 表示例
 
-| 問題ID | 問題タイトル |
+| 問題コード | 問題タイトル |
 |---|---|
 | A | 文字列長が偶数 |
 | B | 1の個数が3の倍数 |
@@ -125,7 +128,7 @@ Practiceコンテストに含まれる問題の一覧を表示します。
 
 ---
 
-### 問題詳細・提出ページ `/contests/practice/tasks/:taskID`
+### 問題詳細・提出ページ `/contests/:contestSlug/tasks/:taskCode`
 
 #### 目的
 
@@ -135,7 +138,7 @@ MVPでは、問題文表示・提出・判定結果表示を同じページで�
 
 #### 表示内容
 
-- 問題ID
+- 問題コード
 - 問題タイトル
 - 問題文
 - 入力アルファベット
@@ -160,9 +163,9 @@ MVPでは、問題文表示・提出・判定結果表示を同じページで�
 ```text
 /
 ├── /tutorial
-│   └── /contests/practice
+│   └── /contests/:contestSlug
 └── /contests
-    └── /contests/practice
-        └── /contests/practice/tasks
-            └── /contests/practice/tasks/:taskID
+    └── /contests/:contestSlug
+        └── /contests/:contestSlug/tasks
+            └── /contests/:contestSlug/tasks/:taskCode
 ```
