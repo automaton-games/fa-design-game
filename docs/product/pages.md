@@ -9,10 +9,18 @@ MVPでは、以下のページを実装します。
 - コンテスト一覧ページ
 - Practiceコンテストページ
 - 問題一覧ページ
-- 問題詳細・提出ページ
+- 問題詳細および提出ページ
 
-ルーティングでは、コンテストの公開識別子を `:contestSlug`、コンテスト内の問題コードを `:taskCode` として表します。
-MVPでは `:contestSlug` に `practice` を指定します。
+ルート定義では、コンテストの公開識別子を `:contestSlug`、コンテスト内の問題コードを `:taskCode` と表記します。
+
+| ルートパラメータ | 値の例 | 役割 |
+|---|---|---|
+| `:contestSlug` | `practice` | コンテストを識別する |
+| `:taskCode` | `A` | コンテスト内の問題を識別する |
+
+これらはルート定義上のパラメータ名です。
+MVPで使用する実際のURLは、従来どおり `/contests/practice/tasks/A` の形式です。
+命名の理由は、[公開識別子にslugとcodeを使用する](../adr/0001-public-identifiers.md)を参照してください。
 
 ## ページ一覧
 
@@ -59,7 +67,7 @@ MVPでは、Practiceコンテストのみを表示します。
 #### 表示内容
 
 - 常設コンテスト一覧
-  - Practice Contest
+  - Practiceコンテスト
 
 #### MVP後の検討事項
 
@@ -128,7 +136,7 @@ Practiceコンテストに含まれる問題の一覧を表示します。
 
 ---
 
-### 問題詳細・提出ページ `/contests/:contestSlug/tasks/:taskCode`
+### 問題詳細および提出ページ `/contests/:contestSlug/tasks/:taskCode`
 
 #### 目的
 
