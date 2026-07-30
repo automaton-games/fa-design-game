@@ -19,49 +19,19 @@ MVPで使用するAPIのエンドポイントを定義します。
 
 APIでは、URLから参照する公開識別子として、コンテストに `slug`、問題に `code` を使用します。
 
+- `slug` はすべてのコンテスト間で一意とします。
+  MVPでは、Practiceコンテストに `practice` を使用します。
+- `code` は同じコンテスト内で一意とします。
+  異なるコンテストでは同じ値を使用できます。
+
 ```text
 /api/contests/practice/tasks/A
               └──────┘       └┘
                 slug        code
 ```
 
-### コンテストのslug
-
-`slug` は、コンテストを識別する、URLで使用可能な安定した文字列です。
-すべてのコンテスト間で一意とします。
-MVPでは、Practiceコンテストの `slug` に `practice` を使用します。
-
-### 問題のcode
-
-`code` は、コンテスト内で問題を識別する文字列です。
-同じコンテスト内で一意とし、異なるコンテストでは同じ値を使用できます。
-たとえば、`practice` と `abc001` のどちらにも、`A` という問題コードを定義できます。
-
-```text
-practice / A
-abc001   / A
-```
-
-将来データベースを導入する場合は、コンテストの内部主キーと問題コードの組み合わせに一意制約を設定します。
-
-```sql
-UNIQUE (contest_id, code)
-```
-
-### 内部主キーとの区別
-
-`id` は、データベース内部で使用する主キーを表す名前として予約します。
-公開識別子と内部主キーを区別することで、APIの値がデータベースの主キーであるという誤解を防ぎます。
-
-この命名変更によって、MVPで使用するURLは変わりません。
-フィールド名とルートパラメータ名だけが変わります。
-
-```text
-/api/contests/practice
-/api/contests/practice/tasks/A
-```
-
-この命名を採用した理由と影響は、[公開識別子にslugとcodeを使用する](../adr/0001-public-identifiers.md)を参照してください。
+MVPで使用するURLの値とパス構造は変更しません。
+命名を採用した理由と内部主キーとの関係は、[公開識別子にslugとcodeを使用する](../adr/0001-public-identifiers.md)を参照してください。
 
 ## `GET /health`
 
@@ -87,7 +57,7 @@ MVPでは、Practiceコンテストのみを返します。
   "contests": [
     {
       "slug": "practice",
-      "title": "Practice Contest",
+      "title": "Practiceコンテスト",
       "description": "練習用の常設コンテストです。"
     }
   ]
@@ -110,7 +80,7 @@ GET /api/contests/practice
 ```json
 {
   "slug": "practice",
-  "title": "Practice Contest",
+  "title": "Practiceコンテスト",
   "description": "練習用の常設コンテストです。"
 }
 ```

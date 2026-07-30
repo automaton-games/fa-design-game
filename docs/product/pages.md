@@ -19,7 +19,7 @@ MVPでは、以下のページを実装します。
 | `:taskCode` | `A` | コンテスト内の問題を識別する |
 
 これらはルート定義上のパラメータ名です。
-MVPで使用する実際のURLは、従来どおり `/contests/practice/tasks/A` の形式です。
+MVPで使用する実際のURLは `/contests/practice/tasks/A` の形式です。
 命名の理由は、[公開識別子にslugとcodeを使用する](../adr/0001-public-identifiers.md)を参照してください。
 
 ## ページ一覧

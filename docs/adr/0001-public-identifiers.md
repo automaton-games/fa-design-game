@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 ---
 
 # 公開識別子にslugとcodeを使用する
