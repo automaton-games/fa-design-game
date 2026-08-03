@@ -52,6 +52,39 @@ MVPでは問題データを静的定義（コードまたはJSONファイル）�
 
 起動時に `problem.NewStore` で問題ストアを構築し、HTTP handler へ注入する（DI）。各問題の正解DFAを読み込み時に構造検証して `ValidatedDFA` として保持する（[ADR 0004](../adr/0004-answer-dfa-lifecycle.md)）。読み込み時の検証失敗は問題データ不良であり、サーバは起動できない（または該当問題を提供しない）。提出ごとに正解DFAを再検証しない。読み込みとストアの詳細は第3節に示す。
 
+### 1.4 責務境界
+
+提出は4つの責務ゾーン（クライアント／HTTP/API層／問題・提出層／DFAドメイン層）を横断し、ゾーンの境界を越えるデータと契約を矢印に示す。とくに **`DFAInput → ValidatedDFA` の型境界（太線）は型システムで強制され、未検証入力が等価性判定へ直接渡ることを防ぐ**（第2.2節、[ADR 0003](../adr/0003-validation-boundary.md)）。alphabet は問題データを唯一の情報源とし `Validate` 内で注入され（[ADR 0002](../adr/0002-alphabet-source.md)）、正解DFAは起動時に `NewStore` で検証済みの `ValidatedDFA` として保持される（[ADR 0004](../adr/0004-answer-dfa-lifecycle.md)）。エラーとHTTPステータスの対応は第2.1節の表に示す。
+
+```mermaid
+flowchart LR
+    subgraph Cl["クライアント"]
+        IN["提出JSON"]
+    end
+    subgraph Ap["HTTP/API層<br/>internal/api"]
+        DEC["decode + サイズ制限"]
+    end
+    subgraph Pb["問題・提出層<br/>internal/problem"]
+        GET["Store.Get"]
+        SUB["ValidateSubmission"]
+        LOAD["NewStore（起動時）"]
+    end
+    subgraph Df["DFAドメイン層<br/>internal/dfa（問題非依存）"]
+        VAL["Validate"]
+        EQU["Equivalent"]
+    end
+
+    IN -->|"DFAInput（JSON契約）"| DEC
+    DEC --> GET
+    GET -->|"Alphabet（検証済み）"| VAL
+    DEC -->|"DFAInput（未検証）"| VAL
+    VAL ==>|"型境界（型強制）<br/>DFAInput → ValidatedDFA"| VD["ValidatedDFA"]
+    VD --> SUB
+    VD --> EQU
+    LOAD -.->|"正解DFA（検証済み）"| EQU
+    EQU -->|"JudgeResult"| DEC
+```
+
 ---
 
 ## 2. 共通設計
@@ -59,6 +92,17 @@ MVPでは問題データを静的定義（コードまたはJSONファイル）�
 ### 2.1 エラー分類とHTTPステータス
 
 HTTPステータスとエラーコードの完全な対応は [openapi.yaml](openapi.yaml) を正とする。本書では各処理がどのエラーを起こしうるかを、関数仕様（第3〜5節）の「エラー」欄に示す。**Wrong Answer はエラーではなく**、正常な判定結果として `200` を返す。
+
+各処理が起こすエラー、対応コード、HTTPステータス、起因（誰の責任）は次のとおりである。
+
+| 処理（層） | 条件 | コード | HTTP | 起因 |
+|---|---|---|---|---|
+| decode（HTTP/API） | JSONの構文/型エラー | `JSON_INVALID` | `400` | 提出者 |
+| `Store.Get`（問題） | 問題不存在 | `PROBLEM_NOT_FOUND` | `404` | 提出者 |
+| `Validate`（dfa） | 構造エラー | `DFA_STRUCTURAL` | `422` | 提出者 |
+| `ValidateSubmission`（問題） | 問題固有制約違反 | `SUBMISSION_CONDITION` | `422` | 提出者 |
+| `Equivalent`（dfa） | 判定結果 | — | `200` | 正常（エラーではない） |
+| `NewStore`（起動時） | 正解DFA不良、想定外エラー | `INTERNAL` | `500` | サーバ |
 
 ### 2.2 共通データ型：検証済みDFA（`ValidatedDFA`）
 
@@ -170,6 +214,16 @@ func (s *Store) Get(taskCode string) (Problem, error)
 ---
 
 ## 5. DFA提出・判定
+
+提出DFAは、JSON decode、構造検証、提出検証、等価性判定の複数段階を経て判定される。各段階の所有者、検査範囲、検査**しない**こと、失敗時の振る舞いを次の表に示す（各関数の詳細は第5.4節）。構造検証は問題に依存しないDFA単体の不変条件を担い（[ADR 0003](../adr/0003-validation-boundary.md)）、提出検証は問題固有の制約を担う。alphabet検証は起動時の問題ローダが行い、提出時には現れない（[ADR 0002](../adr/0002-alphabet-source.md)）。
+
+| 段階 | 所有者 | 検査するもの | 検査しないもの | 失敗時 |
+|---|---|---|---|---|
+| 0. JSON decode | HTTP/API層 | JSONの構文/型 | DFAの意味 | `400 JSON_INVALID` |
+| 1. alphabet検証 | 問題ローダ `NewStore`（起動時） | alphabet非空、重複なし | DFA本体 | `500 INTERNAL` |
+| 2. 構造検証 `Validate` | dfa層（問題非依存） | DFA単体の不変条件（statesの重複/空文字、start、accept、transitionsの完全性、遷移先、余分）。alphabetを注入 | 問題固有制約、到達不能/非最小等の性質 | `422 DFA_STRUCTURAL` |
+| 3. 提出検証 `ValidateSubmission` | 問題層（問題依存） | 問題固有制約（`StateLimit`） | DFA構造（検証済みを前提） | `422 SUBMISSION_CONDITION` |
+| 4. 等価性判定 `Equivalent` | dfa層 | 言語等価（判定であり検証ではない） | 構造、alphabet（前提） | `200` |
 
 ### 5.1 処理フロー（分岐とHTTPステータス）
 
