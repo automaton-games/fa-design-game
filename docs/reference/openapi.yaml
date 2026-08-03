@@ -114,6 +114,8 @@ paths:
                     title: 文字列長が偶数
                   - code: B
                     title: 1の個数が3の倍数
+        '404':
+          $ref: '#/components/responses/ProblemNotFound'
         '500':
           $ref: '#/components/responses/InternalError'
 
@@ -149,7 +151,7 @@ paths:
       summary: DFAの提出
       description: |
         指定した問題にDFAを提出し、正解DFAとの等価性判定結果を返す。
-        提出するDFAの alphabet は問題データが所有する。リクエストに alphabet が含まれていても無視され、問題の入力アルファベットが使われる。
+        提出するDFAの alphabet は問題データが所有するためリクエストに含めない。request body の上限は1 MiB。JSONは単一の値のみ許可し、未知フィールドは拒否する。
       operationId: submitDFA
       parameters:
         - $ref: '#/components/parameters/ContestSlug'
@@ -184,12 +186,12 @@ paths:
                   value:
                     accepted: true
                     result: Accepted
-                    counterexample: ""
+                    counterexample: []
                 wrongAnswer:
                   value:
                     accepted: false
                     result: WrongAnswer
-                    counterexample: "01"
+                    counterexample: ["0", "1"]
         '400':
           $ref: '#/components/responses/JsonInvalid'
         '404':
@@ -256,7 +258,7 @@ components:
               code: PROBLEM_NOT_FOUND
               message: 問題が見つかりません
     InternalError:
-      description: サーバ内部エラー（正解DFA不良、想定外の失敗）
+      description: サーバ稼働中に発生した想定外の内部エラー
       content:
         application/json:
           schema:
@@ -269,6 +271,7 @@ components:
   schemas:
     HealthResponse:
       type: object
+      additionalProperties: false
       required: [status]
       properties:
         status:
@@ -277,6 +280,7 @@ components:
 
     Contest:
       type: object
+      additionalProperties: false
       required: [slug, title, description]
       properties:
         slug:
@@ -292,6 +296,7 @@ components:
 
     ContestsResponse:
       type: object
+      additionalProperties: false
       required: [contests]
       properties:
         contests:
@@ -301,6 +306,7 @@ components:
 
     TaskSummary:
       type: object
+      additionalProperties: false
       required: [code, title]
       properties:
         code:
@@ -313,6 +319,7 @@ components:
 
     TasksResponse:
       type: object
+      additionalProperties: false
       required: [tasks]
       properties:
         tasks:
@@ -322,6 +329,7 @@ components:
 
     TaskDetail:
       type: object
+      additionalProperties: false
       required: [code, title, statement, alphabet]
       properties:
         code:
@@ -343,9 +351,10 @@ components:
 
     DFAInput:
       type: object
+      additionalProperties: false
       description: |
-        提出するDFA。alphabet は問題データが所有するため含めない（含めても無視される）。
-        各フィールドの制約、入力要件は「DFA JSON形式」を参照。
+        提出するDFA。alphabet は問題データが所有するため含めない。
+        未知フィールドは拒否する。各フィールドの制約、入力要件は「DFA JSON形式」を参照。
       required: [states, start, accept, transitions]
       properties:
         states:
@@ -378,6 +387,7 @@ components:
 
     SubmitRequest:
       type: object
+      additionalProperties: false
       required: [dfa]
       properties:
         dfa:
@@ -385,7 +395,8 @@ components:
 
     SubmitResponse:
       type: object
-      description: 判定結果。counterexample は常に含み、WrongAnswer で空文字列のときは ε（空文字列）を意味する。
+      additionalProperties: false
+      description: 判定結果。counterexample は常に含む入力記号の配列で、空配列は ε を意味する。
       required: [accepted, result, counterexample]
       properties:
         accepted:
@@ -395,12 +406,15 @@ components:
           type: string
           enum: [Accepted, WrongAnswer]
         counterexample:
-          type: string
-          description: 不正解時の最短反例。"" は ε。Accepted のときは空。
-          example: "01"
+          type: array
+          description: 不正解時の最短反例を入力記号列として返す。空配列は ε。Accepted のときも空配列。
+          items:
+            type: string
+          example: ["0", "1"]
 
     ErrorResponse:
       type: object
+      additionalProperties: false
       description: |
         エラーレスポンス。code は以下のいずれか。
         - JSON_INVALID: JSONとして解釈できない（400）
@@ -412,6 +426,7 @@ components:
       properties:
         error:
           type: object
+          additionalProperties: false
           required: [code, message]
           properties:
             code:
