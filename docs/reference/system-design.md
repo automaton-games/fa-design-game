@@ -105,6 +105,8 @@ alphabet の唯一の情報源は問題データ（[ADR 0002](../adr/0002-alphab
 | Title | `string` | — | 問題タイトル（表示用） |
 | Statement | `string` | — | 問題文（表示用） |
 
+`Problem` は `NewStore` 以外で構築してはならない。`Alphabet`（読み込み時検証済み）と `Answer`（`ValidatedDFA`）の検証済み状態は、`NewStore` を唯一の構築子とすることで保証する。
+
 ### 3.2 問題ストア（`Store`）と読み込み（`NewStore`）
 
 問題ストアは、読み込み後に不変の `Problem` の集合を保持する。HTTP handler が `*Store` を保持し（DI）、提出・読み取りAPIから参照する。読み込み後に変更されないため、スレッドセーフのための追加機構は不要である。
@@ -269,7 +271,7 @@ func ValidateSubmission(d ValidatedDFA, p Problem) error
 ```
 
 - **概要**: 提出DFAが問題固有の提出条件を満たすか検証する。
-- **事前条件**: `d` は構造検証済みの `ValidatedDFA`。
+- **事前条件**: `d` は構造検証済みの `ValidatedDFA`。`p` は `Store.Get` で取得した問題（存在しない問題は `404` で本関数に到達しない）。
 - **事後条件**: `nil` なら提出条件OK。非`nil` なら提出条件エラー。
 - **引数**: `d ValidatedDFA`、`p Problem`
 - **戻り値**: `error`
