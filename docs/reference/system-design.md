@@ -98,7 +98,7 @@ alphabet の唯一の情報源は問題データ（[ADR 0002](../adr/0002-alphab
 
 | フィールド | 型 | 制約 | 説明 |
 |---|---|---|---|
-| ID | `string` | 空でない | 問題ID（例: `"A"`） |
+| Code | `string` | 空でない | 問題コード（例: `"A"`） |
 | Alphabet | `[]string` | 1以上、重複なし | 入力アルファベット（読み込み時に検証済み） |
 | Answer | `ValidatedDFA` | 第2.2節の不変条件を満たす | 正解DFA |
 | StateLimit | `int` | `0` は無制限 | 状態数上限など問題固有の提出制約 |
@@ -112,7 +112,7 @@ alphabet の唯一の情報源は問題データ（[ADR 0002](../adr/0002-alphab
 ```go
 // 問題データの未検証入力（読み込み前）。
 type ProblemInput struct {
-    ID         string
+    Code        string
     Alphabet   []string
     Answer     DFAInput   // 正解DFAの未検証入力
     StateLimit int
@@ -121,7 +121,7 @@ type ProblemInput struct {
 }
 
 type Store struct {
-    // 問題ID -> Problem（読み込み後に不変）
+    // 問題コード -> Problem（読み込み後に不変）
 }
 
 // 問題データを読み込み、各問題を検証して不変のストアを構築する。起動時に一度だけ呼ぶ。
@@ -130,10 +130,10 @@ func NewStore(inputs []ProblemInput) (*Store, error)
 
 - **概要**: 問題データを読み込み、各問題を検証して `*Store` を構築する。
 - **事前条件**: なし。
-- **事後条件**: 成功時、戻り値の `*Store` は各問題の `Answer` を検証済み `ValidatedDFA` として保持し、問題IDは一意である。失敗時、`*Store` は `nil`。
+- **事後条件**: 成功時、戻り値の `*Store` は各問題の `Answer` を検証済み `ValidatedDFA` として保持し、問題コードは一意である。失敗時、`*Store` は `nil`。
 - **引数**: `inputs []ProblemInput`（問題データの未検証入力）
 - **戻り値**: `(*Store, error)`
-- **エラー**: 問題データ不良（`Alphabet` 不正、正解DFAの構造エラー、問題ID重複）。起動時に呼ぶため、失敗時はサーバを起動できない。
+- **エラー**: 問題データ不良（`Alphabet` 不正、正解DFAの構造エラー、問題コード重複）。起動時に呼ぶため、失敗時はサーバを起動できない。
 - **処理**: 各 input について次を行う（[ADR 0004](../adr/0004-answer-dfa-lifecycle.md)）。いずれかの検証が失敗した場合はその時点で `error` を返す（提出者の責任ではない）。
   1. `Alphabet` の妥当性（1以上、重複なし）を検証する。
   2. 正解DFAを `dfa.Validate(input.Answer, input.Alphabet)` で構造検証し、`ValidatedDFA` を得る。
@@ -142,13 +142,13 @@ func NewStore(inputs []ProblemInput) (*Store, error)
 ### 3.3 問題の取得（`Store.Get`）
 
 ```go
-func (s *Store) Get(taskID string) (Problem, error)
+func (s *Store) Get(taskCode string) (Problem, error)
 ```
 
-- **概要**: 問題IDから `Problem` を取得する。
+- **概要**: 問題コードから `Problem` を取得する。
 - **事前条件**: なし。
 - **事後条件**: 成功時、戻り値の `Problem` は `Answer` を検証済み `ValidatedDFA` として保持する。
-- **引数**: `taskID string`
+- **引数**: `taskCode string`
 - **戻り値**: `(Problem, error)`
 - **エラー**: 問題不存在（`PROBLEM_NOT_FOUND`、HTTP `404`）。
 
@@ -156,14 +156,14 @@ func (s *Store) Get(taskID string) (Problem, error)
 
 ## 4. 読み取りAPI
 
-コンテスト・問題の読み取りAPIは、問題ストアからデータを取り出して返す。レスポンス形式は [openapi.yaml](openapi.yaml) を正とする。正解DFA（`Answer`）はレスポンスに含めない。
+コンテスト・問題の読み取りAPIは、問題ストアからデータを取り出して返す。レスポンス形式は [openapi.yaml](openapi.yaml) を正とする。正解DFA（`Answer`）はレスポンスに含めない。MVPでは `contestSlug` は `practice` のみ有効である。
 
 | エンドポイント | データ元 | 備考 |
 |---|---|---|
 | `GET /api/contests` | 固定 | Practiceコンテストのみ |
-| `GET /api/contests/practice` | 固定 | Practiceコンテスト情報（[openapi.yaml](openapi.yaml)） |
-| `GET /api/contests/practice/tasks` | ストア | 各問題の ID / Title |
-| `GET /api/contests/practice/tasks/:taskID` | ストア（`Store.Get`） | ID / Title / Statement / Alphabet |
+| `GET /api/contests/{contestSlug}` | 固定 | Practiceコンテスト情報（[openapi.yaml](openapi.yaml)） |
+| `GET /api/contests/{contestSlug}/tasks` | ストア | 各問題の Code / Title |
+| `GET /api/contests/{contestSlug}/tasks/{taskCode}` | ストア（`Store.Get`） | Code / Title / Statement / Alphabet |
 
 ---
 
@@ -173,11 +173,11 @@ func (s *Store) Get(taskID string) (Problem, error)
 
 ```mermaid
 flowchart TD
-    Req["HTTP Request<br/>POST .../tasks/:taskID/submit"]
+    Req["HTTP Request<br/>POST .../tasks/{taskCode}/submit"]
     Req --> Decode{"body サイズ制限 + JSON decode"}
     Decode -->|失敗| R400["400 JSON_INVALID"]
     Decode -->|成功| In["DFAInput（提出DFA: alphabet なし）"]
-    In --> Get["problem.Get(taskID)"]
+    In --> Get["problem.Get(taskCode)"]
     Get --> Exist{"問題が存在する?"}
     Exist -->|無し| R404["404 PROBLEM_NOT_FOUND"]
     Exist -->|有り| Val["dfa.Validate(input, problem.Alphabet)<br/>alphabet を注入して構造検証"]
@@ -206,7 +206,7 @@ sequenceDiagram
     C->>H: POST .../submit (DFA JSON)
     H->>H: サイズ制限 + JSON decode
     note over H: 失敗 → 400 JSON_INVALID
-    H->>P: Get(taskID) → Problem
+    H->>P: Get(taskCode) → Problem
     note over P: 存在しない → 404 PROBLEM_NOT_FOUND
     H->>D: Validate(input, problem.Alphabet) → ValidatedDFA
     note over D: 構造エラー → 422 DFA_STRUCTURAL

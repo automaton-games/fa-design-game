@@ -5,8 +5,8 @@ info:
   description: |
     FA Design Game のMVPで使用するAPI。
     本ファイルがAPI契約の唯一の正（SSOT）である。
-    DFAの提出から判定までの処理フロー、内部設計は「バックエンド システム詳細設計書」を、
-    DFAのデータ形式は「DFA JSON形式」を参照すること。
+    公開識別子（slug/code）は ADR 0001、DFAの提出から判定までの処理フロー・内部設計は
+    「バックエンド システム詳細設計書」、DFAのデータ形式は「DFA JSON形式」を参照すること。
   license:
     name: UNLICENSED
 servers:
@@ -56,36 +56,51 @@ paths:
                 $ref: '#/components/schemas/ContestsResponse'
               example:
                 contests:
-                  - id: practice
-                    title: Practice Contest
+                  - slug: practice
+                    title: Practiceコンテスト
                     description: 練習用の常設コンテストです。
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /api/contests/practice:
+  /api/contests/{contestSlug}:
     get:
       tags: [Contests]
-      summary: Practiceコンテストの取得
-      operationId: getPracticeContest
+      summary: コンテストの取得
+      description: 指定したコンテストの情報を取得する。MVPでは contestSlug に practice を指定する。
+      operationId: getContest
+      parameters:
+        - $ref: '#/components/parameters/ContestSlug'
       responses:
         '200':
-          description: Practiceコンテスト情報
+          description: コンテスト情報
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contest'
               example:
-                id: practice
-                title: Practice Contest
+                slug: practice
+                title: Practiceコンテスト
                 description: 練習用の常設コンテストです。
+        '404':
+          description: 指定したコンテストが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  code: PROBLEM_NOT_FOUND
+                  message: コンテストが見つかりません
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /api/contests/practice/tasks:
+  /api/contests/{contestSlug}/tasks:
     get:
       tags: [Tasks]
       summary: 問題一覧の取得
       operationId: listTasks
+      parameters:
+        - $ref: '#/components/parameters/ContestSlug'
       responses:
         '200':
           description: 問題一覧
@@ -95,21 +110,22 @@ paths:
                 $ref: '#/components/schemas/TasksResponse'
               example:
                 tasks:
-                  - id: A
+                  - code: A
                     title: 文字列長が偶数
-                  - id: B
+                  - code: B
                     title: 1の個数が3の倍数
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /api/contests/practice/tasks/{taskID}:
+  /api/contests/{contestSlug}/tasks/{taskCode}:
     get:
       tags: [Tasks]
       summary: 問題詳細の取得
       description: 正解DFAは判定用の内部データであり、レスポンスに含めない。
       operationId: getTask
       parameters:
-        - $ref: '#/components/parameters/TaskID'
+        - $ref: '#/components/parameters/ContestSlug'
+        - $ref: '#/components/parameters/TaskCode'
       responses:
         '200':
           description: 問題詳細
@@ -118,7 +134,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TaskDetail'
               example:
-                id: A
+                code: A
                 title: 文字列長が偶数
                 statement: "0と1からなる文字列Sについて、Sの長さが偶数であるとき受理するDFAを構成してください。"
                 alphabet: ["0", "1"]
@@ -127,7 +143,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /api/contests/practice/tasks/{taskID}/submit:
+  /api/contests/{contestSlug}/tasks/{taskCode}/submit:
     post:
       tags: [Submit]
       summary: DFAの提出
@@ -136,7 +152,8 @@ paths:
         提出するDFAの alphabet は問題データが所有する。リクエストに alphabet が含まれていても無視され、問題の入力アルファベットが使われる。
       operationId: submitDFA
       parameters:
-        - $ref: '#/components/parameters/TaskID'
+        - $ref: '#/components/parameters/ContestSlug'
+        - $ref: '#/components/parameters/TaskCode'
       requestBody:
         required: true
         content:
@@ -200,11 +217,19 @@ paths:
 
 components:
   parameters:
-    TaskID:
-      name: taskID
+    ContestSlug:
+      name: contestSlug
       in: path
       required: true
-      description: "問題ID（例: A, B, C）"
+      description: "コンテストの公開識別子（例: practice）。すべてのコンテスト間で一意。"
+      schema:
+        type: string
+        example: practice
+    TaskCode:
+      name: taskCode
+      in: path
+      required: true
+      description: "問題の公開識別子（例: A, B, C）。同じコンテスト内で一意。"
       schema:
         type: string
         example: A
@@ -221,7 +246,7 @@ components:
               code: JSON_INVALID
               message: invalid JSON
     ProblemNotFound:
-      description: 指定した問題が存在しない
+      description: 指定したコンテストまたは問題が存在しない
       content:
         application/json:
           schema:
@@ -252,14 +277,15 @@ components:
 
     Contest:
       type: object
-      required: [id, title, description]
+      required: [slug, title, description]
       properties:
-        id:
+        slug:
           type: string
+          description: コンテストの公開識別子。すべてのコンテスト間で一意。
           example: practice
         title:
           type: string
-          example: Practice Contest
+          example: Practiceコンテスト
         description:
           type: string
           example: 練習用の常設コンテストです。
@@ -275,10 +301,11 @@ components:
 
     TaskSummary:
       type: object
-      required: [id, title]
+      required: [code, title]
       properties:
-        id:
+        code:
           type: string
+          description: 問題の公開識別子。同じコンテスト内で一意。
           example: A
         title:
           type: string
@@ -295,10 +322,11 @@ components:
 
     TaskDetail:
       type: object
-      required: [id, title, statement, alphabet]
+      required: [code, title, statement, alphabet]
       properties:
-        id:
+        code:
           type: string
+          description: 問題の公開識別子。同じコンテスト内で一意。
           example: A
         title:
           type: string
@@ -378,7 +406,7 @@ components:
         - JSON_INVALID: JSONとして解釈できない（400）
         - DFA_STRUCTURAL: DFAの構造エラー（422）
         - SUBMISSION_CONDITION: 問題の提出条件違反（422）
-        - PROBLEM_NOT_FOUND: 問題が存在しない（404）
+        - PROBLEM_NOT_FOUND: コンテストまたは問題が存在しない（404）
         - INTERNAL: サーバ内部エラー（500）
       required: [error]
       properties:
