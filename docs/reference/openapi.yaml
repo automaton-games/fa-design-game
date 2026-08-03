@@ -1,0 +1,396 @@
+openapi: 3.0.3
+info:
+  title: FA Design Game API
+  version: 1.0.0
+  description: |
+    FA Design Game のMVPで使用するAPI。
+    本ファイルがAPI契約の唯一の正（SSOT）である。
+    DFAの提出から判定までの処理フロー、内部設計は「バックエンド システム詳細設計書」を、
+    DFAのデータ形式は「DFA JSON形式」を参照すること。
+  license:
+    name: UNLICENSED
+servers:
+  - url: http://localhost:8080
+    description: ローカル開発環境
+tags:
+  - name: Health
+    description: ヘルスチェック
+  - name: Contests
+    description: コンテスト
+  - name: Tasks
+    description: 問題
+  - name: Submit
+    description: DFAの提出と判定
+
+security: []  # MVPでは認証を行わない（ログインなし）
+
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: ヘルスチェック
+      description: バックエンドの稼働状態を確認する。問題ストアの読み込みが完了していれば稼働中とみなす。
+      operationId: getHealth
+      responses:
+        '200':
+          description: 稼働中
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: ok
+
+  /api/contests:
+    get:
+      tags: [Contests]
+      summary: コンテスト一覧の取得
+      description: MVPではPracticeコンテストのみを返す。
+      operationId: listContests
+      responses:
+        '200':
+          description: コンテスト一覧
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContestsResponse'
+              example:
+                contests:
+                  - id: practice
+                    title: Practice Contest
+                    description: 練習用の常設コンテストです。
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/contests/practice:
+    get:
+      tags: [Contests]
+      summary: Practiceコンテストの取得
+      operationId: getPracticeContest
+      responses:
+        '200':
+          description: Practiceコンテスト情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contest'
+              example:
+                id: practice
+                title: Practice Contest
+                description: 練習用の常設コンテストです。
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/contests/practice/tasks:
+    get:
+      tags: [Tasks]
+      summary: 問題一覧の取得
+      operationId: listTasks
+      responses:
+        '200':
+          description: 問題一覧
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TasksResponse'
+              example:
+                tasks:
+                  - id: A
+                    title: 文字列長が偶数
+                  - id: B
+                    title: 1の個数が3の倍数
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/contests/practice/tasks/{taskID}:
+    get:
+      tags: [Tasks]
+      summary: 問題詳細の取得
+      description: 正解DFAは判定用の内部データであり、レスポンスに含めない。
+      operationId: getTask
+      parameters:
+        - $ref: '#/components/parameters/TaskID'
+      responses:
+        '200':
+          description: 問題詳細
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDetail'
+              example:
+                id: A
+                title: 文字列長が偶数
+                statement: "0と1からなる文字列Sについて、Sの長さが偶数であるとき受理するDFAを構成してください。"
+                alphabet: ["0", "1"]
+        '404':
+          $ref: '#/components/responses/ProblemNotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/contests/practice/tasks/{taskID}/submit:
+    post:
+      tags: [Submit]
+      summary: DFAの提出
+      description: |
+        指定した問題にDFAを提出し、正解DFAとの等価性判定結果を返す。
+        提出するDFAの alphabet は問題データが所有する。リクエストに alphabet が含まれていても無視され、問題の入力アルファベットが使われる。
+      operationId: submitDFA
+      parameters:
+        - $ref: '#/components/parameters/TaskID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitRequest'
+            example:
+              dfa:
+                states: [q0, q1]
+                start: q0
+                accept: [q0]
+                transitions:
+                  q0:
+                    "0": q1
+                    "1": q1
+                  q1:
+                    "0": q0
+                    "1": q0
+      responses:
+        '200':
+          description: 判定成功（Accepted または Wrong Answer）。Wrong Answer はエラーではない。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitResponse'
+              examples:
+                accepted:
+                  value:
+                    accepted: true
+                    result: Accepted
+                    counterexample: ""
+                wrongAnswer:
+                  value:
+                    accepted: false
+                    result: WrongAnswer
+                    counterexample: "01"
+        '400':
+          $ref: '#/components/responses/JsonInvalid'
+        '404':
+          $ref: '#/components/responses/ProblemNotFound'
+        '422':
+          description: DFAの構造エラー、または提出条件違反
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                structural:
+                  value:
+                    error:
+                      code: DFA_STRUCTURAL
+                      message: "状態 \"q9\" は states に含まれません"
+                      field: transitions
+                submissionCondition:
+                  value:
+                    error:
+                      code: SUBMISSION_CONDITION
+                      message: 状態数が上限を超えています
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  parameters:
+    TaskID:
+      name: taskID
+      in: path
+      required: true
+      description: "問題ID（例: A, B, C）"
+      schema:
+        type: string
+        example: A
+
+  responses:
+    JsonInvalid:
+      description: JSONとして解釈できない（構文不正、型不正、bodyサイズ超過）
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: JSON_INVALID
+              message: invalid JSON
+    ProblemNotFound:
+      description: 指定した問題が存在しない
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: PROBLEM_NOT_FOUND
+              message: 問題が見つかりません
+    InternalError:
+      description: サーバ内部エラー（正解DFA不良、想定外の失敗）
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: INTERNAL
+              message: internal server error
+
+  schemas:
+    HealthResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          example: ok
+
+    Contest:
+      type: object
+      required: [id, title, description]
+      properties:
+        id:
+          type: string
+          example: practice
+        title:
+          type: string
+          example: Practice Contest
+        description:
+          type: string
+          example: 練習用の常設コンテストです。
+
+    ContestsResponse:
+      type: object
+      required: [contests]
+      properties:
+        contests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contest'
+
+    TaskSummary:
+      type: object
+      required: [id, title]
+      properties:
+        id:
+          type: string
+          example: A
+        title:
+          type: string
+          example: 文字列長が偶数
+
+    TasksResponse:
+      type: object
+      required: [tasks]
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskSummary'
+
+    TaskDetail:
+      type: object
+      required: [id, title, statement, alphabet]
+      properties:
+        id:
+          type: string
+          example: A
+        title:
+          type: string
+          example: 文字列長が偶数
+        statement:
+          type: string
+          example: "0と1からなる文字列Sについて、Sの長さが偶数であるとき受理するDFAを構成してください。"
+        alphabet:
+          type: array
+          description: 問題が定義する入力アルファベット（提出DFAはこれを所有する）
+          items:
+            type: string
+          example: ["0", "1"]
+
+    DFAInput:
+      type: object
+      description: |
+        提出するDFA。alphabet は問題データが所有するため含めない（含めても無視される）。
+        各フィールドの制約、入力要件は「DFA JSON形式」を参照。
+      required: [states, start, accept, transitions]
+      properties:
+        states:
+          type: array
+          items:
+            type: string
+          example: [q0, q1]
+        start:
+          type: string
+          example: q0
+        accept:
+          type: array
+          items:
+            type: string
+          example: [q0]
+        transitions:
+          type: object
+          description: transitions[state][symbol] = 次状態
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: string
+          example:
+            q0:
+              "0": q1
+              "1": q1
+            q1:
+              "0": q0
+              "1": q0
+
+    SubmitRequest:
+      type: object
+      required: [dfa]
+      properties:
+        dfa:
+          $ref: '#/components/schemas/DFAInput'
+
+    SubmitResponse:
+      type: object
+      description: 判定結果。counterexample は常に含み、WrongAnswer で空文字列のときは ε（空文字列）を意味する。
+      required: [accepted, result, counterexample]
+      properties:
+        accepted:
+          type: boolean
+          example: true
+        result:
+          type: string
+          enum: [Accepted, WrongAnswer]
+        counterexample:
+          type: string
+          description: 不正解時の最短反例。"" は ε。Accepted のときは空。
+          example: "01"
+
+    ErrorResponse:
+      type: object
+      description: |
+        エラーレスポンス。code は以下のいずれか。
+        - JSON_INVALID: JSONとして解釈できない（400）
+        - DFA_STRUCTURAL: DFAの構造エラー（422）
+        - SUBMISSION_CONDITION: 問題の提出条件違反（422）
+        - PROBLEM_NOT_FOUND: 問題が存在しない（404）
+        - INTERNAL: サーバ内部エラー（500）
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum: [JSON_INVALID, DFA_STRUCTURAL, SUBMISSION_CONDITION, PROBLEM_NOT_FOUND, INTERNAL]
+            message:
+              type: string
+            field:
+              type: string
+              description: 該当フィールド（省略可）

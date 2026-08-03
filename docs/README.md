@@ -17,6 +17,7 @@ APIやデータ形式など、実装時に参照する仕様です。
 
 - [API仕様](reference/api.md)：MVPで使用するエンドポイント
 - [DFA JSON形式](reference/dfa-json-format.md)：DFAの提出データ形式
+- [システム詳細設計書](reference/system-design.md)：バックエンド全体の内部設計（処理フロー、型、関数仕様、層構成）
 
 ## 開発ガイド
 
@@ -41,6 +42,10 @@ APIやデータ形式など、実装時に参照する仕様です。
 
 - [`CONTEXT.md`](../CONTEXT.md)：プロジェクトで使用するドメイン用語
 
-## 今後追加するドキュメント
+## アーキテクチャ決定記録（ADR）
 
-重要な設計判断が発生した時点で、`docs/adr/` に判断内容と理由を記録します。
+重要な設計判断は `docs/adr/` に判断内容と理由を記録します。
+
+- [0001 alphabetの情報源](adr/0001-alphabet-source.md)
+- [0002 構造検証と提出検証の責務境界](adr/0002-validation-boundary.md)
+- [0003 正解DFAのライフサイクル](adr/0003-answer-dfa-lifecycle.md)

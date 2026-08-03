@@ -66,6 +66,7 @@ FA Design Gameで使用する具体的なデータ形式は[DFA JSON形式](docs
 - [ページ構成](docs/product/pages.md)
 - [API仕様](docs/reference/api.md)
 - [DFA JSON形式](docs/reference/dfa-json-format.md)
+- [システム詳細設計書](docs/reference/system-design.md)
 - [開発環境ガイド](docs/guides/development.md)
 - [コントリビューションガイド](CONTRIBUTING.md)
 
