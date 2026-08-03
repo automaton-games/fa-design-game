@@ -46,6 +46,7 @@ APIやデータ形式など、実装時に参照する仕様です。
 
 重要な設計判断は `docs/adr/` に判断内容と理由を記録します。
 
-- [0001 alphabetの情報源](adr/0001-alphabet-source.md)
-- [0002 構造検証と提出検証の責務境界](adr/0002-validation-boundary.md)
-- [0003 正解DFAのライフサイクル](adr/0003-answer-dfa-lifecycle.md)
+- [0001 公開識別子にslugとcodeを使用する](adr/0001-public-identifiers.md)
+- [0002 alphabetの情報源](adr/0002-alphabet-source.md)
+- [0003 構造検証と提出検証の責務境界](adr/0003-validation-boundary.md)
+- [0004 正解DFAのライフサイクル](adr/0004-answer-dfa-lifecycle.md)

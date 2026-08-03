@@ -5,7 +5,7 @@
 | 項目 | 値 |
 |---|---|
 | 対象 | FA Design Gameが内部で扱うDFAのJSON形式（提出データ形式） |
-| 関連 | [バックエンド システム詳細設計書](system-design.md)、[API仕様](api.md)、[ADR 0001](../adr/0001-alphabet-source.md) |
+| 関連 | [バックエンド システム詳細設計書](system-design.md)、[API仕様](api.md)、[ADR 0002](../adr/0002-alphabet-source.md) |
 | 用語集 | [CONTEXT.md](../../CONTEXT.md) |
 | バージョン | 1.0 |
 | ステータス | Draft |
@@ -23,7 +23,7 @@
 
 専用フォームを使う場合は、問題データから自動で設定し、ユーザーによる入力は求めない。
 
-処理の詳細は [バックエンド システム詳細設計書](system-design.md)、決定の経緯は [ADR 0001](../adr/0001-alphabet-source.md) を参照する。
+処理の詳細は [バックエンド システム詳細設計書](system-design.md)、決定の経緯は [ADR 0002](../adr/0002-alphabet-source.md) を参照する。
 
 ## 3. データ例
 

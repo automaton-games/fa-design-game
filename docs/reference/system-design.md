@@ -7,7 +7,7 @@
 | 対象 | FA Design Game バックエンド（Go / Gin）全体の詳細設計 |
 | 対象Issue | [#58 DFA提出・検証・等価性判定の責務境界と処理フローを設計する](https://github.com/automaton-games/fa-design-game/issues/58) |
 | 関連Issue | [#22 構造体検証](https://github.com/automaton-games/fa-design-game/issues/22)、[#54 等価性判定](https://github.com/automaton-games/fa-design-game/issues/54) |
-| 関連ADR | [0001 alphabetの情報源](../adr/0001-alphabet-source.md)、[0002 構造検証と提出検証の責務境界](../adr/0002-validation-boundary.md)、[0003 正解DFAのライフサイクル](../adr/0003-answer-dfa-lifecycle.md) |
+| 関連ADR | [0001 公開識別子](../adr/0001-public-identifiers.md)、[0002 alphabetの情報源](../adr/0002-alphabet-source.md)、[0003 構造検証と提出検証の責務境界](../adr/0003-validation-boundary.md)、[0004 正解DFAのライフサイクル](../adr/0004-answer-dfa-lifecycle.md) |
 | 外部契約 | [openapi.yaml](openapi.yaml)（API契約）、[DFA JSON形式](dfa-json-format.md) |
 | 用語集 | [CONTEXT.md](../../CONTEXT.md) |
 | バージョン | 1.0 |
@@ -50,7 +50,7 @@ MVPでは問題データを静的定義（コードまたはJSONファイル）�
 
 ### 1.3 起動と問題データの読み込み
 
-起動時に `problem.NewStore` で問題ストアを構築し、HTTP handler へ注入する（DI）。各問題の正解DFAを読み込み時に構造検証して `ValidatedDFA` として保持する（[ADR 0003](../adr/0003-answer-dfa-lifecycle.md)）。読み込み時の検証失敗は問題データ不良であり、サーバは起動できない（または該当問題を提供しない）。提出ごとに正解DFAを再検証しない。読み込みとストアの詳細は第3節に示す。
+起動時に `problem.NewStore` で問題ストアを構築し、HTTP handler へ注入する（DI）。各問題の正解DFAを読み込み時に構造検証して `ValidatedDFA` として保持する（[ADR 0004](../adr/0004-answer-dfa-lifecycle.md)）。読み込み時の検証失敗は問題データ不良であり、サーバは起動できない（または該当問題を提供しない）。提出ごとに正解DFAを再検証しない。読み込みとストアの詳細は第3節に示す。
 
 ---
 
@@ -86,7 +86,7 @@ type ValidatedDFA struct {
 
 ### 2.3 alphabet のデータフロー
 
-alphabet の唯一の情報源は問題データ（[ADR 0001](../adr/0001-alphabet-source.md)）。提出DFAは alphabet を持たず、`dfa.Validate(input, problem.Alphabet)` が問題の alphabet を注入して構造検証を一つの操作で行う。注入を API 層でなくドメイン層の `Validate` 内で行うことで、`ValidatedDFA` の構築を検証経由に限定できる（カプセル化）。遷移の完全性は問題の alphabet で測る。結果として検証済みDFAの alphabet は常に問題データに一致し、等価性判定は alphabet 整合性を改めて検証しない。
+alphabet の唯一の情報源は問題データ（[ADR 0002](../adr/0002-alphabet-source.md)）。提出DFAは alphabet を持たず、`dfa.Validate(input, problem.Alphabet)` が問題の alphabet を注入して構造検証を一つの操作で行う。注入を API 層でなくドメイン層の `Validate` 内で行うことで、`ValidatedDFA` の構築を検証経由に限定できる（カプセル化）。遷移の完全性は問題の alphabet で測る。結果として検証済みDFAの alphabet は常に問題データに一致し、等価性判定は alphabet 整合性を改めて検証しない。
 
 ---
 
@@ -134,7 +134,7 @@ func NewStore(inputs []ProblemInput) (*Store, error)
 - **引数**: `inputs []ProblemInput`（問題データの未検証入力）
 - **戻り値**: `(*Store, error)`
 - **エラー**: 問題データ不良（`Alphabet` 不正、正解DFAの構造エラー、問題ID重複）。起動時に呼ぶため、失敗時はサーバを起動できない。
-- **処理**: 各 input について次を行う（[ADR 0003](../adr/0003-answer-dfa-lifecycle.md)）。いずれかの検証が失敗した場合はその時点で `error` を返す（提出者の責任ではない）。
+- **処理**: 各 input について次を行う（[ADR 0004](../adr/0004-answer-dfa-lifecycle.md)）。いずれかの検証が失敗した場合はその時点で `error` を返す（提出者の責任ではない）。
   1. `Alphabet` の妥当性（1以上、重複なし）を検証する。
   2. 正解DFAを `dfa.Validate(input.Answer, input.Alphabet)` で構造検証し、`ValidatedDFA` を得る。
   3. 検証済みの `Problem` をストアへ追加する。
@@ -193,7 +193,7 @@ flowchart TD
     Eq -->|非等価| R200w["200 WrongAnswer + counterexample"]
 ```
 
-正解DFAの読み込み時検証失敗や想定外のエラーは、フロー全体を通じて **`500 INTERNAL`** に集約される（[ADR 0003](../adr/0003-answer-dfa-lifecycle.md)）。
+正解DFAの読み込み時検証失敗や想定外のエラーは、フロー全体を通じて **`500 INTERNAL`** に集約される（[ADR 0004](../adr/0004-answer-dfa-lifecycle.md)）。
 
 ### 5.2 層間シーケンス（オーケストレーション）
 
@@ -224,7 +224,7 @@ JSON decode の失敗は `400` とする。等価性判定の不一致はエラ�
 
 ### 5.3 データ型
 
-提出DFA（`DFAInput`）のJSON形式・フィールド・入力要件は [DFA JSON形式](dfa-json-format.md) を正とする。本書ではGo型のみ示す。`DFAInput` は alphabet フィールドを持たない（[ADR 0001](../adr/0001-alphabet-source.md)）。JSON に `alphabet` が含まれていてもデコード時に無視される。
+提出DFA（`DFAInput`）のJSON形式・フィールド・入力要件は [DFA JSON形式](dfa-json-format.md) を正とする。本書ではGo型のみ示す。`DFAInput` は alphabet フィールドを持たない（[ADR 0002](../adr/0002-alphabet-source.md)）。JSON に `alphabet` が含まれていてもデコード時に無視される。
 
 ```go
 type DFAInput struct {
@@ -321,7 +321,7 @@ func Equivalent(submitted, answer ValidatedDFA) JudgeResult
 ### 7.1 実装順序
 
 1. **#22 構造検証の拡張**: 重複、空文字状態名、余分遷移の検出を追加。`DFA` 型は `DFAInput` に置換、`Validate` のシグネチャを変更。`alphabet` 非空チェックは問題ローダへ移動。
-2. **問題データローダ**: 問題データの読み込みと検証、`ValidatedDFA` で保持（[ADR 0003](../adr/0003-answer-dfa-lifecycle.md)）。`alphabet` の検証もここ。`Problem`、`Get`、`ValidateSubmission` を実装。
+2. **問題データローダ**: 問題データの読み込みと検証、`ValidatedDFA` で保持（[ADR 0004](../adr/0004-answer-dfa-lifecycle.md)）。`alphabet` の検証もここ。`Problem`、`Get`、`ValidateSubmission` を実装。
 3. **読み取りAPI**: contests、tasks、task detail の各エンドポイント。
 4. **提出API（HTTP/API層）**: decode、問題取得、`Validate`→`ValidateSubmission`→`Equivalent` の接続、エラーとHTTP変換。
 5. **#54 等価性判定**: `Equivalent(submitted, answer ValidatedDFA) JudgeResult` を実装。同じ `alphabet` 前提、ε反例を含む最短反例を返す。

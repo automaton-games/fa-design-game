@@ -9,7 +9,18 @@ MVPでは、以下のページを実装します。
 - コンテスト一覧ページ
 - Practiceコンテストページ
 - 問題一覧ページ
-- 問題詳細・提出ページ
+- 問題詳細および提出ページ
+
+ルート定義では、コンテストの公開識別子を `:contestSlug`、コンテスト内の問題コードを `:taskCode` と表記します。
+
+| ルートパラメータ | 値の例 | 役割 |
+|---|---|---|
+| `:contestSlug` | `practice` | コンテストを識別する |
+| `:taskCode` | `A` | コンテスト内の問題を識別する |
+
+これらはルート定義上のパラメータ名です。
+MVPで使用する実際のURLは `/contests/practice/tasks/A` の形式です。
+命名の理由は、[公開識別子にslugとcodeを使用する](../adr/0001-public-identifiers.md)を参照してください。
 
 ## ページ一覧
 
@@ -56,7 +67,7 @@ MVPでは、Practiceコンテストのみを表示します。
 #### 表示内容
 
 - 常設コンテスト一覧
-  - Practice Contest
+  - Practiceコンテスト
 
 #### MVP後の検討事項
 
@@ -70,7 +81,7 @@ MVPでは、Practiceコンテストのみを表示します。
 
 ---
 
-### Practiceコンテストページ `/contests/practice`
+### Practiceコンテストページ `/contests/:contestSlug`
 
 #### 目的
 
@@ -99,7 +110,7 @@ MVPでは、Practiceコンテストを時間制限のない練習用問題セッ
 
 ---
 
-### 問題一覧ページ `/contests/practice/tasks`
+### 問題一覧ページ `/contests/:contestSlug/tasks`
 
 #### 目的
 
@@ -107,13 +118,13 @@ Practiceコンテストに含まれる問題の一覧を表示します。
 
 #### 表示内容
 
-- 問題ID
+- 問題コード
 - 問題タイトル
 - 各問題詳細ページへのリンク
 
 #### 表示例
 
-| 問題ID | 問題タイトル |
+| 問題コード | 問題タイトル |
 |---|---|
 | A | 文字列長が偶数 |
 | B | 1の個数が3の倍数 |
@@ -125,7 +136,7 @@ Practiceコンテストに含まれる問題の一覧を表示します。
 
 ---
 
-### 問題詳細・提出ページ `/contests/practice/tasks/:taskID`
+### 問題詳細および提出ページ `/contests/:contestSlug/tasks/:taskCode`
 
 #### 目的
 
@@ -135,7 +146,7 @@ MVPでは、問題文表示・提出・判定結果表示を同じページで�
 
 #### 表示内容
 
-- 問題ID
+- 問題コード
 - 問題タイトル
 - 問題文
 - 入力アルファベット
@@ -160,9 +171,9 @@ MVPでは、問題文表示・提出・判定結果表示を同じページで�
 ```text
 /
 ├── /tutorial
-│   └── /contests/practice
+│   └── /contests/:contestSlug
 └── /contests
-    └── /contests/practice
-        └── /contests/practice/tasks
-            └── /contests/practice/tasks/:taskID
+    └── /contests/:contestSlug
+        └── /contests/:contestSlug/tasks
+            └── /contests/:contestSlug/tasks/:taskCode
 ```
