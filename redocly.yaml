@@ -1,0 +1,19 @@
+# Redocly プロジェクト設定（最新 @redocly/cli の openapi preview / lint 用）
+# 使い方:
+#   プレビュー:  npx @redocly/cli preview                 (http://localhost:4000)
+#   検証:        npx @redocly/cli lint fadg-api
+#   HTML生成:    npx @redocly/cli build-docs fadg-api -o api.html
+ignore:
+  # OpenAPI文書以外をプロジェクトスキャンから除外（コード・設定・キャッシュ）
+  - 'frontend'
+  - 'backend'
+  - '.pi'
+  - '.pi-cache-friendly'
+  - '.mekann'
+  - '.github'
+  - 'node_modules'
+apis:
+  fadg-api:
+    root: docs/reference/openapi.yaml
+extends:
+  - recommended

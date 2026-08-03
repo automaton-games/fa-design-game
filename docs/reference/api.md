@@ -20,8 +20,12 @@ APIの契約（エンドポイント・パラメータ・ステータスコー�
 
 ## openapi.yaml の見かた
 
-- **Swagger Editor**: https://editor.swagger.io/ に `openapi.yaml` の内容を貼り付ける。
-- **Redoc（HTML生成）**: `npx @redocly/cli build-docs docs/reference/openapi.yaml`
+リポジトリルートの [redocly.yaml](../../redocly.yaml) が Redocly プロジェクト設定（最新 `@redocly/cli` 対応）。API名は `fadg-api`。
+
+- **ライブプレビュー（推奨）**: `npx @redocly/cli preview --product redoc` → http://localhost:4000 （`openapi.yaml` 編集で再読込）
+- **HTML生成**: `npx @redocly/cli build-docs fadg-api`
+- **検証**: `npx @redocly/cli lint fadg-api`
+- **Swagger Editor**: https://editor.swagger.io/ に `openapi.yaml` を貼り付ける。
 - **VS Code**: OpenAPI 拡張機能でプレビュー。
 
-> GitHub Pages での Swagger UI ホスティングは今後追加を想定する。フロントエンド・バックエンドのクライアント/スタブコード生成も `openapi.yaml` から行う。
+> フロントエンド・バックエンドのクライアント/スタブコード生成も `openapi.yaml` から行う。GitHub Pages でのホスティングは今後追加を想定する。
