@@ -13,3 +13,4 @@
 - [0002 alphabetの情報源](../adr/0002-alphabet-source.md)
 - [0003 構造検証と提出検証の責務境界](../adr/0003-validation-boundary.md)
 - [0004 正解DFAのライフサイクル](../adr/0004-answer-dfa-lifecycle.md)
+- [0005 永続化層と起動時読み込み](../adr/0005-persistence-strategy.md)
