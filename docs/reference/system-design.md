@@ -276,34 +276,34 @@ erDiagram
     Problem ||--o{ ProblemTransition : has
 
     Contest {
-        id PK
-        slug UK
-        title
-        description
+        bigint id PK
+        string slug UK
+        string title
+        string description
     }
     Problem {
-        id PK
-        contest_id FK
-        code
-        title
-        statement
-        start_state FK
-        state_limit
+        bigint id PK
+        bigint contest_id FK
+        string code
+        string title
+        string statement
+        string start_state FK
+        int state_limit
     }
     ProblemAlphabet {
-        problem_id PK,FK
-        symbol     PK
+        bigint problem_id PK, FK
+        string symbol PK
     }
     ProblemState {
-        problem_id PK,FK
-        state      PK
-        is_accept
+        bigint problem_id PK, FK
+        string state PK
+        boolean is_accept
     }
     ProblemTransition {
-        problem_id PK,FK
-        from_state PK,FK
-        symbol     PK,FK
-        to_state   FK
+        bigint problem_id PK, FK
+        string from_state PK, FK
+        string symbol PK, FK
+        string to_state FK
     }
 ```
 
