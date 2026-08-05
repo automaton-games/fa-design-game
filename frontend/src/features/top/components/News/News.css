@@ -1,0 +1,26 @@
+.news > p {
+  font-size: var(--font-xl);
+}
+.news__item {
+  border-bottom: 1px solid var(--border-sub);
+  padding: var(--space-2) 0;
+  margin: var(--space-2);
+}
+.news__item > p {
+  font-size: var(--font-lg);
+}
+.news__text {
+  color: var(--text-sub); 
+}
+.news__detail__wrapper {
+  display: flex;
+}
+.news__detail {
+  margin-left: auto;
+}
+.news__button__wrapper {
+  display: flex;
+}
+.news__button {
+  margin-left: auto;
+}

@@ -1,4 +1,4 @@
-import Top from "./features/top/screens/page";
+import Top from "./features/top/pages/Top";
 
 function App() {
   return (

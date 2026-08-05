@@ -1,8 +1,42 @@
-.contest__detail {
+.contests > p {
+  font-size: var(--font-xl);
+}
+.contest__item {
   display: flex;
   align-items: center;
   gap: 16px;
+  margin: var(--space-4) 0;
+  padding: var(--space-1);
+  border-bottom: 1px solid var(--border-sub);
+}
+.contest__item a {
+  font-size: var(--font-lg);
 }
 .contest__level {
+  margin-left: auto;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-md);
+}
+.contest__level--intro {
+  background-color: var(--color-purple-100);
+  color: var(--text-accent);
+}
+.contest__level--beginner {
+  background-color: var(--color-purple-400);
+  color: var(--text-primary);
+}
+.contest__level--intermediate {
+  background-color: var(--color-purple-600);
+  color: var(--text-inverse);
+}
+.contest__level--advanced {
+  background-color: var(--color-purple-800);
+  color: var(--text-inverse);
+}
+
+.contests__button__wrapper {
+  display: flex;
+}
+.contests__button {
   margin-left: auto;
 }

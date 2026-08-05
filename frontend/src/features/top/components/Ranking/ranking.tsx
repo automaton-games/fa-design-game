@@ -15,17 +15,19 @@ const topPlayersData: User[] = [ // レート上位のUserを高い順で並べ�
 
 export default function Ranking() {
   return (
-      <div>
+      <div className="ranking">
         <p>ランキング</p> 
         <div className="ranking__list">
           {topPlayersData.map((user, rank) => (
-            <div className="ranking__detail" key={rank}>
-              <p>{rank+1}. {user.name}</p>
+            <div className="ranking__item" key={rank}>
+              <p>{rank+1}.  {user.name}</p>
               <div className="ranking__rate">{user.rate}</div>
             </div> 
           ))}
         </div>
-        <Button>もっと見る</Button>
+        <div className="ranking__button__wrapper">
+          <Button className="ranking__button">もっと見る</Button>
+        </div>
       </div>
   ) 
 }

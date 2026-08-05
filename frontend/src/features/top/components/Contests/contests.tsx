@@ -9,20 +9,30 @@ const contestsData: Contest[] = [ // 実データが無いため仮置き
   {slug: "practice001", title: "Practice 001", level: "入門"},
 ]
 
+const levelClassMap: Record<string, string> = {
+  "入門": "contest__level--intro",
+  "初級": "contest__level--beginner",
+  "中級": "contest__level--intermediate",
+  "上級": "contest__level--advanced",
+}
 
 export default function Contests() {
   return (
-      <div>
+      <div className="contests">
         <p>コンテスト</p>
         <div className="contest__list">
           {contestsData.map((contest) => (
-            <div className="contest__detail" key={contest.slug}>
+            <div className="contest__item" key={contest.slug}>
               <a>{contest.title}</a>
-              <div className="contest__level">{contest.level}</div>
+              <div className={`contest__level ${levelClassMap[contest.level] ?? ""}`}>
+                {contest.level}
+              </div>
             </div> 
           ))}
         </div>
-        <Button>もっと見る</Button>
+        <div className="contests__button__wrapper">
+          <Button className="contests__button">もっと見る</Button>
+        </div>
       </div>
   ) 
 }

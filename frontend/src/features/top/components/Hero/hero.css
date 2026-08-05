@@ -1,7 +1,32 @@
 .hero__explanation {
-  gap: 16px;
+  margin: var(--space-8) 0;
+  gap: var(--space-4);
   display: flex;
 }
+
+.hero__explanation > * {
+  flex: 1;
+  min-width: 0;
+}
+
 .hero__upside {
   display: flex;
+}
+
+.hero__headline {
+  color: var(--text-accent);
+  font-size: var(--font-2xl);
+  font-weight: bold;
+}
+.hero__subtext {
+  color: var(--text-sub);
+}
+.hero__tutorials {
+  display: flex;
+  margin: var(--space-2) 0;
+  gap: var(--space-2);
+}
+
+.hero__tutorials button {
+  flex: 1;
 }

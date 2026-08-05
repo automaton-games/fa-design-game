@@ -2,11 +2,19 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-sub);
+  margin: var(--space-1);
+  padding: var(--space-1);
+  height: 64px;
 }
 .header__nav {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-left: auto;
+}
+
+.header__title {
+  color: var(--text-accent);
+  font-weight: bold;
 }

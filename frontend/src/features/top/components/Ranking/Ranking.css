@@ -1,8 +1,20 @@
-.ranking__detail {
+.ranking > p {
+  font-size: var(--font-xl);
+}
+.ranking__item {
   display: flex;
   align-items: center;
-  gap: 16px;
+  padding: 0 var(--space-2);
+  margin: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-sub);
 }
-.ranking__level {
+.ranking__rate {
+  margin-left: auto;
+}
+
+.ranking__button__wrapper {
+  display: flex;
+}
+.ranking__button {
   margin-left: auto;
 }

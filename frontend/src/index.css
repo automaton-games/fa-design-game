@@ -1,11 +1,34 @@
 body {
-  margin: 0;
+  margin: 0 var(--space-8);
+  font-size: var(--font-md);
   font-family: "Noto Sans JP", sans-serif;
   background-color: var(--background-default);
   color: var(--text-primary);
 }
+img {
+  max-width: 100%;
+  height: auto;      /* 縦横比を保つ */
+  display: block;
+}
 
 :root {
+  /* 余白の大きさ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* 文字の大きさ pxだとブラウザ側の大きさ変更を無視してしまうためremで指定 */
+  --font-xs: 0.75rem;    /* 12px - 補足、キャプション */
+  --font-sm: 0.875rem;   /* 14px - サブテキスト */
+  --font-md: 1rem;       /* 16px - 本文（基準） */
+  --font-lg: 1.25rem;    /* 20px - 小見出し */
+  --font-xl: 1.5rem;     /* 24px - 見出し */
+  --font-2xl: 2rem;      /* 32px - ページタイトル */
+
   /* 紫のカラーパレット */
   --color-purple-100: #ECDDF7;
   --color-purple-400: #BB87FF;
@@ -15,7 +38,7 @@ body {
   /* グレーのカラーパレット */
   --color-gray-0: #FFFFFF;
   --color-gray-300: #F4F4F4;
-  --color-gray-500: #ECEDF2;
+  --color-gray-550: #D0D2D3;
   --color-gray-600: #ADB5BD;
   --color-gray-700: #677278;
   --color-gray-800: #334261;
@@ -31,13 +54,17 @@ body {
   --color-red-700: #BA1A1A;
   --color-red-900: #93000A;
   
-  /* ボタンの色 */
+  /* ボタンの色 普段は枠線のみで、ホバーしたときに塗りつぶされる。そのため、ホバー時の色は別で設定していない */
   --button-primary: var(--color-purple-600);
-  --button-primary-hover: var(--color-purple-800);
+  --button-primary-text: var(--color-purple-800);
+  --button-primary-text-hover: var(--color-gray-0);
+  --button-sub: var(--color-gray-1000);
+  --button-sub-text: var(--color-gray-800);
+  --button-sub-text-hover: var(--color-gray-0);
   
   /* 線の色 */
   --border-primary: var(--color-gray-1000);
-  --border-sub: var(--color-gray-600);
+  --border-sub: var(--color-gray-550);
   --border-accent: var(--color-purple-600);
 
   /* 文字の色 */

@@ -1,4 +1,5 @@
 import Button from "../../../../components/Button/button"
+import "./News.css"
 
 type News = {id: number, title: string, text: string}
 const newsData: News[] = [ // レート上位のUserを高い順で並べたリスト(実データが無いため仮置き)
@@ -9,17 +10,22 @@ const newsData: News[] = [ // レート上位のUserを高い順で並べたリ�
 
 export default function News() {
   return (
-    <div>
+    <div className="news">
       <p>お知らせ</p> 
       <div className="news__list">
         {newsData.map((news) => (
-          <div className="news__detail" key={news.id}>
+          <div className="news__item" key={news.id}>
             <p>{news.title}</p>
             <div className="news__text">{news.text}</div>
+            <div className="news__detail__wrapper">
+              <Button className="news__detail" variant="sub">詳細を見る</Button>
+            </div>
           </div> 
         ))}
       </div>
-      <Button>もっと見る</Button>
+      <div className="news__button__wrapper">
+        <Button className="news__button">もっと見る</Button>
+      </div>
     </div>
   ) 
 }

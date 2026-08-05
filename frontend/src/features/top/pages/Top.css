@@ -1,0 +1,10 @@
+.top__container {
+  margin: var(--space-8) 0;
+  gap: var(--space-4);
+  display: flex;
+}
+
+.top__container > * {
+  flex: 1;
+  min-width: 0;
+}
