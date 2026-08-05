@@ -1,4 +1,57 @@
 body {
   margin: 0;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: "Noto Sans JP", sans-serif;
+  background-color: var(--background-default);
+  color: var(--text-primary);
+}
+
+:root {
+  /* 紫のカラーパレット */
+  --color-purple-100: #ECDDF7;
+  --color-purple-400: #BB87FF;
+  --color-purple-600: #8843E1;
+  --color-purple-800: #5C10BE;
+  
+  /* グレーのカラーパレット */
+  --color-gray-0: #FFFFFF;
+  --color-gray-300: #F4F4F4;
+  --color-gray-500: #ECEDF2;
+  --color-gray-600: #ADB5BD;
+  --color-gray-700: #677278;
+  --color-gray-800: #334261;
+  --color-gray-1000: #000000;
+
+  /* 緑のカラーパレット */
+  --color-green-200: #CCEFD2;
+  --color-green-700: #009944;
+  --color-green-900: #037938;
+
+  /* 赤のカラーパレット */
+  --color-red-200: #FFCECB;
+  --color-red-700: #BA1A1A;
+  --color-red-900: #93000A;
+  
+  /* ボタンの色 */
+  --button-primary: var(--color-purple-600);
+  --button-primary-hover: var(--color-purple-800);
+  
+  /* 線の色 */
+  --border-primary: var(--color-gray-1000);
+  --border-sub: var(--color-gray-600);
+  --border-accent: var(--color-purple-600);
+
+  /* 文字の色 */
+  --text-primary: var(--color-gray-800);
+  --text-sub: var(--color-gray-700);
+  --text-inverse: var(--color-gray-0);
+  --text-accent: var(--color-purple-800);
+  --text-success: var(--color-green-900);
+  --text-error: var(--color-red-900);
+  
+  /* 背景 */
+  --background-default: var(--color-gray-300);
+  --background-surface: var(--color-gray-0);
+  --background-error: var(--color-red-200);
+  --background-success: var(--color-green-200);
+  --background-accent: var(--color-purple-100);
 }
