@@ -1,5 +1,11 @@
+import Top from "./features/top/screens/page";
+
 function App() {
-  return <h1>Hello World</h1>
+  return (
+    <>
+      <Top />
+    </>
+  );
 }
 
-export default App
+export default App;
