@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid #ddd;
+}
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}

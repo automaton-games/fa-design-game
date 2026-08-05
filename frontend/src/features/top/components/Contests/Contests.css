@@ -1,0 +1,8 @@
+.contest__detail {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.contest__level {
+  margin-left: auto;
+}

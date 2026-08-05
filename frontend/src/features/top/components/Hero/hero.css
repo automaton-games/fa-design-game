@@ -1,0 +1,7 @@
+.hero__explanation {
+  gap: 16px;
+  display: flex;
+}
+.hero__upside {
+  display: flex;
+}
