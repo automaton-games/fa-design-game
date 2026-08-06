@@ -93,4 +93,4 @@ MySQLとGORMの導入は必須とせず、MVP後または実装に余裕があ�
 - DFAをJSON形式で提出できる
 - 正しいDFAに対してAcceptedが返る
 - 誤ったDFAに対してWrong Answerが返る
-- Wrong Answerの場合に反例文字列が表示される
+- Wrong Answerの場合に反例（入力記号列）が表示される

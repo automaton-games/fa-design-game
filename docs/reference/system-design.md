@@ -107,12 +107,14 @@ HTTPステータスとエラーコードの完全な対応は [openapi.yaml](ope
 | `Store.Get`（問題） | 問題不存在 | `PROBLEM_NOT_FOUND` | `404` | 提出者 |
 | `Validate`（dfa） | `ValidationError` | — | — | 呼び出し元が文脈化 |
 | `Store.Judge`（問題） | `JudgeError` | `PROBLEM_NOT_FOUND` / `DFA_STRUCTURAL` / `SUBMISSION_CONDITION` | `404` / `422` | 提出者 |
-| `Equivalent`（dfa） | 判定結果、無効なゼロ値 | — / `INTERNAL` | `200` / `500` | 正常 / サーバー |
+| `Equivalent`（dfa） | 判定結果（正常）。契約違反はpanic | — | `200` | 正常 |
 | `NewStore`（起動時） | 正解DFA不良 | —（起動中止） | — | サーバー |
+
+> 正しいコードでは到達しない契約違反（`Equivalent`のzero-value引数など）は`error`を返さず**panic**で落とす。net/httpがpanicを`500 INTERNAL`＋スタックトレースへ変換するため、バグが即座に露出する。`INTERNAL`はこのpanicを含む稼働中の想定外エラーの到達点である。
 
 ### 2.2 共通データ型：検証済みDFA（`ValidatedDFA`）
 
-構造検証を通過し、有効なDFAの不変条件を満たすことが保証されたDFA。正解DFAと提出DFAの両方で使う。素朴なconcrete structとして公開するが、フィールドはすべて非公開にし、正常値の構築は`Validate`経由に限定する。Goでは外部packageもゼロ値を作れるため、`states`と`alphabet`が1要素以上という既存の不変条件でゼロ値を検出する。検出専用のbooleanは持たない。`Validate`は入力のsliceとmapを再帰的にコピーしてから保持する。
+構造検証を通過し、有効なDFAの不変条件を満たすことが保証されたDFA。正解DFAと提出DFAの両方で使う。素朴なconcrete structとして公開するが、フィールドはすべて非公開にし、正常値の構築は`Validate`経由に限定する。Goでは外部packageもゼロ値を作れるため、`Equivalent`は`states`と`alphabet`が1要素以上という既存の不変条件でゼロ値を検出し、契約違反としてpanicする（第5.4.3節）。検出専用のbooleanは持たない。この検出は「states/alphabet は1以上」の不変量に依存しており、同不変量を緩める変更を行う場合はゼロ値検出も併せて再検討すること。`Validate`は入力のsliceとmapを再帰的にコピーしてから保持する。
 
 | フィールド | 型 | 制約（不変条件） | 説明 |
 |---|---|---|---|
@@ -256,6 +258,32 @@ func (s *Store) GetContest(contestSlug string) (Contest, error)
 - **事後条件**: 成功時、戻り値の `Contest` は slug/title/description を持つ。
 - **引数**: `contestSlug string`
 - **戻り値**: `(Contest, error)`
+- **エラー**: コンテスト不存在（`PROBLEM_NOT_FOUND`、HTTP `404`）。
+
+#### 3.3.3 コンテスト一覧の取得（`Store.ListContests`）
+
+```go
+func (s *Store) ListContests() []Contest
+```
+
+- **概要**: 全コンテストのメタデータを取得する。読み取りAPIの `GET /api/contests` が使う。MVPではPracticeコンテスト1件を返す。
+- **事前条件**: なし。
+- **事後条件**: 戻り値は空でない `[]Contest` であり、各要素は slug/title/description を持つ。
+- **引数**: なし。
+- **戻り値**: `[]Contest`
+- **エラー**: なし（ストアは不変であり、読み込み時に検証済み）。
+
+#### 3.3.4 問題一覧の取得（`Store.ListTasks`）
+
+```go
+func (s *Store) ListTasks(contestSlug string) ([]Problem, error)
+```
+
+- **概要**: 指定したコンテストの全問題を取得する。読み取りAPIの `GET /api/contests/{contestSlug}/tasks` が使う。handlerは各 `Problem` から `TaskSummary`（code/title）を構築する。
+- **事前条件**: なし。
+- **事後条件**: 成功時、戻り値は指定コンテストに属する全問題の `[]Problem` を持つ。
+- **引数**: `contestSlug string`
+- **戻り値**: `([]Problem, error)`
 - **エラー**: コンテスト不存在（`PROBLEM_NOT_FOUND`、HTTP `404`）。
 
 ### 3.4 論理データモデル
@@ -416,7 +444,7 @@ DB移行後の loader はこのスキーマから JOIN で `DFAInput` を組み�
 
 #### 物理設計（MySQL）
 
-論理スキーマを MySQL（InnoDB、`utf8mb4`）へ実装する。MVP では DB を使わないため、これは DB 移行時の物理設計である。
+論理スキーマを MySQL（InnoDB、`utf8mb4`）へ実装する。**本節は DB 物理設計の正である。MVP（JSON ファイル loader）では参照不要だが、DB 移行時にここを更新する。MVP 段階の実装対象は論理データモデル（第3.4節）と loader seam の方針のみである。**
 
 **DDL の管理**: DDL は [golang-migrate](https://github.com/golang-migrate/migrate) で `backend/migrations/` 配下のバージョン付き SQL ファイル（`0001_init.up.sql` / `0001_init.down.sql`）として管理する。マイグレーションファイルが DDL の正（SSOT）であり、本節は方針のみを示す。GORM 構造体は読み取りマッピングであり、スキーマ変更はマイグレーションファイルで行う（AutoMigrate には依存しない）。マイグレーション実装は DB 移行 issue で扱う。
 
@@ -450,9 +478,9 @@ DB移行後の loader はこのスキーマから JOIN で `DFAInput` を組み�
 
 | エンドポイント | データ元 | 備考 |
 |---|---|---|
-| `GET /api/contests` | ストア（`Store.GetContest`） | Practiceコンテストのみ |
+| `GET /api/contests` | ストア（`Store.ListContests`） | Practiceコンテストのみ |
 | `GET /api/contests/{contestSlug}` | ストア（`Store.GetContest`） | Practiceコンテスト情報（[openapi.yaml](openapi.yaml)） |
-| `GET /api/contests/{contestSlug}/tasks` | ストア | 各問題の Code / Title |
+| `GET /api/contests/{contestSlug}/tasks` | ストア（`Store.ListTasks`） | 各問題の Code / Title |
 | `GET /api/contests/{contestSlug}/tasks/{taskCode}` | ストア（`Store.Get(contestSlug, taskCode)`） | Code / Title / Statement / Alphabet |
 
 ---
@@ -553,14 +581,9 @@ type JudgeResult struct {
 handler は `Accepted` から `result`（`Accepted`/`WrongAnswer`）を導出し、[SubmitResponse](openapi.yaml) を構築する。`result` は API 表現であり、ドメイン型には持たない。
 
 ```go
-// dfa package。HTTPを知らない構造検証エラー。
+// dfa package。HTTPを知らない構造検証エラー（ユーザ起因）。
 type ValidationError struct {
     Field   string
-    Message string
-}
-
-// dfa package。ゼロ値混入など、構築境界の破壊を示す内部エラー。
-type InvariantError struct {
     Message string
 }
 ```
@@ -574,7 +597,6 @@ const (
     JudgeProblemNotFound      JudgeErrorKind = "problem_not_found"
     JudgeStructuralInvalid    JudgeErrorKind = "structural_invalid"
     JudgeConditionViolated    JudgeErrorKind = "condition_violated"
-    JudgeInternal             JudgeErrorKind = "internal"
 )
 
 type JudgeError struct {
@@ -611,28 +633,28 @@ func (s *Store) Judge(contestSlug, taskCode string, input dfa.DFAInput) (dfa.Jud
 - **概要**: 問題を解決し、提出DFAの構造検証、問題固有制約、等価性判定を一つの提出ユースケースとして実行する。
 - **事前条件**: なし。
 - **事後条件**: 成功時は正解または不正解の`JudgeResult`を返す。失敗時は結果のゼロ値と`*JudgeError`を返す。
-- **エラー**: `JudgeProblemNotFound`、`JudgeStructuralInvalid`、`JudgeConditionViolated`、`JudgeInternal`のいずれか。DFA層の`ValidationError`は`JudgeStructuralInvalid`へ、`InvariantError`は`JudgeInternal`へwrapする。
+- **エラー**: `JudgeProblemNotFound`、`JudgeStructuralInvalid`、`JudgeConditionViolated`のいずれか。DFA層の`ValidationError`は`JudgeStructuralInvalid`へwrapする。`Equivalent`の契約違反は到達不能でありpanicするため、`Judge`はこれを`error`として扱わない（net/httpがpanicを`500 INTERNAL`へ変換する）。
 - **処理**:
   1. `contestSlug`と`taskCode`で問題を取得する。
   2. `dfa.Validate(input, p.alphabet)`を呼ぶ。
   3. `p.stateLimit > 0`なら`validated.StateCount()`で状態数上限を検証する。
-  4. `dfa.Equivalent(validated, p.answer)`を呼ぶ。`InvariantError`は`JudgeInternal`へwrapし、成功時は判定結果を返す。
+  4. `dfa.Equivalent(validated, p.answer)`の判定結果を返す。契約違反（zero-valueやalphabet不一致）は到達不能であり、`Equivalent`内でpanicする。
 
 正解DFAと入力アルファベットは`Problem`の外へ出さない。問題固有制約が増えた場合もこの操作の内部に保ち、handlerへ分岐を追加しない。
 
 #### 5.4.3 `dfa.Equivalent`
 
 ```go
-func Equivalent(submitted, answer ValidatedDFA) (JudgeResult, error)
+func Equivalent(submitted, answer ValidatedDFA) JudgeResult
 ```
 
 - **概要**: 2つの検証済みDFAの言語等価性を判定する。
-- **事前条件**: なし。通常経路では`submitted`と`answer`はともに`Validate`の成功値で、同じ`alphabet`を持つ。
+- **事前条件**: 両引数は`Validate`の成功値であり、同じ`alphabet`を持つこと。これらは正しいコードでは常に満たされ、違反はバグである。
 - **事後条件**: `Accepted==true` ⟺ 2つのDFAが受理する言語が一致。`Accepted==false` のとき `Counterexample` は一方だけが受理する最短の入力記号列（ε を表す空sliceを含む）。入力記号は複数文字でもよく、文字列へ連結せず記号列のまま返す。
 - **引数**: `submitted, answer ValidatedDFA`
-- **戻り値**: `(JudgeResult, error)`
-- **エラー**: いずれかの引数で`states`または`alphabet`が空、または両者の入力アルファベットが異なる場合は`InvariantError`。通常の不一致はエラーではない。
-- **処理**: 既存の不変条件からゼロ値を検出して境界を確認した後、2つのDFAの直積オートマトンを構成し、開始状態から到達可能な状態対を幅優先探索する。受理状態のフラグが異なる状態対が見つかれば非等価とし、そこまでの最短パスを反例として返す。1つも見つからなければ等価とする。状態数は有限なので循環を含んでも終了する。
+- **戻り値**: `JudgeResult`
+- **エラー**: 返さない。事前条件違反（zero-valueの`ValidatedDFA`、両者の`alphabet`不一致）は正しいコードでは到達不能な契約違反であり、panicで落とす（net/httpがpanicを`500 INTERNAL`＋スタックトレースに変換する）。
+- **処理**: 事前条件（`states`/`alphabet`が空でないこと、両者の`alphabet`が一致すること）を確認し、違反すればpanicした上で、2つのDFAの直積オートマトンを構成し、開始状態から到達可能な状態対を幅優先探索する。受理状態のフラグが異なる状態対が見つかれば非等価とし、そこまでの最短パスを反例として返す。1つも見つからなければ等価とする。状態数は有限なので循環を含んでも終了する。
 
 ### 5.5 構造検証の実装
 
@@ -688,13 +710,13 @@ func Equivalent(submitted, answer ValidatedDFA) (JudgeResult, error)
 2. **問題データローダと提出ユースケース**: 永続化層の loader（MVP は JSON ファイル、[ADR 0005](../adr/0005-persistence-strategy.md)）と `NewStore(load)` を実装。問題データを検証して`ValidatedDFA`で保持し（[ADR 0004](../adr/0004-answer-dfa-lifecycle.md)）、`Problem`、`Get`、単一の入口である`Store.Judge`を実装。
 3. **読み取りAPI**: contests、tasks、task detail の各エンドポイント。
 4. **提出API（HTTP/API層）**: strict decode、`Store.Judge`の呼び出し、エラーとHTTPレスポンスの変換。
-5. **#54 等価性判定**: `Equivalent(submitted, answer ValidatedDFA) (JudgeResult, error)`を実装。通常経路では同じ入力アルファベットを持つ検証済みDFAを受け、ε反例を含む最短の入力記号列を返す。ゼロ値や入力アルファベット不一致は`InvariantError`にする。
+5. **#54 等価性判定**: `Equivalent(submitted, answer ValidatedDFA) JudgeResult`を実装。通常経路では同じ入力アルファベットを持つ検証済みDFAを受け、ε反例を含む最短の入力記号列を返す。ゼロ値や入力アルファベット不一致は正しいコードでは起きない契約違反であり、panicで落とす（第5.4.3節）。
 6. **結合**: 提出から判定結果までをつなぐ。
 
 ### 7.2 関連Issueへの影響
 
 - **#22**: 第5.5節・第5.6節の拡張要件を反映する。
-- **#54**: 第5.4.3節の入力契約（検証済みDFA、入力記号列としての反例、εは空slice、`InvariantError`）を反映する。
+- **#54**: 第5.4.3節の入力契約（検証済みDFA、入力記号列としての反例、εは空slice、契約違反はpanic）を反映する。
 
 ### 7.3 関連ドキュメントの整合
 
