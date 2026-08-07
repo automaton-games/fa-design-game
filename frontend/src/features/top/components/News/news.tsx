@@ -17,9 +17,6 @@ export default function News() {
           <div className="news__item" key={news.id}>
             <p>{news.title}</p>
             <div className="news__text">{news.text}</div>
-            <div className="news__detail__wrapper">
-              <Button className="news__detail" variant="sub">詳細を見る</Button>
-            </div>
           </div> 
         ))}
       </div>
