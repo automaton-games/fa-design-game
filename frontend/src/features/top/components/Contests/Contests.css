@@ -1,5 +1,12 @@
+.contests {
+  display: flex;
+  flex-direction: column;
+}
 .contests > p {
   font-size: var(--font-xl);
+}
+.contest__list {
+  padding-bottom: var(--space-2);
 }
 .contest__item {
   display: flex;

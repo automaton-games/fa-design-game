@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  border-bottom: 1px solid var(--border-sub);
+  border-bottom: 1px solid var(--border-primary);
   margin: var(--space-1);
   padding: var(--space-1);
   height: 64px;
@@ -13,8 +13,13 @@
   gap: 16px;
   margin-left: auto;
 }
+.header__nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
 
 .header__title {
   color: var(--text-accent);
   font-weight: bold;
+  text-decoration: none;
 }

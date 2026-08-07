@@ -26,7 +26,7 @@ export default function Ranking() {
           ))}
         </div>
         <div className="ranking__button__wrapper">
-          <Button className="ranking__button">もっと見る</Button>
+          <Button className="ranking__button" variant="sub">もっと見る</Button>
         </div>
       </div>
   ) 

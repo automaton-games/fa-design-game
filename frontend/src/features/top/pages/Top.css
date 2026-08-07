@@ -3,8 +3,11 @@
   gap: var(--space-4);
   display: flex;
 }
-
 .top__container > * {
   flex: 1;
   min-width: 0;
+}
+.top__container > *:not(:first-child) {
+  border-left: 1px solid var(--border-primary);
+  padding-left: var(--space-4);
 }

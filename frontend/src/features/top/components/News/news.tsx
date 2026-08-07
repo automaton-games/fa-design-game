@@ -15,13 +15,13 @@ export default function News() {
       <div className="news__list">
         {newsData.map((news) => (
           <div className="news__item" key={news.id}>
-            <p>{news.title}</p>
+            <a href="#" className="news__title">{news.title}</a>
             <div className="news__text">{news.text}</div>
           </div> 
         ))}
       </div>
       <div className="news__button__wrapper">
-        <Button className="news__button">もっと見る</Button>
+        <Button className="news__button" variant="sub">もっと見る</Button>
       </div>
     </div>
   ) 

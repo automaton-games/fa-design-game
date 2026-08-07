@@ -1,15 +1,24 @@
+.ranking {
+  display: flex;
+  flex-direction: column;
+}
 .ranking > p {
   font-size: var(--font-xl);
+}
+.ranking__list {
+  padding-bottom: var(--space-2);
 }
 .ranking__item {
   display: flex;
   align-items: center;
   padding: 0 var(--space-2);
-  margin: var(--space-2) 0;
   border-bottom: 1px solid var(--border-sub);
+  font-size: var(--font-sm);
 }
 .ranking__rate {
   margin-left: auto;
+  font-weight: bold;
+  color: var(--text-accent);
 }
 
 .ranking__button__wrapper {

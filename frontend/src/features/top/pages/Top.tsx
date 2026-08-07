@@ -1,4 +1,5 @@
 import Header from "../../../components/Header/Header";
+import Footer from "../../../components/Footer/Footer";
 import Hero from "../components/Hero/Hero";
 import Contests from "../components/Contests/Contests";
 import Ranking from "../components/Ranking/Ranking";

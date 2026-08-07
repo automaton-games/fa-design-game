@@ -3,12 +3,20 @@ body {
   font-size: var(--font-md);
   font-family: "Noto Sans JP", sans-serif;
   background-color: var(--background-default);
+  background-image:
+    linear-gradient(to right, var(--border-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-grid) 1px, transparent 1px);
+  background-size: var(--space-6) var(--space-6);
   color: var(--text-primary);
 }
 img {
   max-width: 100%;
   height: auto;      /* 縦横比を保つ */
   display: block;
+}
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  color: var(--icon-primary);
 }
 
 :root {
@@ -38,6 +46,7 @@ img {
   /* グレーのカラーパレット */
   --color-gray-0: #FFFFFF;
   --color-gray-300: #F4F4F4;
+  --color-gray-400: #F0F4F6;
   --color-gray-550: #D0D2D3;
   --color-gray-600: #ADB5BD;
   --color-gray-700: #677278;
@@ -54,17 +63,21 @@ img {
   --color-red-700: #BA1A1A;
   --color-red-900: #93000A;
   
-  /* ボタンの色 普段は枠線のみで、ホバーしたときに塗りつぶされる。そのため、ホバー時の色は別で設定していない */
+  /* ボタンの色 普段は塗りつぶし、ホバーしたときに透明になる */
   --button-primary: var(--color-purple-600);
   --button-primary-text: var(--color-purple-800);
   --button-primary-text-hover: var(--color-gray-0);
   --button-sub: var(--color-gray-1000);
   --button-sub-text: var(--color-gray-800);
   --button-sub-text-hover: var(--color-gray-0);
+
+  /* アイコンの色 */
+  --icon-primary: var(--color-purple-600);
   
   /* 線の色 */
   --border-primary: var(--color-gray-1000);
   --border-sub: var(--color-gray-550);
+  --border-grid: var(--color-gray-400);
   --border-accent: var(--color-purple-600);
 
   /* 文字の色 */
@@ -76,8 +89,7 @@ img {
   --text-error: var(--color-red-900);
   
   /* 背景 */
-  --background-default: var(--color-gray-300);
-  --background-surface: var(--color-gray-0);
+  --background-default: var(--color-gray-0);
   --background-error: var(--color-red-200);
   --background-success: var(--color-green-200);
   --background-accent: var(--color-purple-100);
