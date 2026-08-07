@@ -19,10 +19,10 @@ export default function Hero() {
         </div>
       </div>
       <div className="hero__explanation">
-        <Card title="FAを設計する">状態と遷移を自由に設計して、与えられた仕事を満たすオートマトンを作ろう</Card> 
-        <Card title="JSONで提出">オートマトンをJSON形式で記述して提出します。サイト内エディタでの記述かファイルの提出が可能です。</Card> 
-        <Card title="自動判定">提出すると、テストケースに基づいて自動で判定。判例も表示されるので改善を繰り返せます。</Card> 
-        <Card title="実力を競おう">コンテスト形式の課題に挑戦して、クリア数や回答時間を競おう</Card> 
+        <Card icon="crossword" title="FAを設計する">状態と遷移を自由に設計して、与えられた仕事を満たすオートマトンを作ろう</Card>
+        <Card icon="code_xml" title="JSONで提出">オートマトンをJSON形式で記述して提出します。サイト内エディタでの記述かファイルの提出が可能です。</Card>
+        <Card icon="check_circle" title="自動判定">提出すると、テストケースに基づいて自動で判定。判例も表示されるので改善を繰り返せます。</Card>
+        <Card icon="leaderboard" title="実力を競おう">コンテスト形式の課題に挑戦して、クリア数や回答時間を競おう</Card>
       </div>
     </>
   )

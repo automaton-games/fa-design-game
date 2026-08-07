@@ -3,14 +3,18 @@ import "./Card.css"
 
 type CardProps = {
   title: string,
+  icon?: string,
   children: ReactNode,
 }
 
-export default function Card({title, children}: CardProps) {
+export default function Card({title, icon, children}: CardProps) {
   return (
     <div className="card">
-      <p className="card__title">{title}</p> 
-      <p className="card__text">{children}</p> 
+      <p className="card__title">
+        {icon && <span className="material-symbols-outlined">{icon}</span>}
+        {title}
+      </p>
+      <p className="card__text">{children}</p>
     </div>
   );
 }
