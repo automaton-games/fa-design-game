@@ -7,21 +7,23 @@
 /* メインのボタンのデザイン */
 .button--primary {
   border: 1px solid var(--button-primary);
-  color: var(--button-primary-text);
+  color: var(--button-primary-text-hover);
+  background-color: var(--button-primary);
   transition: background-color 0.2s;
 }
 .button--primary:hover {
-  background: var(--button-primary);
-  color: var(--button-primary-text-hover);
+  background-color: transparent;
+  color: var(--button-primary-text);
 }
 
 /* サブのボタンのデザイン */
 .button--sub {
   border: 1px solid var(--button-sub);
-  color: var(--button-sub-text);
+  color: var(--button-sub-text-hover);
+  background-color: var(--button-sub);
   transition: background-color 0.2s;
 }
 .button--sub:hover {
-  background: var(--button-sub);
-  color: var(--button-sub-text-hover);
+  background-color: transparent;
+  color: var(--button-sub-text);
 }
