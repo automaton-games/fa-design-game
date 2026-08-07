@@ -11,6 +11,10 @@
 }
 .news__text {
   color: var(--text-sub); 
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .news__detail__wrapper {
   display: flex;
