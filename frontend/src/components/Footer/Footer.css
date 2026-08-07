@@ -1,0 +1,22 @@
+.footer {
+  height: 200px;
+  border-top: 1px solid var(--border-primary);
+  margin: var(--space-1);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-8);
+  padding: var(--space-4) var(--space-1);
+}
+.footer__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.footer__heading {
+  color: var(--text-primary);
+  font-weight: bold;
+  margin: 0 0 var(--space-1);
+}
+.footer__column a {
+  color: var(--text-sub);
+}

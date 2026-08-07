@@ -17,6 +17,7 @@ export default function Top() {
         <Ranking></Ranking>
         <News></News>
       </div>
+      <Footer></Footer>
     </>
-  ) 
+  )
 }
