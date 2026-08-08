@@ -11,6 +11,21 @@
 
 .hero__upside {
   display: flex;
+  align-items: center;
+}
+
+.hero__upside > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero__picture {
+  display: flex;
+  justify-content: center;
+}
+
+.hero__picture img {
+  width: 100%;
 }
 
 .hero__headline {

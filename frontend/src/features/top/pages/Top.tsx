@@ -12,11 +12,13 @@ export default function Top() {
   return (
     <>
       <Header ></Header>
-      <Hero></Hero>
-      <div className="top__container">
-        <Contests></Contests>
-        <Ranking></Ranking>
-        <News></News>
+      <div className="page__content">
+        <Hero></Hero>
+        <div className="top__container">
+          <Contests></Contests>
+          <Ranking></Ranking>
+          <News></News>
+        </div>
       </div>
       <Footer></Footer>
     </>
