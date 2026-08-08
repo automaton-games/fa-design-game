@@ -14,6 +14,7 @@
 }
 .footer__heading {
   color: var(--text-primary);
+  font-size: var(--font-md);
   font-weight: bold;
   margin: 0 0 var(--space-1);
 }

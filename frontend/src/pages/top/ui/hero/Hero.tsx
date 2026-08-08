@@ -1,5 +1,4 @@
-import Button from "../../../../components/Button/Button"
-import Card from "../../../../components/Card/Card"
+import { Button, Card } from "@/shared/ui"
 import "./Hero.css"
 
 export default function Hero() {

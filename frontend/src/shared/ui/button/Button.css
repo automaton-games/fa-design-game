@@ -22,7 +22,10 @@
 
 .button__arrow .material-symbols-outlined {
   font-size: 14px;
+  line-height: 1;
   color: currentColor;
+  /* Material Symbolsのグリフが円の中央より上に寄るため、下方向に補正 */
+  transform: translateY(1px);
 }
 
 /* メインのボタンのデザイン */

@@ -10,10 +10,10 @@ type CardProps = {
 export default function Card({title, icon, children}: CardProps) {
   return (
     <div className="card">
-      <p className="card__title">
+      <h3 className="card__title">
         {icon && <span className="material-symbols-outlined">{icon}</span>}
         {title}
-      </p>
+      </h3>
       <p className="card__text">{children}</p>
     </div>
   );
