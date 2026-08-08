@@ -1,8 +1,9 @@
 # フロントエンドのアーキテクチャ
 
-`frontend/src` のディレクトリ構成は [Feature-Sliced Design](https://feature-sliced.design/)（以下 FSD）に従っています。このドキュメントでは、新しくコードを追加するときに**どこに置けばよいか**を判断できるようにすることを目的とします。
+`frontend/src` のディレクトリ構成は Feature-Sliced Design（以下 FSD）に従っています。このドキュメントでは、新しくコードを追加するときに**どこに置けばよいか**を判断できるようにすることを目的とします。
 
-デザイントークンやコンポーネントの見た目のルールは [デザインシステム](design-system.md) を参照してください。
+- FSD という方法論そのものの解説は [Feature-Sliced Designとは](feature-sliced-design.md) を参照してください
+- デザイントークンやコンポーネントの見た目のルールは [デザインシステム](design-system.md) を参照してください
 
 ## なぜ FSD にしたか
 
