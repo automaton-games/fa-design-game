@@ -1,4 +1,5 @@
 body {
+  position: relative;
   margin: 0;
   font-size: var(--font-md);
   font-family: "Noto Sans JP", sans-serif;
@@ -36,6 +37,11 @@ img {
   --font-lg: 1.25rem;    /* 20px - 小見出し */
   --font-xl: 1.5rem;     /* 24px - 見出し */
   --font-2xl: 2rem;      /* 32px - ページタイトル */
+
+  /* 背景のアクセントの正方形の大きさ */
+  --background-accent-sm: 16px;
+  --background-accent-md: 32px;
+  --background-accent-lg: 64px;
 
   /* 紫のカラーパレット */
   --color-purple-100: #ECDDF7;

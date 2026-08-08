@@ -1,0 +1,44 @@
+.page__accents {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.page__accent--purple {
+  position: absolute;
+  background-color: var(--color-purple-100);
+}
+.page__accent--gray {
+  position: absolute;
+  background-color: var(--color-gray-550);
+}
+.page__accent--1 {
+  width: var(--background-accent-lg);
+  aspect-ratio: 1 / 1;
+  top: 100px;
+  left: 60px;
+}
+.page__accent--2 {
+  width: var(--background-accent-lg);
+  aspect-ratio: 1 / 1;
+  top: 180px;
+  left: 340px;
+}
+.page__accent--3 {
+  width: var(--background-accent-lg);
+  aspect-ratio: 1 / 1;
+  top: 420px;
+  left: 20px;
+}
+.page__accent--4 {
+  width: var(--background-accent-lg);
+  aspect-ratio: 1 / 1;
+  top: 900px;
+  right: 80px;
+}
+.page__accent--5 {
+  width: var(--background-accent-lg);
+  aspect-ratio: 1 / 1;
+  top: 1400px;
+  left: 640px;
+}
