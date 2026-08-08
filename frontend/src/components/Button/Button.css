@@ -1,4 +1,6 @@
 .button {
+  /* buttonはUAスタイルでfontが直接指定されるため、bodyからは継承されない。明示的に継承させる */
+  font: inherit;
   display: flex;
   align-items: center;
   justify-content: space-between;
