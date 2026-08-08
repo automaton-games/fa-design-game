@@ -4,7 +4,7 @@
 
 ## 概要
 
-見た目の統一とレビューのしやすさのために、色・文字サイズ・余白を CSS 変数（デザイントークン）として一箇所にまとめています。定義は [`frontend/src/index.css`](../frontend/src/index.css) にあります。
+見た目の統一とレビューのしやすさのために、色・文字サイズ・余白を CSS 変数（デザイントークン）として一箇所にまとめています。定義は [`frontend/src/app/styles/index.css`](../frontend/src/app/styles/index.css) にあります。
 
 **コンポーネントの CSS では原則としてトークンだけを使い、生の値（`#8843E1`、`16px` など）を直接書かない**というのが基本方針です。色を調整したくなったときに `index.css` だけを見れば済むようにするためです。
 
@@ -98,7 +98,11 @@
 
 ## 共通コンポーネント
 
-`frontend/src/components/` にページをまたいで使うものを置いています。特定のページでしか使わないものは `frontend/src/features/<ページ名>/components/` に置きます。
+ディレクトリ構成は Feature-Sliced Design に従っています。どのレイヤーに置くかの判断基準は [フロントエンドのアーキテクチャ](frontend-architecture.md) を参照してください。ざっくりは以下の通りです。
+
+- 汎用的な部品（Button、Card）は `frontend/src/shared/ui/`
+- 画面の一区画としてまとまった部品（Header、Footer、コンテスト一覧）は `frontend/src/widgets/`
+- 特定のページでしか使わないものは `frontend/src/pages/<ページ名>/ui/`
 
 ### Button
 
@@ -141,7 +145,7 @@ Header は 768px 以下でナビをハンバーガーメニューに畳みます
 
 ### Section（CSS のみ）
 
-[`frontend/src/features/top/components/Section.css`](../frontend/src/features/top/components/Section.css) に、トップページの「コンテスト」「ランキング」「お知らせ」で共通のレイアウトをまとめています。
+[`frontend/src/shared/ui/section/Section.css`](../frontend/src/shared/ui/section/Section.css) に、トップページの「コンテスト」「ランキング」「お知らせ」で共通のレイアウトをまとめています。
 
 | クラス | 役割 |
 | --- | --- |
@@ -164,14 +168,15 @@ Header は 768px 以下でナビをハンバーガーメニューに畳みます
 .button--primary   /* 修飾子 */
 ```
 
-### ファイル名は PascalCase
+### ファイル名は PascalCase、スライスのディレクトリは kebab-case
 
-コンポーネントのファイルとディレクトリは PascalCase で、CSS は同じディレクトリに同名で置きます。
+FSD のスライス（`button`、`contest-list` など）のディレクトリ名は kebab-case、その中のコンポーネントのファイル名は PascalCase です。CSS は同じディレクトリに同名で置きます。
 
 ```
-components/Button/
-├── Button.tsx
-└── Button.css
+shared/ui/button/       ← スライスは kebab-case
+├── Button.tsx          ← コンポーネントは PascalCase
+├── Button.css
+└── index.ts            ← 公開API
 ```
 
 > ⚠️ **import 文の大文字小文字はファイル名と厳密に一致させてください。**
@@ -210,7 +215,7 @@ CSS 変数は「要素に紐づく継承プロパティ」なので、特定の�
 
 | 幅 | 対象 |
 | --- | --- |
-| `768px` | [Top.css](../frontend/src/features/top/pages/Top.css)（3カラム→縦積み、区切り線を左→上へ）、[Header.css](../frontend/src/components/Header/Header.css)（ナビをハンバーガーメニューに）、[Footer.css](../frontend/src/components/Footer/Footer.css)（3カラム→縦積み）、[Hero.css](../frontend/src/features/top/components/Hero/Hero.css)（見出しと画像を縦積み） |
+| `768px` | [TopPage.css](../frontend/src/pages/top/ui/TopPage.css)（3カラム→縦積み、区切り線を左→上へ）、[Header.css](../frontend/src/widgets/header/ui/Header.css)（ナビをハンバーガーメニューに）、[Footer.css](../frontend/src/widgets/footer/ui/Footer.css)（3カラム→縦積み）、[Hero.css](../frontend/src/pages/top/ui/Hero/Hero.css)（見出しと画像を縦積み） |
 
 ### ブレークポイントを使っていない箇所
 
