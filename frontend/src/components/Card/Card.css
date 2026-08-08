@@ -1,8 +1,28 @@
 .card {
+  position: relative;
   padding: 0 var(--space-4);
   border: 1px solid var(--border-primary);
   box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.1);
   background-color: var(--background-default);
+}
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+}
+.card::before {
+  top: 8px;
+  left: 8px;
+  border-top: 1px solid var(--border-primary);
+  border-left: 1px solid var(--border-primary);
+}
+.card::after {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 1px solid var(--border-primary);
+  border-right: 1px solid var(--border-primary);
 }
 .card__title {
   display: flex;
