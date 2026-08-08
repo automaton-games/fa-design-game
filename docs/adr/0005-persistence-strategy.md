@@ -2,7 +2,7 @@
 status: draft
 ---
 
-# 問題データは永続化層を介して起動時に一括読み込みする
+# 永続化層と起動時読み込み
 
 問題データの読み込みを、ドメイン層（`problem.Store`）と切り離した永続化層（loader）が担う。loader は `[]ContestInput` を返す関数で、MVP では JSON ファイル、DB 移行後は SQL/GORM から読む。`problem.NewStore` は loader を受け取って起動時に全件を読み込み、各問題を検証して不変ストアを構築する。DB 移行後もこの構造と、起動時一括読み込み・不変ストア（ADR 0004）を維持する。
 

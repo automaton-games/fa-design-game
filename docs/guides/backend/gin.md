@@ -67,5 +67,5 @@ curl -X POST \
 ## 関連ドキュメント
 
 - [バックエンド開発ガイド](README.md)
-- [API仕様](../../reference/api.md)
+- [API仕様](../../reference/openapi.yaml)
 - [Gin公式ドキュメント](https://gin-gonic.com/ja/docs/)

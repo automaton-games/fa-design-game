@@ -22,5 +22,6 @@ docker compose up -d backend
 ## 関連ドキュメント
 
 - [Ginの使い方](gin.md)
-- [API仕様](../../reference/api.md)
+- [バックエンド システム詳細設計書](../../reference/system-design.md)
+- [API仕様](../../reference/openapi.yaml)
 - [DFA JSON形式](../../reference/dfa-json-format.md)

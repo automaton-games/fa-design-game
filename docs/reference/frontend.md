@@ -5,7 +5,7 @@
 | 項目 | 値 |
 |---|---|
 | 対象 | フロントエンドがAPIをどう消費するか（バックエンドAPI設計の検証用） |
-| 関連 | [openapi.yaml](openapi.yaml)、[API仕様](api.md)、[ページ構成](../product/pages.md)、[バックエンド システム詳細設計書](system-design.md) |
+| 関連 | [openapi.yaml](openapi.yaml)、[ページ構成](../product/pages.md)、[バックエンド システム詳細設計書](system-design.md) |
 | ステータス | Draft |
 | 作成日 | 2026-08-07 |
 

@@ -5,7 +5,7 @@
 | 項目 | 値 |
 |---|---|
 | 対象 | FA Design Gameが内部で扱うDFAのJSON形式（提出DFA・正解DFA共通） |
-| 関連 | [バックエンド システム詳細設計書](system-design.md)、[API仕様](api.md)、[ADR 0002](../adr/0002-alphabet-source.md) |
+| 関連 | [バックエンド システム詳細設計書](system-design.md)、[openapi.yaml](openapi.yaml)、[ADR 0002](../adr/0002-alphabet-source.md) |
 | 用語集 | [CONTEXT.md](../../CONTEXT.md) |
 | バージョン | 1.0 |
 | ステータス | Draft |
@@ -23,7 +23,7 @@
 
 専用フォームを使う場合は、問題データから自動で設定し、ユーザーによる入力は求めない。
 
-alphabet は1要素以上、重複なし、空文字・空白のみを禁止する。複数文字の入力記号を許可し、長さや使用文字に追加の制限を設けない。検証は `dfa.Validate` が DFA 本体と同時に行う（[バックエンド システム詳細設計書 第5.4.1節](system-design.md)）。
+alphabet は1要素以上、重複なし、空文字・空白のみを禁止する。複数文字の入力記号を許可し、長さや使用文字に追加の制限を設けない。検証は `dfa.Validate` が DFA 本体と同時に行う（[バックエンド システム詳細設計書](system-design.md) の `Validate`）。
 
 処理の詳細は [バックエンド システム詳細設計書](system-design.md)、決定の経緯は [ADR 0002](../adr/0002-alphabet-source.md) を参照する。
 
@@ -61,7 +61,7 @@ alphabet は1要素以上、重複なし、空文字・空白のみを禁止す�
 
 ## 5. 入力時の要件（構造検証）
 
-第4節のフィールド制約に違反するDFAは `422 DFA_STRUCTURAL` になる。検査項目とエラーコードの対応は [バックエンド システム詳細設計書 第5.5節](system-design.md) を参照する。alphabet の制約は第2節に示す。反例は記号を連結した文字列ではなく、入力記号の配列として返す。
+フィールド制約に違反するDFAは `422 DFA_STRUCTURAL` になる。検査項目とエラーコードの対応は [バックエンド システム詳細設計書](system-design.md) の「構造検証の実装」を参照する。alphabet の制約は「alphabet の取り扱い」に示す。反例は記号を連結した文字列ではなく、入力記号の配列として返す。
 
 ## 6. JSON decode規則
 

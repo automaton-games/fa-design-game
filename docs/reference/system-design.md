@@ -116,15 +116,7 @@ HTTPステータスとエラーコードの完全な対応は [openapi.yaml](ope
 
 構造検証を通過し、有効なDFAの不変条件を満たすことが保証されたDFA。正解DFAと提出DFAの両方で使う。素朴なconcrete structとして公開するが、フィールドはすべて非公開にし、正常値の構築は`Validate`経由に限定する。Goでは外部packageもゼロ値を作れるため、`Equivalent`は`states`と`alphabet`が1要素以上という既存の不変条件でゼロ値を検出し、契約違反としてpanicする（第5.4.3節）。検出専用のbooleanは持たない。この検出は「states/alphabet は1以上」の不変量に依存しており、同不変量を緩める変更を行う場合はゼロ値検出も併せて再検討すること。`Validate`は入力のsliceとmapを再帰的にコピーしてから保持する。
 
-| フィールド | 型 | 制約（不変条件） | 説明 |
-|---|---|---|---|
-| states | `[]string` | 1以上、重複なし、空文字/空白のみを除外 | 状態の集合 |
-| alphabet | `[]string` | 1以上、重複なし、空文字/空白のみを除外（問題由来） | 入力アルファベット。複数文字可、長さ・使用文字の上限なし |
-| start | `string` | `states` に含まれる | 開始状態 |
-| accept | `[]string` | `states` の部分集合、重複なし（空集合可） | 受理状態の集合 |
-| transitions | `map[string]map[string]string` | `states × alphabet` の完全関数、遷移先は `states`、余分な定義なし | 遷移関数 δ |
-
-> 制約の正は [DFA JSON形式](dfa-json-format.md)。本表は検証後の不変条件（保証）を示す。
+フィールドの制約（`states`/`start`/`accept`/`transitions` の不変条件）は [DFA JSON形式](dfa-json-format.md) を正とし、本書では重複して記述しない。`ValidatedDFA` はそれらに加え **`alphabet` が問題由来であること** を保証する。
 
 ```go
 type ValidatedDFA struct {
@@ -382,7 +374,7 @@ erDiagram
 }
 ```
 
-**decode 規則**: 提出JSON（[DFA JSON形式 第6節](dfa-json-format.md)）と同じく strict とする。未知フィールドは拒否し、JSON document は単一値とする。ファイルサイズ上限は 1ファイル 10 MiB とする（問題データは提出より大きいため）。decode 失敗は loader の読み込みエラーとして `NewStore` へ伝播し、起動を中止する。
+**decode 規則**: 提出JSON（[DFA JSON形式](dfa-json-format.md) の decode 規則）と同じく strict とする。未知フィールドは拒否し、JSON document は単一値とする。ファイルサイズ上限は 1ファイル 10 MiB とする（問題データは提出より大きいため）。decode 失敗は loader の読み込みエラーとして `NewStore` へ伝播し、起動を中止する。
 
 #### DB移行後: SQL/GORM loader
 
@@ -658,7 +650,7 @@ func Equivalent(submitted, answer ValidatedDFA) JudgeResult
 
 ### 5.5 構造検証の実装
 
-構造検証（`Validate`）の検査項目と対応エラーコード。各項目の条件は [DFA JSON形式 第4節](dfa-json-format.md)（alphabet は[第2節](dfa-json-format.md)）を正とし、本表は検査項目とエラーコードの対応のみを示す。
+構造検証（`Validate`）の検査項目と対応エラーコード。各項目の条件は [DFA JSON形式](dfa-json-format.md)（フィールド制約・alphabetの取り扱い）を正とし、本表は検査項目とエラーコードの対応のみを示す。
 
 | 検査項目 | 対応 code |
 |---|---|

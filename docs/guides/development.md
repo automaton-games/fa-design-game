@@ -114,3 +114,15 @@ docker compose exec frontend pnpm install --frozen-lockfile
 依存パッケージを追加する`pnpm add`では、このオプションは不要です。
 
 Goの依存パッケージは、次回のビルド時に自動でダウンロードされるため、pull後の同期操作は不要です。
+
+## API仕様のプレビューと検証
+
+API契約は [openapi.yaml](../reference/openapi.yaml)（OpenAPI 3.0.3）で、Redocly でプレビュー・検証できる。プロジェクト設定はリポジトリルートの [redocly.yaml](../../redocly.yaml)（API名 `fadg-api`）。
+
+- **ライブプレビュー（推奨）**: `npx @redocly/cli preview --product redoc` → http://localhost:4000 （`openapi.yaml` 編集で再読込）
+- **HTML生成**: `npx @redocly/cli build-docs fadg-api`
+- **検証**: `npx @redocly/cli lint fadg-api`
+- **Swagger Editor**: https://editor.swagger.io/ に `openapi.yaml` を貼り付ける。
+- **VS Code**: OpenAPI 拡張機能でプレビュー。
+
+> フロントエンド・バックエンドのクライアント/スタブコード生成も `openapi.yaml` から行う。GitHub Pages でのホスティングは今後追加を想定する。
