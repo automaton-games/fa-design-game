@@ -1,11 +1,7 @@
 import Top from "./features/top/pages/Top";
 
 function App() {
-  return (
-    <>
-      <Top />
-    </>
-  );
+  return <Top />;
 }
 
 export default App;

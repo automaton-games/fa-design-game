@@ -1,5 +1,5 @@
 .footer {
-  height: 200px;
+  min-height: 200px;
   border-top: 1px solid var(--border-primary);
   margin: var(--space-1) 0;
   display: flex;
@@ -19,4 +19,5 @@
 }
 .footer__column a {
   color: var(--text-sub);
+  text-decoration: none;
 }

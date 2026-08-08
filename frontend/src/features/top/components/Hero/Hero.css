@@ -30,6 +30,7 @@
 
 .hero__headline {
   font-weight: bold;
+  margin: var(--space-4) 0;
 }
 .hero__headline-sub {
   color: var(--text-accent);

@@ -36,7 +36,7 @@ img {
   --font-lg: 1.25rem;    /* 20px - 小見出し */
   --font-xl: 1.5rem;     /* 24px - 見出し */
   --font-2xl: 2rem;      /* 32px - ページタイトル */
-  --font-3xl: 4.5rem;    /* 56px - ヒーロー見出しの強調 */
+  --font-3xl: 4.5rem;    /* ヒーロー見出しの強調 */
 
   /* 紫のカラーパレット */
   --color-purple-100: #ECDDF7;

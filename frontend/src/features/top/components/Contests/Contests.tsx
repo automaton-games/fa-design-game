@@ -1,5 +1,6 @@
+import "../Section.css"
 import "./Contests.css"
-import Button from "../../../../components/Button/button"
+import Button from "../../../../components/Button/Button"
 type Contest = {slug: string, title: string, level: string}
 const contestsData: Contest[] = [ // 実データが無いため仮置き
   {slug: "fdg003", title: "FDG 003", level: "初級"},
@@ -18,21 +19,21 @@ const levelClassMap: Record<string, string> = {
 
 export default function Contests() {
   return (
-      <div className="contests">
-        <p>コンテスト</p>
-        <div className="contest__list">
+      <div className="section">
+        <h2 className="section__title">コンテスト</h2>
+        <div className="section__list">
           {contestsData.map((contest) => (
             <div className="contest__item" key={contest.slug}>
-              <a>{contest.title}</a>
+              <a href="#">{contest.title}</a>
               <div className={`contest__level ${levelClassMap[contest.level] ?? ""}`}>
                 {contest.level}
               </div>
-            </div> 
+            </div>
           ))}
         </div>
-        <div className="contests__button__wrapper">
-          <Button className="contests__button" variant="sub" icon="arrow_forward">もっと見る</Button>
+        <div className="section__more">
+          <Button variant="sub" icon="arrow_forward">もっと見る</Button>
         </div>
       </div>
-  ) 
+  )
 }

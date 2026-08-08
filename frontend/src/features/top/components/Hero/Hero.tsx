@@ -1,5 +1,5 @@
-import Button from "../../../../components/Button/button"
-import Card from "../../../../components/Card/card"
+import Button from "../../../../components/Button/Button"
+import Card from "../../../../components/Card/Card"
 import "./Hero.css"
 
 export default function Hero() {
@@ -7,21 +7,21 @@ export default function Hero() {
     <>
       <div className="hero__upside">
         <div className="hero__main">
-          <p className="hero__headline">
+          <h1 className="hero__headline">
             <span className="hero__headline-sub">有限オートマトンを設計して、</span>
             <br />
             <span className="hero__headline-main">複雑な世界を</span>
             <br />
             <span className="hero__headline-accent">モデル化しよう。</span>
-          </p>
-          <p className="hero__subtext">FA Design Gameは、有限オートマトン(DFA)を設計して様々な課題を解く、新しい形式の競技プログラミングです。</p> 
+          </h1>
+          <p className="hero__subtext">FA Design Gameは、有限オートマトン(DFA)を設計して様々な課題を解く、新しい形式の競技プログラミングです。</p>
           <div className="hero__tutorials">
-            <Button className="button__automaton" icon="arrow_forward">有限オートマトンとは？</Button>
-            <Button variant="sub" className="button__tutorial" icon="arrow_forward">チュートリアル</Button>
+            <Button icon="arrow_forward">有限オートマトンとは？</Button>
+            <Button variant="sub" icon="arrow_forward">チュートリアル</Button>
           </div>
         </div>
         <div className="hero__picture">
-         <img src="/automaton-image.svg" alt="オートマトンのイメージ図" /> 
+          <img src="/automaton-image.svg" alt="オートマトンのイメージ図" />
         </div>
       </div>
       <div className="hero__explanation">

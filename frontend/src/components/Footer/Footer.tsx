@@ -2,25 +2,25 @@ import "./Footer.css"
 
 export default function Footer() {
   return (
-    <div className="footer">
+    <footer className="footer">
       <div className="footer__column">
         <p className="footer__heading">サイト</p>
-        <a>Top</a>
-        <a>遊び方</a>
-        <a>コンテスト</a>
+        <a href="#">Top</a>
+        <a href="#">遊び方</a>
+        <a href="#">コンテスト</a>
       </div>
       <div className="footer__column">
         <p className="footer__heading">アカウント</p>
-        <a>ログイン</a>
-        <a>新規登録</a>
-        <a>マイページ</a>
+        <a href="#">ログイン</a>
+        <a href="#">新規登録</a>
+        <a href="#">マイページ</a>
       </div>
       <div className="footer__column">
         <p className="footer__heading">サポート</p>
-        <a>お問い合わせ</a>
-        <a>利用規約</a>
-        <a>プライバシーポリシー</a>
+        <a href="#">お問い合わせ</a>
+        <a href="#">利用規約</a>
+        <a href="#">プライバシーポリシー</a>
       </div>
-    </div>
+    </footer>
   )
 }

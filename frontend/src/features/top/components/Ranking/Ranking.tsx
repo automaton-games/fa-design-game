@@ -1,5 +1,6 @@
+import "../Section.css"
 import "./Ranking.css"
-import Button from "../../../../components/Button/button"
+import Button from "../../../../components/Button/Button"
 
 type User = {id: number, name: string, rate: number}
 const topPlayersData: User[] = [ // レート上位のUserを高い順で並べたリスト(実データが無いため仮置き)
@@ -15,19 +16,19 @@ const topPlayersData: User[] = [ // レート上位のUserを高い順で並べ�
 
 export default function Ranking() {
   return (
-      <div className="ranking">
-        <p>ランキング</p> 
-        <div className="ranking__list">
+      <div className="section">
+        <h2 className="section__title">ランキング</h2>
+        <div className="section__list">
           {topPlayersData.map((user, rank) => (
-            <div className="ranking__item" key={rank}>
+            <div className="ranking__item" key={user.id}>
               <p>{rank+1}.  {user.name}</p>
               <div className="ranking__rate">{user.rate}</div>
-            </div> 
+            </div>
           ))}
         </div>
-        <div className="ranking__button__wrapper">
-          <Button className="ranking__button" variant="sub" icon="arrow_forward">もっと見る</Button>
+        <div className="section__more">
+          <Button variant="sub" icon="arrow_forward">もっと見る</Button>
         </div>
       </div>
-  ) 
+  )
 }

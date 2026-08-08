@@ -3,17 +3,17 @@ import "./Button.css";
 
 type ButtonProps = {
   children: ReactNode;
-  className: string;
+  className?: string;
   variant?: "primary" | "sub";
   icon?: string;
   onClick?: () => void;
 };
 
-export default function Button({ children, className ,variant = "primary" ,icon ,onClick }: ButtonProps) {
+export default function Button({ children, className, variant = "primary", icon, onClick }: ButtonProps) {
   return (
     <button
       type="button"
-      className={`button button--${variant} ${className}`}
+      className={`button button--${variant}${className ? ` ${className}` : ""}`}
       onClick={onClick}
     >
       {children}

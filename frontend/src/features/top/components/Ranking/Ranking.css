@@ -1,13 +1,3 @@
-.ranking {
-  display: flex;
-  flex-direction: column;
-}
-.ranking > p {
-  font-size: var(--font-xl);
-}
-.ranking__list {
-  padding-bottom: var(--space-2);
-}
 .ranking__item {
   display: flex;
   align-items: center;
@@ -19,11 +9,4 @@
   margin-left: auto;
   font-weight: bold;
   color: var(--text-accent);
-}
-
-.ranking__button__wrapper {
-  display: flex;
-}
-.ranking__button {
-  margin-left: auto;
 }

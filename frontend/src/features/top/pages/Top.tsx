@@ -11,16 +11,16 @@ import "./Top.css"
 export default function Top() {
   return (
     <>
-      <Header ></Header>
-      <div className="page__content">
-        <Hero></Hero>
+      <Header />
+      <main className="page__content">
+        <Hero />
         <div className="top__container">
-          <Contests></Contests>
-          <Ranking></Ranking>
-          <News></News>
+          <Contests />
+          <Ranking />
+          <News />
         </div>
-      </div>
-      <Footer></Footer>
+      </main>
+      <Footer />
     </>
   )
 }
