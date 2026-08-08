@@ -7,7 +7,13 @@ export default function Hero() {
     <>
       <div className="hero__upside">
         <div className="hero__main">
-          <p className="hero__headline">有限オートマトンを設計して、すべての問題をクリアしよう</p>
+          <p className="hero__headline">
+            <span className="hero__headline-sub">有限オートマトンを設計して、</span>
+            <br />
+            <span className="hero__headline-main">すべての問題を</span>
+            <br />
+            <span className="hero__headline-accent">クリアしよう。</span>
+          </p>
           <p className="hero__subtext">FA Design Gameは、有限オートマトン(DFA)を設計して様々な課題を解く、新しい形式の競技プログラミングです。</p> 
           <div className="hero__tutorials">
             <Button className="button__automaton">有限オートマトンとは？</Button>
