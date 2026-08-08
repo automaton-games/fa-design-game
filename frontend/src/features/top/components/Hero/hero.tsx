@@ -10,9 +10,9 @@ export default function Hero() {
           <p className="hero__headline">
             <span className="hero__headline-sub">有限オートマトンを設計して、</span>
             <br />
-            <span className="hero__headline-main">すべての問題を</span>
+            <span className="hero__headline-main">複雑な世界を</span>
             <br />
-            <span className="hero__headline-accent">クリアしよう。</span>
+            <span className="hero__headline-accent">モデル化しよう。</span>
           </p>
           <p className="hero__subtext">FA Design Gameは、有限オートマトン(DFA)を設計して様々な課題を解く、新しい形式の競技プログラミングです。</p> 
           <div className="hero__tutorials">
@@ -25,10 +25,10 @@ export default function Hero() {
         </div>
       </div>
       <div className="hero__explanation">
-        <Card icon="crossword" title="FAを設計する">状態と遷移を自由に設計して、与えられた仕事を満たすオートマトンを作ろう</Card>
+        <Card icon="crossword" title="FAを設計する">状態と遷移を自由に設計して、与えられた仕事を満たすオートマトンを作ろう。</Card>
         <Card icon="code_xml" title="JSONで提出">オートマトンをJSON形式で記述して提出します。サイト内エディタでの記述かファイルの提出が可能です。</Card>
-        <Card icon="check_circle" title="自動判定">提出すると、テストケースに基づいて自動で判定。判例も表示されるので改善を繰り返せます。</Card>
-        <Card icon="leaderboard" title="実力を競おう">コンテスト形式の課題に挑戦して、クリア数や回答時間を競おう</Card>
+        <Card icon="check_circle" title="自動判定">提出するとテストケースに基づいて自動で判定。判例も表示されるので改善を繰り返せます。</Card>
+        <Card icon="leaderboard" title="実力を競おう">コンテスト形式の課題に挑戦して、クリア数や回答時間を競おう。</Card>
       </div>
     </>
   )
