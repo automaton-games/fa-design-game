@@ -31,7 +31,7 @@ export default function Contests() {
           ))}
         </div>
         <div className="contests__button__wrapper">
-          <Button className="contests__button" variant="sub">もっと見る</Button>
+          <Button className="contests__button" variant="sub" icon="arrow_forward">もっと見る</Button>
         </div>
       </div>
   ) 

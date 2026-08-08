@@ -9,7 +9,7 @@ export default function Header() {
         <a href="#">Top</a>
         <a href="#">遊び方</a>
         <a href="#">コンテスト</a>
-        <Button className="tmp">ログイン</Button>
+        <Button className="tmp" icon="login">ログイン</Button>
         <Button className="tmp" variant="sub">新規登録</Button>
       </div>
     </div>

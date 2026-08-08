@@ -21,7 +21,7 @@ export default function News() {
         ))}
       </div>
       <div className="news__button__wrapper">
-        <Button className="news__button" variant="sub">もっと見る</Button>
+        <Button className="news__button" variant="sub" icon="arrow_forward">もっと見る</Button>
       </div>
     </div>
   ) 
