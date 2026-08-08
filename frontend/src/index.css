@@ -35,8 +35,12 @@ img {
   --font-md: 1rem;       /* 16px - 本文（基準） */
   --font-lg: 1.25rem;    /* 20px - 小見出し */
   --font-xl: 1.5rem;     /* 24px - 見出し */
-  --font-2xl: 2rem;      /* 32px - ページタイトル */
-  --font-3xl: 4.5rem;    /* ヒーロー見出しの強調 */
+  /* 大きい文字は画面幅に応じて縮める。clamp(最小, 可変, 最大) */
+  --font-2xl: clamp(1.5rem, 5vw, 2rem);      /* ページタイトル */
+  --font-3xl: clamp(2.5rem, 5.5vw, 4.5rem);  /* ヒーロー見出しの強調 */
+
+  /* グリッドで並べるカードの最小幅。この値を下回ると列数が減る */
+  --card-min: 240px;
 
   /* 紫のカラーパレット */
   --color-purple-100: #ECDDF7;

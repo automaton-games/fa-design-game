@@ -1,11 +1,13 @@
 .header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-4);
   border-bottom: 1px solid var(--border-primary);
   margin: var(--space-1) 0;
   padding: var(--space-1) var(--space-8);
-  height: 64px;
+  /* メニューを開いたときに中身が溢れないよう、固定値ではなく下限として指定する */
+  min-height: 64px;
 }
 .header__nav {
   display: flex;
@@ -22,4 +24,46 @@
   color: var(--text-accent);
   font-weight: bold;
   text-decoration: none;
+}
+
+/* ハンバーガーボタンはスマホ幅でのみ表示する */
+.header__menu-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: var(--space-2) var(--space-4);
+  }
+  .header__menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    /* タップ領域を確保する */
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  /* 閉じているときはナビ自体を描画しない */
+  .header__nav {
+    display: none;
+  }
+  .header__nav--open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    margin-left: 0;
+    gap: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+  .header__nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
 }

@@ -1,12 +1,9 @@
+/* 1枚あたり--card-minを確保できる範囲で入るだけ並べる。列数は幅に応じて自動で減る */
 .hero__explanation {
   margin: var(--space-8) 0;
   gap: var(--space-4);
-  display: flex;
-}
-
-.hero__explanation > * {
-  flex: 1;
-  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--card-min), 1fr));
 }
 
 .hero__upside {
@@ -55,4 +52,19 @@
 
 .hero__tutorials button {
   flex: 1;
+}
+
+/* スマホ: 見出しと画像の横並びをやめて縦に積む */
+@media (max-width: 768px) {
+  .hero__upside {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hero__picture img {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .hero__tutorials {
+    flex-direction: column;
+  }
 }

@@ -21,3 +21,18 @@
   color: var(--text-sub);
   text-decoration: none;
 }
+
+/* スマホ: 3カラムを縦に積み、タップ領域を確保する */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--space-6);
+    padding: var(--space-6) var(--space-4);
+  }
+  .footer__column a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
