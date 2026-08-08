@@ -4,7 +4,7 @@
 
 ## 概要
 
-見た目の統一とレビューのしやすさのために、色・文字サイズ・余白を CSS 変数（デザイントークン）として一箇所にまとめています。定義は [`frontend/src/index.css`](../frontend/src/index.css) にあります。
+見た目の統一とレビューのしやすさのために、色・文字サイズ・余白を CSS 変数（デザイントークン）として一箇所にまとめています。定義は [`frontend/src/app/styles/index.css`](../frontend/src/app/styles/index.css) にあります。
 
 **コンポーネントの CSS では原則としてトークンだけを使い、生の値（`#8843E1`、`16px` など）を直接書かない**というのが基本方針です。色を調整したくなったときに `index.css` だけを見れば済むようにするためです。
 
@@ -98,7 +98,15 @@
 
 ## 共通コンポーネント
 
-`frontend/src/components/` にページをまたいで使うものを置いています。特定のページでしか使わないものは `frontend/src/features/<ページ名>/components/` に置きます。
+プロジェクトは **Feature-Sliced Design** で層を分けています。
+
+- `frontend/src/app/` — シェル構成（Header / main / Footer）とエントリ
+- `frontend/src/pages/<ページ>/` — ルート単位の画面。ページ専用ブロック（Hero / Contests / Ranking / News）は `ui/` セグメント内に置く
+- `frontend/src/shared/ui/` — ページをまたいで使うUIコンポーネント（Button / Card / Header / Footer）
+
+依存は `app → pages → shared` の一方向で、各スライスは `index.ts`（公開API）経由で参照します。深い相対パスの代わりに `@/` エイリアスを使います。
+
+各スライスは `ui/` など用途別セグメントに分けます。**1ページでしか使わないブロックはページ内に置き、別ページでも再利用する時に `widgets/` 層へ昇格**させます（Feature-Sliced Design の「先行で分割しない」原則）。構造と依存規約は公式リンター **Steiger**（`pnpm steiger`、設定 [`steiger.config.ts`](../frontend/steiger.config.ts)）で検証します。
 
 ### Button
 
@@ -131,18 +139,17 @@
 
 > 現状リンク先はすべて `href="#"` です。ルーティング導入時にまとめて差し替えます。
 
-### Section（CSS のみ）
+### Section
 
-[`frontend/src/features/top/components/Section.css`](../frontend/src/features/top/components/Section.css) に、トップページの「コンテスト」「ランキング」「お知らせ」で共通のレイアウトをまとめています。
+トップページの「コンテスト」「ランキング」「お知らせ」で共通する外枠（見出し・一覧・「もっと見る」ボタン）を [`<Section>`](../frontend/src/pages/top/ui/section/Section.tsx) コンポーネント（`pages/top/ui/section/`）にまとめています。
 
-| クラス | 役割 |
-| --- | --- |
-| `.section` | セクション全体の縦並び |
-| `.section__title` | 見出し |
-| `.section__list` | 一覧部分 |
-| `.section__more` | 「もっと見る」ボタンを右寄せ |
+```tsx
+<Section title="コンテスト">
+  {items.map(...)}
+</Section>
+```
 
-同じ構造のセクションが他のページにも増えるようなら、CSS だけでなくコンポーネントとして切り出すことを検討してもよさそうです。
+Top ページ専用のため `pages/top/ui/` に置いています。同じ構造が別ページでも必要になったら `widgets/` 層へ昇格させます（Feature-Sliced Design）。
 
 ## 記述ルール
 
@@ -156,18 +163,18 @@
 .button--primary   /* 修飾子 */
 ```
 
-### ファイル名は PascalCase
+### 命名規則
 
-コンポーネントのファイルとディレクトリは PascalCase で、CSS は同じディレクトリに同名で置きます。
+レイヤー・スライス・セグメント・コンポーネントの**ディレクトリは kebab-case（小文字）**、**コンポーネントのファイルは PascalCase** です。CSS はコンポーネントと同じディレクトリに同名で置きます。
 
 ```
-components/Button/
+shared/ui/button/
 ├── Button.tsx
 └── Button.css
 ```
 
 > ⚠️ **import 文の大文字小文字はファイル名と厳密に一致させてください。**
-> macOS はファイル名の大文字小文字を区別しないため手元では動いてしまいますが、Docker コンテナ（Linux）や CI では解決に失敗してビルドが落ちます。`pnpm build` を実行すれば `tsc` が検出してくれます（`error TS1261`）。ただし CSS の import は検出されないので特に注意してください。
+> macOS はファイル名の大文字小文字を区別しないため手元では動いてしまいますが、Docker コンテナ（Linux）や CI では解決に失敗してビルドが落ちます。ディレクトリは小文字化済みですが、コンポーネントファイル（`Button.tsx` 等）は大文字を含むため引き続き注意が必要です。`pnpm build` を実行すれば `tsc` が検出してくれます（`error TS1261`）。ただし CSS の import は検出されないので特に注意してください。
 
 ### HTML のセマンティクス
 
