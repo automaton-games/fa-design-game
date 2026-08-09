@@ -44,7 +44,7 @@ graph TD
 
 | 層 | package | 責務 |
 |---|---|---|
-| HTTP/API層 | `internal/api`（仮） | ルーティング、JSONのdecode/encode、`Store.Judge`の呼び出し、エラーからHTTP status/レスポンスへの変換 |
+| HTTP/API層 | `internal/api`（仮） | ルーティング、JSONのdecode/encode、`Store.Judge`の呼び出し、エラーからHTTP status/レスポンスへの変換、panicを規定の`500 INTERNAL`へ閉じるRecovery middleware |
 | 問題・提出層 | `internal/problem`（仮） | `Problem`、問題データの検証（検証済みで保持）、`Get`、提出パイプラインのオーケストレーション（`Judge`）と問題固有制約 |
 | 永続化層 | `internal/problem/data`（仮） | 問題データの読み込みと `[]ContestInput` の構築。MVP は JSON ファイル、DB 移行後は SQL/GORM。ドメイン層・API は永続化手法を知らない |
 | DFAドメイン層 | `internal/dfa` | `DFAInput`、非公開フィールドを持つ`ValidatedDFA`、構造検証（`Validate`）、等価性判定（`Equivalent`）、HTTP非依存のtyped error。問題に依存しない |
@@ -110,7 +110,7 @@ HTTPステータスとエラーコードの完全な対応は [openapi.yaml](ope
 | `Equivalent`（dfa） | 判定結果（正常）。契約違反はpanic | — | `200` | 正常 |
 | `NewStore`（起動時） | 正解DFA不良 | —（起動中止） | — | サーバー |
 
-> 正しいコードでは到達しない契約違反（`Equivalent`のzero-value引数など）は`error`を返さず**panic**で落とす。net/httpがpanicを`500 INTERNAL`＋スタックトレースへ変換するため、バグが即座に露出する。`INTERNAL`はこのpanicを含む稼働中の想定外エラーの到達点である。
+> 正しいコードでは到達しない契約違反（`Equivalent`のzero-value引数など）は`error`を返さず**panic**で落とす。API層のRecovery middlewareがpanicとスタックトレースをサーバーログへ記録し、クライアントには[openapi.yaml](openapi.yaml)で定義した`500 INTERNAL`の`ErrorResponse`だけを返す。標準の`net/http`やGinの既定Recoveryの応答形式には依存しない。
 
 ### 2.2 共通データ型：検証済みDFA（`ValidatedDFA`）
 
@@ -307,7 +307,7 @@ erDiagram
         string code
         string title
         string statement
-        string start_state FK
+        string start_state
         int state_limit
     }
     ProblemAlphabet {
@@ -334,7 +334,7 @@ erDiagram
 - **第2正規形**: 全ての非キー列が候補キーに完全従属する。複合キー `(problem_id, from_state, symbol)` の部分従属はない。
 - **第3正規形**: 推移的関数従属なし。`title`/`statement`/`state_limit` は問題IDに直接従属し、他の非キー列経由ではない。
 
-完全性（全 state×symbol 組に遷移があるか）・重複・空文字は DB 制約で表現できないため loader → `Validate` が検証する（ADR 0003）。DB 制約は遷移の参照整合性（from/to/symbol が定義済み state/alphabet に存在）と開始状態の参照整合性（`start_state` が `problem_states` に存在）を保証する。
+完全性（全 state×symbol 組に遷移があるか）・重複・空文字・開始状態の参照整合性は loader → `Validate` が検証する（ADR 0003）。DB 制約は遷移の参照整合性（from/to/symbol が定義済み state/alphabet に存在）を保証する。開始状態の複合FKは `problems` と `problem_states` の挿入を循環させるため設けず、DFA全体の不変条件を所有する `Validate` に一元化する。
 
 ### 3.5 永続化層（loader）
 
@@ -396,7 +396,6 @@ problems
   start_state  VARCHAR            -- 開始状態 (DFAInput.start)
   state_limit  INT DEFAULT 0      -- 0 は無制限
   UNIQUE(contest_id, code)
-  FK(id, start_state) -> problem_states(problem_id, state)
 
 problem_alphabet                       -- 入力アルファベット (ADR 0002)
   problem_id   BIGINT FK -> problems.id
@@ -460,7 +459,7 @@ DB移行後の loader はこのスキーマから JOIN で `DFAInput` を組み�
 - `problem_transitions.to_state` は `RESTRICT`（遷移先の状態削除を防止）
 - `problems.contest_id` は `RESTRICT`（問題が残るコンテストは削除不可）
 
-**循環FK**: `problems.start_state → problem_states` と `problem_states.problem_id → problems` で循環する。`problem_states` 作成後に `ALTER TABLE` で `fk_problems_start` を付与する。レコード挿入は 問題行 → 状態行 の順で行い、制約は全行挿入後に有効化する想定である。
+**開始状態の整合性**: `problems.start_state` から `problem_states` への複合FKは設けない。これを設けると問題行と状態行の挿入順序が循環し、MySQLには遅延制約がないため通常のデータ追加が成立しない。loaderが行を `DFAInput` に再構築し、`Validate` が `start` が `states` に含まれることを起動時に必ず検証する。
 
 ---
 
@@ -625,7 +624,7 @@ func (s *Store) Judge(contestSlug, taskCode string, input dfa.DFAInput) (dfa.Jud
 - **概要**: 問題を解決し、提出DFAの構造検証、問題固有制約、等価性判定を一つの提出ユースケースとして実行する。
 - **事前条件**: なし。
 - **事後条件**: 成功時は正解または不正解の`JudgeResult`を返す。失敗時は結果のゼロ値と`*JudgeError`を返す。
-- **エラー**: `JudgeProblemNotFound`、`JudgeStructuralInvalid`、`JudgeConditionViolated`のいずれか。DFA層の`ValidationError`は`JudgeStructuralInvalid`へwrapする。`Equivalent`の契約違反は到達不能でありpanicするため、`Judge`はこれを`error`として扱わない（net/httpがpanicを`500 INTERNAL`へ変換する）。
+- **エラー**: `JudgeProblemNotFound`、`JudgeStructuralInvalid`、`JudgeConditionViolated`のいずれか。DFA層の`ValidationError`は`JudgeStructuralInvalid`へwrapする。`Equivalent`の契約違反は到達不能でありpanicするため、`Judge`はこれを`error`として扱わない（API層のRecovery middlewareが規定の`500 INTERNAL`へ変換する）。
 - **処理**:
   1. `contestSlug`と`taskCode`で問題を取得する。
   2. `dfa.Validate(input, p.alphabet)`を呼ぶ。
@@ -645,7 +644,7 @@ func Equivalent(submitted, answer ValidatedDFA) JudgeResult
 - **事後条件**: `Accepted==true` ⟺ 2つのDFAが受理する言語が一致。`Accepted==false` のとき `Counterexample` は一方だけが受理する最短の入力記号列（ε を表す空sliceを含む）。入力記号は複数文字でもよく、文字列へ連結せず記号列のまま返す。
 - **引数**: `submitted, answer ValidatedDFA`
 - **戻り値**: `JudgeResult`
-- **エラー**: 返さない。事前条件違反（zero-valueの`ValidatedDFA`、両者の`alphabet`不一致）は正しいコードでは到達不能な契約違反であり、panicで落とす（net/httpがpanicを`500 INTERNAL`＋スタックトレースに変換する）。
+- **エラー**: 返さない。事前条件違反（zero-valueの`ValidatedDFA`、両者の`alphabet`不一致）は正しいコードでは到達不能な契約違反であり、panicで落とす。API層のRecovery middlewareがスタックトレースをサーバーログへ記録し、規定の`500 INTERNAL`へ変換する。
 - **処理**: 事前条件（`states`/`alphabet`が空でないこと、両者の`alphabet`が一致すること）を確認し、違反すればpanicした上で、2つのDFAの直積オートマトンを構成し、開始状態から到達可能な状態対を幅優先探索する。受理状態のフラグが異なる状態対が見つかれば非等価とし、そこまでの最短パスを反例として返す。1つも見つからなければ等価とする。状態数は有限なので循環を含んでも終了する。
 
 ### 5.5 構造検証の実装

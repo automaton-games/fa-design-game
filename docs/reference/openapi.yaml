@@ -161,19 +161,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubmitRequest'
+              $ref: '#/components/schemas/DFAInput'
             example:
-              dfa:
-                states: [q0, q1]
-                start: q0
-                accept: [q0]
-                transitions:
-                  q0:
-                    "0": q1
-                    "1": q1
-                  q1:
-                    "0": q0
-                    "1": q0
+              states: [q0, q1]
+              start: q0
+              accept: [q0]
+              transitions:
+                q0:
+                  "0": q1
+                  "1": q1
+                q1:
+                  "0": q0
+                  "1": q0
       responses:
         '200':
           description: 判定成功（Accepted または Wrong Answer）。Wrong Answer はエラーではない。
@@ -344,7 +343,7 @@ components:
           example: "0と1からなる文字列Sについて、Sの長さが偶数であるとき受理するDFAを構成してください。"
         alphabet:
           type: array
-          description: 問題が定義する入力アルファベット（提出DFAはこれを所有する）
+          description: 問題が所有し、提出DFAの構造検証と判定に使用する入力アルファベット
           items:
             type: string
           example: ["0", "1"]
@@ -384,14 +383,6 @@ components:
             q1:
               "0": q0
               "1": q0
-
-    SubmitRequest:
-      type: object
-      additionalProperties: false
-      required: [dfa]
-      properties:
-        dfa:
-          $ref: '#/components/schemas/DFAInput'
 
     SubmitResponse:
       type: object
