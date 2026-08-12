@@ -37,6 +37,8 @@ Dockerfileを変更した場合や、Dockerfileの変更をpullで取り込ん�
 docker compose up -d --build
 ```
 
+> **注意：`--build`だけでは足りない変更もあります。** `node_modules`などのボリュームは、`docker compose down`では削除されません。pnpmストアの保存場所など、ボリューム内の構成に関わる変更を取り込んだ場合は、ボリュームを作り直す必要があります。詳しくは[pnpmストアの保存場所](#pnpmストアの保存場所)を参照してください。
+
 ## 依存パッケージの管理
 
 開発環境はDocker Composeで統一しています。
@@ -114,3 +116,43 @@ docker compose exec frontend pnpm install --frozen-lockfile
 依存パッケージを追加する`pnpm add`では、このオプションは不要です。
 
 Goの依存パッケージは、次回のビルド時に自動でダウンロードされるため、pull後の同期操作は不要です。
+
+> **注意：** フロントエンドは`pnpm install`を明示的に実行しないと、ボリューム内の`node_modules`が古いままになることがあります。pull後にフロントエンドが起動しない場合は、最初に依存パッケージの同期を確認してください。
+
+## pnpmストアの保存場所
+
+pnpmは、パッケージの実体をストアに一度だけ保存し、`node_modules`からストアへのハードリンクを作成します。同じパッケージを複数回インストールしても実体を共有できるため、ディスク使用量を抑えられます。
+
+このリポジトリでは、pnpmストアを`node_modules`内の`/frontend/node_modules/.pnpm-store`に保存します。この設定は[`frontend/Dockerfile`](../../frontend/Dockerfile)に記述されています。
+
+```dockerfile
+RUN pnpm config set store-dir /frontend/node_modules/.pnpm-store --global
+```
+
+`node_modules`はDockerボリュームに保存されるため、pnpmストアも同じボリューム内に永続化されます。pnpmストア専用のボリュームは使用しません。
+
+### `node_modules`を削除した場合
+
+`node_modules`のボリュームを削除すると、pnpmストアも一緒に削除されます。次回の`pnpm install`ではパッケージの再ダウンロードが必要です。
+
+ボリューム内の構成に関わる変更を取り込んだ場合は、次のコマンドでボリュームを作り直してからコンテナを起動してください。
+
+```bash
+docker compose down --volumes
+docker compose up -d --build
+```
+
+> **注意：** `docker compose down --volumes`は、このComposeプロジェクトが使用するほかの名前付きボリュームも削除します。保持したいデータがないことを確認してから実行してください。
+
+### `.npmrc`ではなくコンテナのグローバル設定を使う理由
+
+`frontend/.npmrc`はホスト側のpnpmからも読み込まれます。そこにコンテナ内の絶対パスを指定すると、ホストでpnpmを実行したときにもその設定が適用されます。
+
+そのため、`pnpm config set --global`を使い、コンテナ内の設定ファイル`/root/.config/pnpm/rc`に保存しています。この設定はイメージに含まれ、`docker compose exec`と`docker compose run --rm`のどちらでも使用できますが、ホスト側には影響しません。
+
+現在の保存場所は、次のコマンドで確認できます。
+
+```bash
+docker compose exec frontend pnpm store path
+# /frontend/node_modules/.pnpm-store/v10
+```

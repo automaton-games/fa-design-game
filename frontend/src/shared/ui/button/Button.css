@@ -1,0 +1,52 @@
+.button {
+  /* buttonはUAスタイルでfontが直接指定されるため、bodyからは継承されない。明示的に継承させる */
+  font: inherit;
+  /* href付きのときは<a>で描画されるため、UAスタイルの下線を消す */
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.1);
+}
+
+.button__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+}
+
+.button__arrow .material-symbols-outlined {
+  font-size: 14px;
+  color: currentColor;
+}
+
+/* メインのボタンのデザイン */
+.button--primary {
+  border: 1px solid var(--button-primary);
+  color: var(--button-primary-text-hover);
+  background-color: var(--button-primary);
+  transition: background-color 0.2s, color 0.2s;
+}
+.button--primary:hover {
+  background-color: transparent;
+  color: var(--button-primary-text);
+}
+
+/* サブのボタンのデザイン */
+.button--sub {
+  border: 1px solid var(--button-sub);
+  color: var(--button-sub-text-hover);
+  background-color: var(--button-sub);
+  transition: background-color 0.2s, color 0.2s;
+}
+.button--sub:hover {
+  background-color: transparent;
+  color: var(--button-sub-text);
+}

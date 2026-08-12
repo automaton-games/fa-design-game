@@ -1,0 +1,101 @@
+body {
+  margin: 0;
+  font-size: var(--font-md);
+  font-family: "Noto Sans JP", sans-serif;
+  background-color: var(--background-default);
+  background-image:
+    linear-gradient(to right, var(--border-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-grid) 1px, transparent 1px);
+  background-size: var(--space-6) var(--space-6);
+  color: var(--text-primary);
+}
+img {
+  max-width: 100%;
+  height: auto;      /* 縦横比を保つ */
+  display: block;
+}
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  color: var(--icon-primary);
+}
+
+:root {
+  /* 余白の大きさ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* 文字の大きさ pxだとブラウザ側の大きさ変更を無視してしまうためremで指定 */
+  --font-xs: 0.75rem;    /* 12px - 補足、キャプション */
+  --font-sm: 0.875rem;   /* 14px - サブテキスト */
+  --font-md: 1rem;       /* 16px - 本文（基準） */
+  --font-lg: 1.25rem;    /* 20px - 小見出し */
+  --font-xl: 1.5rem;     /* 24px - 見出し */
+  /* 大きい文字は画面幅に応じて縮める。clamp(最小, 可変, 最大) */
+  --font-2xl: clamp(1.5rem, 5vw, 2rem);      /* ページタイトル */
+  --font-3xl: clamp(2.5rem, 5.5vw, 4.5rem);  /* ヒーロー見出しの強調 */
+
+  /* グリッドで並べるカードの最小幅。この値を下回ると列数が減る */
+  --card-min: 240px;
+
+  /* 紫のカラーパレット */
+  --color-purple-100: #ECDDF7;
+  --color-purple-400: #BB87FF;
+  --color-purple-600: #8843E1;
+  --color-purple-800: #5C10BE;
+  
+  /* グレーのカラーパレット */
+  --color-gray-0: #FFFFFF;
+  --color-gray-300: #F4F4F4;
+  --color-gray-400: #F0F4F6;
+  --color-gray-550: #D0D2D3;
+  --color-gray-600: #ADB5BD;
+  --color-gray-700: #677278;
+  --color-gray-800: #334261;
+  --color-gray-1000: #000000;
+
+  /* 緑のカラーパレット */
+  --color-green-200: #CCEFD2;
+  --color-green-700: #009944;
+  --color-green-900: #037938;
+
+  /* 赤のカラーパレット */
+  --color-red-200: #FFCECB;
+  --color-red-700: #BA1A1A;
+  --color-red-900: #93000A;
+  
+  /* ボタンの色 普段は塗りつぶし、ホバーしたときに透明になる */
+  --button-primary: var(--color-purple-600);
+  --button-primary-text: var(--color-purple-800);
+  --button-primary-text-hover: var(--color-gray-0);
+  --button-sub: var(--color-gray-1000);
+  --button-sub-text: var(--color-gray-800);
+  --button-sub-text-hover: var(--color-gray-0);
+
+  /* アイコンの色 */
+  --icon-primary: var(--color-purple-600);
+  
+  /* 線の色 */
+  --border-primary: var(--color-gray-1000);
+  --border-sub: var(--color-gray-550);
+  --border-grid: var(--color-gray-400);
+  --border-accent: var(--color-purple-600);
+
+  /* 文字の色 */
+  --text-primary: var(--color-gray-800);
+  --text-sub: var(--color-gray-700);
+  --text-inverse: var(--color-gray-0);
+  --text-accent: var(--color-purple-800);
+  --text-success: var(--color-green-900);
+  --text-error: var(--color-red-900);
+  
+  /* 背景 */
+  --background-default: var(--color-gray-0);
+  --background-error: var(--color-red-200);
+  --background-success: var(--color-green-200);
+  --background-accent: var(--color-purple-100);
+}

@@ -1,0 +1,36 @@
+.page__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+}
+
+.top__container {
+  margin: var(--space-8) 0;
+  gap: var(--space-4);
+  display: flex;
+}
+.top__container > * {
+  flex: 1;
+  min-width: 0;
+}
+.top__container > *:not(:first-child) {
+  border-left: 1px solid var(--border-primary);
+  padding-left: var(--space-4);
+}
+
+/* スマホ: 3カラムを縦に積む。区切り線も左から上へ付け替える */
+@media (max-width: 768px) {
+  .page__content {
+    padding: 0 var(--space-4);
+  }
+  .top__container {
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .top__container > *:not(:first-child) {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--border-primary);
+    padding-top: var(--space-6);
+  }
+}
