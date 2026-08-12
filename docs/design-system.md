@@ -100,9 +100,9 @@
 
 ディレクトリ構成は Feature-Sliced Design に従っています。どのレイヤーに置くかの判断基準は [フロントエンドのアーキテクチャ](frontend-architecture.md) を参照してください。ざっくりは以下の通りです。
 
-- 汎用的な部品（Button、Card）は `frontend/src/shared/ui/`
-- 画面の一区画としてまとまった部品（Header、Footer、コンテスト一覧）は `frontend/src/widgets/`
-- 特定のページでしか使わないものは `frontend/src/pages/<ページ名>/ui/`
+- 汎用的な部品（Button、Card、Header、Footer）は `frontend/src/shared/ui/`
+- 特定のページでしか使わないものは `frontend/src/pages/<ページ名>/ui/<ブロック名>/`
+- 2ページ目でも使いたくなった一区画は `frontend/src/widgets/` に引き上げる（現時点では該当なし）
 
 ### Button
 
@@ -143,22 +143,8 @@ Header は 768px 以下でナビをハンバーガーメニューに畳みます
 
 > 現状リンク先はすべて `href="#"` です。ルーティング導入時にまとめて差し替えます。
 
-### Section（CSS のみ）
 
-[`frontend/src/shared/ui/section/Section.css`](../frontend/src/shared/ui/section/Section.css) に、トップページの「コンテスト」「ランキング」「お知らせ」で共通のレイアウトをまとめています。
-
-| クラス | 役割 |
-| --- | --- |
-| `.section` | セクション全体の縦並び |
-| `.section__title` | 見出し |
-| `.section__list` | 一覧部分 |
-| `.section__more` | 「もっと見る」ボタンを右寄せ |
-
-同じ構造のセクションが他のページにも増えるようなら、CSS だけでなくコンポーネントとして切り出すことを検討してもよさそうです。
-
-## 記述ルール
-
-### クラス名は BEM
+## クラス名は BEM
 
 `ブロック__要素--修飾子` の形式です。
 
@@ -167,28 +153,13 @@ Header は 768px 以下でナビをハンバーガーメニューに畳みます
 .button__arrow     /* 要素 */
 .button--primary   /* 修飾子 */
 ```
-
-### ファイル名は PascalCase、スライスのディレクトリは kebab-case
-
-FSD のスライス（`button`、`contest-list` など）のディレクトリ名は kebab-case、その中のコンポーネントのファイル名は PascalCase です。CSS は同じディレクトリに同名で置きます。
-
-```
-shared/ui/button/       ← スライスは kebab-case
-├── Button.tsx          ← コンポーネントは PascalCase
-├── Button.css
-└── index.ts            ← 公開API
-```
-
-> ⚠️ **import 文の大文字小文字はファイル名と厳密に一致させてください。**
-> macOS はファイル名の大文字小文字を区別しないため手元では動いてしまいますが、Docker コンテナ（Linux）や CI では解決に失敗してビルドが落ちます。`pnpm build` を実行すれば `tsc` が検出してくれます（`error TS1261`）。ただし CSS の import は検出されないので特に注意してください。
-
-### HTML のセマンティクス
+## HTML のセマンティクス
 
 - 見出しは必ず `<h1>`〜`<h6>` を使います（`<p>` に `font-size` を当てるのは避ける）。1ページに `<h1>` は1つです
 - ヘッダーは `<header>`、フッターは `<footer>`、主コンテンツは `<main>`、ナビゲーションは `<nav>`
 - リンクには必ず `href` を付けます。`href` のない `<a>` はキーボードでフォーカスできず、スクリーンリーダーにもリンクとして読まれません
 
-### 色のコントラスト
+## 色のコントラスト
 
 文字と背景のコントラスト比は WCAG AA（通常サイズの文字で **4.5:1** 以上）を目安にします。パレット上で隣り合う濃度の組み合わせは不足しがちなので、新しい配色を追加するときはチェックツールで確認してください。
 
@@ -215,7 +186,7 @@ CSS 変数は「要素に紐づく継承プロパティ」なので、特定の�
 
 | 幅 | 対象 |
 | --- | --- |
-| `768px` | [TopPage.css](../frontend/src/pages/top/ui/TopPage.css)（3カラム→縦積み、区切り線を左→上へ）、[Header.css](../frontend/src/widgets/header/ui/Header.css)（ナビをハンバーガーメニューに）、[Footer.css](../frontend/src/widgets/footer/ui/Footer.css)（3カラム→縦積み）、[Hero.css](../frontend/src/pages/top/ui/Hero/Hero.css)（見出しと画像を縦積み） |
+| `768px` | [Top.css](../frontend/src/pages/top/ui/Top.css)（3カラム→縦積み、区切り線を左→上へ）、[Header.css](../frontend/src/shared/ui/header/Header.css)（ナビをハンバーガーメニューに）、[Footer.css](../frontend/src/shared/ui/footer/Footer.css)（3カラム→縦積み）、[Hero.css](../frontend/src/pages/top/ui/hero/Hero.css)（見出しと画像を縦積み） |
 
 ### ブレークポイントを使っていない箇所
 
@@ -231,11 +202,3 @@ CSS 変数は「要素に紐づく継承プロパティ」なので、特定の�
 ## 背景のグリッド
 
 `body` に CSS グラデーションで `24px` 間隔の方眼を敷いています。オートマトンの状態遷移図を手で描くイメージに寄せたものです。
-
-## 未確定・今後の検討事項
-
-- **説明カードの列数** — `auto-fit` のため、ビューポート幅 816〜1071px では3列になり「3枚 + 1枚」の並びになります。4→2→1 に固定したい場合はブレークポイントを明示する必要があります
-- **フォーカススタイル** — キーボード操作時の `:focus-visible` の見た目を定義していません（ブラウザ既定のまま）
-- **ダークモード** — 対応予定なし。やる場合はセマンティックカラーの定義を差し替える形になります
-- **文字サイズトークンの間隔** — `--font-2xl`（2rem）と `--font-3xl`（4.5rem）の差が大きいので、中間が必要になるかもしれません
-- **フォームコンポーネント** — 入力欄・セレクトなどは未作成。ログイン/新規登録ページの実装時に定義が必要です

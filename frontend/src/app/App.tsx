@@ -1,8 +1,8 @@
-import { TopPage } from "@/pages/top";
+import { Top } from "@/pages/top";
 import "./styles/index.css";
 
 function App() {
-  return <TopPage />;
+  return <Top />;
 }
 
 export default App;

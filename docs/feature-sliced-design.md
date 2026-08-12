@@ -103,10 +103,25 @@ import ContestList from "@/widgets/contest-list/ui/ContestList";
 `features` は「ユーザーが何をするか」（検索する、提出する）、`widgets` は「画面のどこに何が表示されるか」（検索バー、提出フォーム一式）です。判断に迷うなら、動詞で言えるものが `features`、名詞で言えるものが `widgets` と考えると分けやすくなります。
 
 **entities に何を入れる？**
-その対象の型、モックや API から取得したデータ、対象そのものを表示する小さなコンポーネント（ユーザーのアバターなど）です。「どの画面で使うか」に依存しないものだけを入れます。
+その対象に固有の**ビジネスロジック**と、対象そのものを表示する小さなコンポーネント（ユーザーのアバターなど）です。「どの画面で使うか」に依存しないものだけを入れます。
+
+逆に、**入れてはいけないものの方が重要**です。
+
+- **型定義だけのもの** — `type User = { id: number, name: string }` しか無いなら entity にしません
+- **CRUD 処理** — 単に取得・作成・更新・削除するだけのものはビジネスロジックではないので `shared/api/` に置きます
+- **認証情報** — トークンやログインユーザーの DTO は `shared/auth/` や `shared/api/` に置きます
+
+`entities` はどこからでも参照できるため、変更の影響範囲が最も広いレイヤーです。要件が固まらないうちに作ると、後で作り直すコストが高くつきます。**まずは使う場所（page や feature の `model`）に書き、再利用が必要になってから引き上げる**のが安全です。
+
+詳しくは公式の [Excessive Entities（エンティティの作りすぎ）](https://feature-sliced.design/docs/guides/issues/excessive-entities) を参照してください。
 
 **全部のレイヤーを作らないといけない？**
 いいえ。**該当するものが無いレイヤーは作りません。** 空のディレクトリだけあると、かえって「ここに何を入れるべきか」が分からなくなります。必要になった時点で追加します。
+
+公式も「バックエンドに処理が寄っているアプリなら `entities` は無くてよい」と明言しています。レイヤーは埋めるためのチェックリストではありません。
+
+**ディレクトリ名は大文字と小文字どちらで書く？**
+ディレクトリは kebab-case、コンポーネントファイルは PascalCase に統一します（`shared/ui/button/Button.tsx`）。混在させると、import パスの大文字小文字を間違えても macOS では気づけず、区別する Linux（Docker、CI）で初めて壊れます。また大文字小文字だけのリネームは macOS 上では `git mv` が効かず、後から直すのが厄介です。
 
 **小規模なプロジェクトでも使うべき？**
 ファイル数が確実に増えるので、画面が数枚しかないうちは過剰になりがちです。ただし後から移行するほどコストが上がるため、**これから画面が増えることが分かっている段階で入れる**のが一番安く済みます。
@@ -127,4 +142,5 @@ import ContestList from "@/widgets/contest-list/ui/ContestList";
 - [公式サイト](https://feature-sliced.design/)（英語・ロシア語）
 - [Overview](https://feature-sliced.design/docs/get-started/overview) — まず読むならここ
 - [Layers](https://feature-sliced.design/docs/reference/layers) — 各レイヤーの詳しい定義
+- [Excessive Entities](https://feature-sliced.design/docs/guides/issues/excessive-entities) — レイヤーを分けすぎないための指針
 - [steiger](https://github.com/feature-sliced/steiger) — レイヤー違反を検出する公式リンター

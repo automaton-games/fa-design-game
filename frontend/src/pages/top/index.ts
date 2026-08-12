@@ -1,1 +1,1 @@
-export { default as TopPage } from "./ui/TopPage";
+export { default as Top } from "./ui/Top";
