@@ -1,6 +1,6 @@
 # Feature-Sliced Design（FSD）とは
 
-フロントエンドのディレクトリ構成を決めるための方法論です。このドキュメントは FSD そのものの解説で、**このプロジェクトで実際にどう適用しているか**は [フロントエンドのアーキテクチャ](frontend-architecture.md) を参照してください。
+フロントエンドのディレクトリ構成を決めるための方法論で、特定のフレームワークや言語に依存しません。このドキュメントは FSD そのものの解説で、**このプロジェクトで実際にどう適用しているか**は [フロントエンドのアーキテクチャ](frontend-architecture.md) を参照してください。
 
 公式サイト: https://feature-sliced.design/
 
@@ -17,6 +17,10 @@ FSD は **「置き場所のルール」と「依存の向きのルール」を�
 
 ## 3つの階層
 
+![FSDのレイヤー・スライス・セグメントの構成](images/fsd-schema.jpg)
+
+レイヤー、スライス、セグメントの関係を示した構成図。
+
 FSD の構成は3段階です。上から順に、レイヤー → スライス → セグメントと細かくなります。
 
 ```
@@ -28,30 +32,35 @@ src/
             └── ContestList.tsx
 ```
 
-### 1. レイヤー — 抽象度で分ける
+### 1. レイヤーは抽象度で分ける
 
 レイヤーの名前と数は FSD が定めており、増やしたり名前を変えたりはしません。
+
+![FSDのレイヤーフォルダ構成](images/folders-graphic-light.svg#gh-light-mode-only)
+![FSDのレイヤーフォルダ構成](images/folders-graphic-dark.svg#gh-dark-mode-only)
+
+`src/` 直下に並ぶレイヤーフォルダ。非推奨の `processes` は薄く表示される。
 
 | レイヤー | 役割 | 例 |
 | --- | --- | --- |
 | `app` | アプリ全体の設定。ルーティング、Provider、グローバルCSS | エントリポイント、テーマ設定 |
 | `pages` | 1つの画面まるごと | トップページ、記事詳細ページ |
-| `widgets` | 画面の中の独立した一区画 | ヘッダー、サイドバー、記事一覧 |
+| `widgets` | 画面を構成する大きな独立したUIブロック | ヘッダー、サイドバー、記事一覧 |
 | `features` | ユーザーの操作単位の機能 | ログインする、いいねを押す、検索する |
 | `entities` | ビジネス上の対象物 | ユーザー、記事、商品 |
 | `shared` | 業務知識を持たない汎用部品 | ボタン、入力欄、日付フォーマット関数 |
 
-「ユーザー」という対象物が `entities/user`、「ログインする」という操作が `features/auth`、「ヘッダー（その中にログインボタンが入る）」が `widgets/header` ——という関係です。
+「ユーザー」という対象物が `entities/user`、「ログインする」という操作が `features/auth`、「ヘッダー（その中にログインボタンが入る）」が `widgets/header` という関係です。
 
 > 旧仕様には `pages` と `widgets` の間に `processes` レイヤーがありましたが、現在は非推奨です。新規に作る必要はありません。
 
-### 2. スライス — 対象で分ける
+### 2. スライスは対象で分ける
 
 レイヤーの中を、扱う対象ごとに分けます。スライスの名前は自由で、プロダクトの言葉をそのまま使います（`contest`、`ranking-board` など）。
 
 `app` と `shared` にはスライスがありません。この2つは「アプリ全体」「汎用」であって、特定の対象を持たないためです。
 
-### 3. セグメント — 技術的な役割で分ける
+### 3. セグメントは技術的な役割で分ける
 
 スライスの中を、役割ごとに分けます。名前は慣習でおおむね決まっています。
 
@@ -77,21 +86,26 @@ FSD の実質はこの2つです。
 app  →  pages  →  widgets  →  features  →  entities  →  shared
 ```
 
-- ✅ `widgets/header` が `shared/ui/button` を使う
-- ❌ `shared/ui/button` が `widgets/header` を使う（逆向き）
-- ❌ `widgets/header` が `widgets/footer` を使う（同じレイヤー内）
+- OK: `widgets/header` が `shared/ui/button` を使う
+- NG: `shared/ui/button` が `widgets/header` を使う（逆向き）
+- NG: `widgets/header` が `widgets/footer` を使う（同じレイヤー内）
 
 同じレイヤー内での相互 import が禁止なのが要点です。これがあるおかげで、循環依存が構造的に起きません。widget 同士で共通化したいものが出てきたら、下のレイヤーに下ろします。
+
+![循環依存の例](images/circular-import-light.svg#gh-light-mode-only)
+![循環依存の例](images/circular-import-dark.svg#gh-dark-mode-only)
+
+依存が循環すると、1箇所の修正が離れた箇所を壊す。FSD はレイヤーの上下関係でこの状態を防ぐ。
 
 ### ルール2: スライスは公開API経由で使う
 
 各スライスは `index.ts` で「外から使ってよいもの」だけを公開し、**中のファイルは直接 import しません。**
 
 ```ts
-// ✅
+// OK
 import { ContestList } from "@/widgets/contest-list";
 
-// ❌ 内部構造に依存してしまう
+// NG: 内部構造に依存してしまう
 import ContestList from "@/widgets/contest-list/ui/ContestList";
 ```
 
@@ -100,7 +114,7 @@ import ContestList from "@/widgets/contest-list/ui/ContestList";
 ## よくある疑問
 
 **features と widgets はどう違う？**
-`features` は「ユーザーが何をするか」（検索する、提出する）、`widgets` は「画面のどこに何が表示されるか」（検索バー、提出フォーム一式）です。判断に迷うなら、動詞で言えるものが `features`、名詞で言えるものが `widgets` と考えると分けやすくなります。
+`features` はユーザーが行う操作（検索する、提出する）をまとめ、`widgets` は画面を構成する大きな独立したUIブロック（検索バー、提出フォーム一式）をまとめます。`widgets` は、複数ページで再利用するときか、1ページの中で大きな独立ブロックとして切り出せるときに作ります。判断に迷うなら、動詞で言えるものが `features`、名詞で言えるものが `widgets` と考えると分けやすくなります。
 
 **entities に何を入れる？**
 その対象に固有の**ビジネスロジック**と、対象そのものを表示する小さなコンポーネント（ユーザーのアバターなど）です。「どの画面で使うか」に依存しないものだけを入れます。
@@ -126,16 +140,21 @@ import ContestList from "@/widgets/contest-list/ui/ContestList";
 **小規模なプロジェクトでも使うべき？**
 ファイル数が確実に増えるので、画面が数枚しかないうちは過剰になりがちです。ただし後から移行するほどコストが上がるため、**これから画面が増えることが分かっている段階で入れる**のが一番安く済みます。
 
+**Atomic Design とどう違う？**
+Atomic Design は、UI を原子（atom）→ 分子（molecule）→ 有機体（organism）→ テンプレート → ページと、小さい部品から組み上げる設計手法です。関心は「見た目の部品をどう分割し再利用するか」にあり、デザインシステムの構築に向いています。
+
+Feature-Sliced Design の関心は「コードをビジネス上の機能と依存の向きでどう分けるか」です。関心が違うため両者は対立せず、Atomic Design でコンポーネントの粒度を決めつつ、アプリ全体の構成は FSD でまとめる、といった共存が可能です。
+
 ## メリットとデメリット
 
-| | |
+| 種別 | 内容 |
 | --- | --- |
-| ✅ | 置き場所の判断基準が明文化され、人によってぶれない |
-| ✅ | 依存が一方向なので、変更の影響範囲を追いやすい |
-| ✅ | 機能単位でまとまるので、削除するときに消し忘れが出にくい |
-| ⚠️ | `index.ts` の分だけファイル数が増える |
-| ⚠️ | レイヤーの使い分け（特に features と widgets）に慣れが要る |
-| ⚠️ | ルールを守らせる仕組みが無いと、時間とともに崩れる |
+| メリット | 置き場所の判断基準が明文化され、人によってぶれない |
+| メリット | 依存が一方向なので、変更の影響範囲を追いやすい |
+| メリット | 機能単位でまとまるので、削除するときに消し忘れが出にくい |
+| デメリット | `index.ts` の分だけファイル数が増える |
+| デメリット | レイヤーの使い分け（特に features と widgets）に慣れが要る |
+| デメリット | ルールを守らせる仕組みが無いと、時間とともに崩れる |
 
 ## 参考
 
@@ -144,3 +163,4 @@ import ContestList from "@/widgets/contest-list/ui/ContestList";
 - [Layers](https://feature-sliced.design/docs/reference/layers) — 各レイヤーの詳しい定義
 - [Excessive Entities](https://feature-sliced.design/docs/guides/issues/excessive-entities) — レイヤーを分けすぎないための指針
 - [steiger](https://github.com/feature-sliced/steiger) — レイヤー違反を検出する公式リンター
+- 構成図・フォルダ図・循環依存図は [feature-sliced/documentation](https://github.com/feature-sliced/documentation) のアセットを使用（MIT License）

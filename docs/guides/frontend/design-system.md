@@ -4,9 +4,9 @@
 
 ## 概要
 
-見た目の統一とレビューのしやすさのために、色・文字サイズ・余白を CSS 変数（デザイントークン）として一箇所にまとめています。定義は [`frontend/src/app/styles/index.css`](../frontend/src/app/styles/index.css) にあります。
+見た目の統一とレビューのしやすさのために、色・文字サイズ・余白を CSS 変数（デザイントークン）として [`frontend/src/app/styles/index.css`](../../../frontend/src/app/styles/index.css) にまとめています。
 
-**コンポーネントの CSS では原則としてトークンだけを使い、生の値（`#8843E1`、`16px` など）を直接書かない**というのが基本方針です。色を調整したくなったときに `index.css` だけを見れば済むようにするためです。
+**コンポーネントの CSS では原則としてトークンだけを使い、生の値（`#8843E1`、`16px` など）を直接書きません。** 色を調整したくなったときに `index.css` だけを見れば済むようにするためです。
 
 ## トークンの構造
 
@@ -85,20 +85,20 @@
 
 ### フォント
 
-**Noto Sans JP** を Google Fonts から読み込んでいます（[`frontend/index.html`](../frontend/index.html)）。日本語と英数字が同じファミリで揃うので、和文欧文混在でも字面が崩れません。
+**Noto Sans JP** を Google Fonts から読み込んでいます（[`frontend/index.html`](../../../frontend/index.html)）。日本語と英数字が同じファミリで揃うので、和文欧文混在でも字面が崩れません。
 
 ### アイコン
 
 **Material Symbols Outlined** を使用しています。`<span className="material-symbols-outlined">arrow_forward</span>` のようにアイコン名をテキストとして書きます。
 
-> ⚠️ **新しいアイコンを使うときは `index.html` の `icon_names` パラメータへの追記が必要です。**
+> **新しいアイコンを使うときは `index.html` の `icon_names` パラメータへの追記が必要です。**
 > 読み込み量を抑えるため、使用するアイコンだけを URL で指定しています。追記を忘れるとアイコン名がそのまま文字列として表示されます。
 >
 > 現在指定しているもの: `arrow_forward`, `check_circle`, `close`, `code_xml`, `crossword`, `leaderboard`, `login`, `menu`
 
 ## 共通コンポーネント
 
-ディレクトリ構成は Feature-Sliced Design に従っています。どのレイヤーに置くかの判断基準は [フロントエンドのアーキテクチャ](frontend-architecture.md) を参照してください。ざっくりは以下の通りです。
+ディレクトリ構成は Feature-Sliced Design に従っています。どのレイヤーに置くかの判断基準は [フロントエンドのアーキテクチャ](frontend-architecture.md) を参照してください。大まかには次のとおりです。
 
 - 汎用的な部品（Button、Card、Header、Footer）は `frontend/src/shared/ui/`
 - 特定のページでしか使わないものは `frontend/src/pages/<ページ名>/ui/<ブロック名>/`
@@ -139,7 +139,7 @@
 
 またスクリーンリーダーが「ボタン」と読み上げるため、押すと何か処理が走ると誤解させます。**遷移なら必ず `href` を渡してください。**
 
-> ⚠️ **CSSで `.header__nav a` のような素の要素セレクタを書かないでください。** `href` 付きの Button は `<a>` として描画されるため、こうしたセレクタが Button にも当たります。しかも詳細度が `.button--primary`（0,1,0）より高い（0,1,1）ので、**文字色を奪ってボタンのコントラストを壊します**。実際にヘッダーで踏んだため、素のナビリンクには `.header__nav-link` というクラスを付けて限定しています。
+> **CSSで `.header__nav a` のような素の要素セレクタを書かないでください。** `href` 付きの Button は `<a>` として描画されるため、こうしたセレクタが Button にも当たります。しかも詳細度が `.button--primary`（0,1,0）より高い（0,1,1）ので、**文字色を奪ってボタンのコントラストを壊します**。実際にヘッダーで踏んだため、素のナビリンクには `.header__nav-link` というクラスを付けて限定しています。
 
 ### Card
 
@@ -193,8 +193,8 @@ Header は 768px 以下でナビをハンバーガーメニューに畳みます
 ただし可能な限りブレークポイントを使わず、**宣言側で完結する方法を優先**しています。理由は、`var()` がメディアクエリの条件部では使えないためです。
 
 ```css
-@media (max-width: var(--bp-md)) { ... }   /* ✗ 効かない */
-@media (max-width: 768px) { padding: var(--space-4); }   /* ✓ ブロック内なら使える */
+@media (max-width: var(--bp-md)) { ... }   /* NG: 効かない */
+@media (max-width: 768px) { padding: var(--space-4); }   /* OK: ブロック内なら使える */
 ```
 
 CSS 変数は「要素に紐づく継承プロパティ」なので、特定の要素に属さないメディアクエリの条件部では解決できません。`@custom-media` という仕様案がありますが、まだどのブラウザも実装していません（PostCSS を入れれば使えます）。
@@ -207,7 +207,7 @@ CSS 変数は「要素に紐づく継承プロパティ」なので、特定の�
 
 | 幅 | 対象 |
 | --- | --- |
-| `768px` | [Top.css](../frontend/src/pages/top/ui/Top.css)（3カラム→縦積み、区切り線を左→上へ）、[Header.css](../frontend/src/shared/ui/header/Header.css)（ナビをハンバーガーメニューに）、[Footer.css](../frontend/src/shared/ui/footer/Footer.css)（3カラム→縦積み）、[Hero.css](../frontend/src/pages/top/ui/hero/Hero.css)（見出しと画像を縦積み） |
+| `768px` | [Top.css](../../../frontend/src/pages/top/ui/Top.css)（3カラム→縦積み、区切り線を左→上へ）、[Header.css](../../../frontend/src/shared/ui/header/Header.css)（ナビをハンバーガーメニューに）、[Footer.css](../../../frontend/src/shared/ui/footer/Footer.css)（3カラム→縦積み）、[Hero.css](../../../frontend/src/pages/top/ui/hero/Hero.css)（見出しと画像を縦積み） |
 
 ### ブレークポイントを使っていない箇所
 
