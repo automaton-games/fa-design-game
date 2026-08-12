@@ -23,7 +23,7 @@ FSD は**レイヤーの上下関係を決めて、依存の向きを一方向�
 | --- | --- | --- |
 | `app/` | アプリ全体の設定。エントリポイント、グローバルCSS、今後はルーティングやProvider | `main.tsx`, `App.tsx`, `styles/index.css` |
 | `pages/` | 1つの画面。その画面でしか使わないブロックも中に持つ | `top/`（配下に `hero/`, `section/`, `contest-list/`, `ranking-board/`, `news-list/`） |
-| `widgets/` | **複数のページで**使い回す、画面の中の独立した一区画 | **まだ無し** |
+| `widgets/` | **複数のページで**使い回す、画面を構成する大きな独立したUIブロック | **まだ無し** |
 | `features/` | ユーザーの操作単位の機能（ログインする、DFAを提出する など） | **まだ無し** |
 | `entities/` | ビジネス上の対象物。型やデータだけでなくビジネスロジックを持つもの | **まだ無し** |
 | `shared/` | どこからでも使う汎用部品。特定の業務知識を持たない | `ui/button/`, `ui/card/`, `ui/header/`, `ui/footer/` |
@@ -105,11 +105,11 @@ pages/top/                ← スライス
 各スライスは `index.ts` で「外から使ってよいもの」だけを公開します。**スライスの中のファイルを直接 import しないでください。**
 
 ```ts
-// ✅ 公開APIを経由する
+// OK: 公開APIを経由する
 import { Button, Card } from "@/shared/ui";
 import { Top } from "@/pages/top";
 
-// ❌ 中のファイルを直接指す
+// NG: 中のファイルを直接指す
 import Button from "@/shared/ui/button/Button";
 ```
 
@@ -132,9 +132,9 @@ import Button from "@/shared/ui/button/Button";
 **ディレクトリは kebab-case、ファイルは PascalCase** で統一します。
 
 ```
-shared/ui/button/Button.tsx          ✅
-pages/top/ui/contest-list/ContestList.tsx   ✅
-pages/top/ui/ContestList/ContestList.tsx    ❌ ディレクトリが PascalCase
+shared/ui/button/Button.tsx          OK
+pages/top/ui/contest-list/ContestList.tsx   OK
+pages/top/ui/ContestList/ContestList.tsx    NG: ディレクトリが PascalCase
 ```
 
 これは見た目の統一だけの話ではありません。
