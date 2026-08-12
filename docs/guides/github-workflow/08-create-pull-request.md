@@ -1,8 +1,8 @@
 # Pull Requestを作る
 
-> [← 目次に戻る](README.md) | [前: 07 pushする](07-push.md) | [次: 09 レビューを受けてマージする](09-review-and-merge.md)
+> [← 目次に戻る](README.md) | [前：07 pushする](07-push.md) | [次：09 レビューを受けてマージする](09-review-and-merge.md)
 
-## このページで扱うこと
+## Pull Request作成の流れ
 
 **Pull Request（PR）** は、自分のブランチの変更をmainに取り込んでもらうための提案です。
 このページでは、PRを作成し、Issueと紐づける手順を説明します。
@@ -51,7 +51,7 @@ PR作成画面では、テンプレートが自動で入力されます。
 
 `Closes` を書いておくと、PRがマージされたときにIssueも自動で閉じます。
 このリポジトリでは「1 Issue = 1 Pull Request」を基本にするため、多くの場合 `Closes` を使います。
-紐づけの規則は [CONTRIBUTING.md の「Pull Requestの運用」](../CONTRIBUTING.md#pull-requestの運用) を参照してください。
+紐づけの規則は[CONTRIBUTING.md の「Pull Requestの運用」](../../../CONTRIBUTING.md#pull-requestの運用)を参照してください。
 
 ## レビュアーを指定する
 
@@ -66,8 +66,8 @@ PR作成画面では、テンプレートが自動で入力されます。
 ## 次のステップ
 
 PRを作ったら、レビューに対応します。
-[09 レビューを受けてマージする](09-review-and-merge.md) へ進んでください。
+[09 レビューを受けてマージする](09-review-and-merge.md)へ進んでください。
 
 ## 関連
 
-- [CONTRIBUTING.md - Pull Requestの運用](../CONTRIBUTING.md#pull-requestの運用)
+- [CONTRIBUTING.md「Pull Requestの運用」](../../../CONTRIBUTING.md#pull-requestの運用)

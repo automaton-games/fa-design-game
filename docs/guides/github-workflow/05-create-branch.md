@@ -1,8 +1,8 @@
 # 作業ブランチを作る
 
-> [← 目次に戻る](README.md) | [前: 04 自分をAssignする](04-assign-yourself.md) | [次: 06 コミットする](06-commit.md)
+> [← 目次に戻る](README.md) | [前：04 自分をAssignする](04-assign-yourself.md) | [次：06 コミットする](06-commit.md)
 
-## このページで扱うこと
+## ブランチ作成の流れ
 
 **ブランチ** は、変更履歴を枝分かれさせ、自分の作業をほかの人の作業から切り離すためのものです。
 このページでは、mainから作業ブランチを作る手順を説明します。
@@ -40,7 +40,7 @@ git switch -c <type>/<issue番号>-<要約>
 git switch -c docs/13-add-github-workflow
 ```
 
-ブランチ名の付け方は [CONTRIBUTING.md の「ブランチ運用」](../CONTRIBUTING.md#ブランチ運用) で規定しています。
+ブランチ名の付け方は[CONTRIBUTING.md の「ブランチ運用」](../../../CONTRIBUTING.md#ブランチ運用)で規定しています。
 `type` はIssueのラベルに合わせて選びます。
 主な `type` は次のとおりです。
 
@@ -66,8 +66,8 @@ git branch --show-current
 ## 次のステップ
 
 ブランチができたら、ファイルを編集して変更を記録します。
-[06 コミットする](06-commit.md) へ進んでください。
+[06 コミットする](06-commit.md)へ進んでください。
 
 ## 関連
 
-- [CONTRIBUTING.md - ブランチ運用](../CONTRIBUTING.md#ブランチ運用)
+- [CONTRIBUTING.md「ブランチ運用」](../../../CONTRIBUTING.md#ブランチ運用)

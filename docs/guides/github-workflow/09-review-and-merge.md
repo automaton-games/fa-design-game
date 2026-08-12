@@ -1,8 +1,8 @@
 # レビューを受けてマージする
 
-> [← 目次に戻る](README.md) | [前: 08 Pull Requestを作る](08-create-pull-request.md) | [次: 10 Projectのステータスを動かす](10-update-project-status.md)
+> [← 目次に戻る](README.md) | [前：08 Pull Requestを作る](08-create-pull-request.md) | [次：10 Projectのステータスを動かす](10-update-project-status.md)
 
-## このページで扱うこと
+## レビューからマージまでの流れ
 
 PRのレビューとマージについて説明します。
 自分のPRがレビューされる場合と、ほかの人のPRをレビューする場合の両方を扱い、最後にマージまで進めます。
@@ -37,7 +37,7 @@ mainは全員の作業の前提になるため、そこに問題が混入する�
 - **Request changes**：修正してほしいことがある
 - **Approve**：問題がない。マージしてよい
 
-`Approve` が出ると、PRはマージできる状態になります。
+必要なレビューで`Approve`され、ほかのマージ条件も満たすと、PRをマージできる状態になります。
 
 ## レビューを待つ
 
@@ -48,7 +48,7 @@ PRを作ったら、レビュアーがコメントを書くのを待ちます。
 
 レビューで指摘を受けたら、同じブランチで修正します。
 修正は、これまでと同じ手順でコミットしてpushします。
-詳しくは [06 コミットする](06-commit.md) を見てください。
+詳しくは[06 コミットする](06-commit.md)を見てください。
 
 pushすると、変更が同じPRに自動で追加されます。
 新しくPRを作り直す必要はありません。
@@ -87,9 +87,9 @@ git branch -d <ブランチ名>
 ## 次のステップ
 
 マージまで終わったら、進捗をProjectsに反映します。
-[10 Projectのステータスを動かす](10-update-project-status.md) へ進んでください。
+[10 Projectのステータスを動かす](10-update-project-status.md)へ進んでください。
 
 ## 関連
 
 - [06 コミットする](06-commit.md)
-- [CONTRIBUTING.md - 開発の流れ](../CONTRIBUTING.md#開発の流れ)
+- [CONTRIBUTING.md「開発の流れ」](../../../CONTRIBUTING.md#開発の流れ)

@@ -9,7 +9,18 @@ MVPでは、以下のページを実装します。
 - コンテスト一覧ページ
 - Practiceコンテストページ
 - 問題一覧ページ
-- 問題詳細・提出ページ
+- 問題詳細および提出ページ
+
+ルート定義では、コンテストの公開識別子を `:contestSlug`、コンテスト内の問題コードを `:taskCode` と表記します。
+
+| ルートパラメータ | 値の例 | 役割 |
+|---|---|---|
+| `:contestSlug` | `practice` | コンテストを識別する |
+| `:taskCode` | `A` | コンテスト内の問題を識別する |
+
+これらはルート定義上のパラメータ名です。
+MVPで使用する実際のURLは `/contests/practice/tasks/A` の形式です。
+命名の理由は、[公開識別子にslugとcodeを使用する](../adr/0001-public-identifiers.md)を参照してください。
 
 ## ページ一覧
 
@@ -17,9 +28,9 @@ MVPでは、以下のページを実装します。
 
 #### 目的
 
-初めて訪れたユーザーに、FA Design Game が何をするサイトかを伝えます。
+初めて訪れたユーザーに、FA Design Gameがどのようなサイトかを伝えます。
 
-#### 表示するもの
+#### 表示内容
 
 - サイト概要
 - チュートリアルページへのリンク
@@ -35,7 +46,7 @@ MVPでは、以下のページを実装します。
 
 ユーザーに、DFAと提出形式の基本を説明します。
 
-#### 表示するもの
+#### 表示内容
 
 - このサイトでやること
 - DFAの簡単な説明
@@ -53,12 +64,12 @@ MVPでは、以下のページを実装します。
 
 MVPでは、Practiceコンテストのみを表示します。
 
-#### 表示するもの
+#### 表示内容
 
 - 常設コンテスト一覧
-  - Practice Contest
+  - Practiceコンテスト
 
-#### MVP後に検討するもの
+#### MVP後の検討事項
 
 - 開催予定のコンテスト一覧
 - 開催中のコンテスト一覧
@@ -66,11 +77,11 @@ MVPでは、Practiceコンテストのみを表示します。
 
 #### 参考
 
-https://atcoder.jp/contests/
+- [AtCoderのコンテスト一覧](https://atcoder.jp/contests/)
 
 ---
 
-### Practiceコンテストページ `/contests/practice`
+### Practiceコンテストページ `/contests/:contestSlug`
 
 #### 目的
 
@@ -78,13 +89,13 @@ Practiceコンテストの概要を表示します。
 
 MVPでは、Practiceコンテストを時間制限のない練習用問題セットとして扱います。
 
-#### 表示するもの
+#### 表示内容
 
 - Practiceコンテストの説明
 - 問題一覧ページへのリンク
 - チュートリアルページへのリンク
 
-#### MVP後に検討するもの
+#### MVP後の検討事項
 
 - コンテスト開始時刻
 - コンテスト終了時刻
@@ -95,25 +106,25 @@ MVPでは、Practiceコンテストを時間制限のない練習用問題セッ
 
 #### 参考
 
-https://atcoder.jp/contests/practice
+- [AtCoderの練習用コンテスト](https://atcoder.jp/contests/practice)
 
 ---
 
-### 問題一覧ページ `/contests/practice/tasks`
+### 問題一覧ページ `/contests/:contestSlug/tasks`
 
 #### 目的
 
 Practiceコンテストに含まれる問題の一覧を表示します。
 
-#### 表示するもの
+#### 表示内容
 
-- 問題ID
+- 問題コード
 - 問題タイトル
 - 各問題詳細ページへのリンク
 
 #### 表示例
 
-| 問題ID | 問題タイトル |
+| 問題コード | 問題タイトル |
 |---|---|
 | A | 文字列長が偶数 |
 | B | 1の個数が3の倍数 |
@@ -121,11 +132,11 @@ Practiceコンテストに含まれる問題の一覧を表示します。
 
 #### 参考
 
-https://atcoder.jp/contests/practice/tasks
+- [AtCoderの練習用コンテストの問題一覧](https://atcoder.jp/contests/practice/tasks)
 
 ---
 
-### 問題詳細・提出ページ `/contests/practice/tasks/:taskID`
+### 問題詳細および提出ページ `/contests/:contestSlug/tasks/:taskCode`
 
 #### 目的
 
@@ -133,9 +144,9 @@ https://atcoder.jp/contests/practice/tasks
 
 MVPでは、問題文表示・提出・判定結果表示を同じページで行います。
 
-#### 表示するもの
+#### 表示内容
 
-- 問題ID
+- 問題コード
 - 問題タイトル
 - 問題文
 - 入力アルファベット
@@ -144,7 +155,7 @@ MVPでは、問題文表示・提出・判定結果表示を同じページで�
 - 判定結果
 - 不正解時の反例
 
-#### MVP後に検討するもの
+#### MVP後の検討事項
 
 - 提出結果一覧へのリンク
 - 解説へのリンク
@@ -153,15 +164,16 @@ MVPでは、問題文表示・提出・判定結果表示を同じページで�
 
 #### 参考
 
-https://atcoder.jp/contests/practice/tasks/practice_1
+- [AtCoderの練習問題](https://atcoder.jp/contests/practice/tasks/practice_1)
 
 ## 画面遷移
 
 ```text
 /
 ├── /tutorial
-│   └── /contests/practice
+│   └── /contests/:contestSlug
 └── /contests
-    └── /contests/practice
-        └── /contests/practice/tasks
-            └── /contests/practice/tasks/:taskID
+    └── /contests/:contestSlug
+        └── /contests/:contestSlug/tasks
+            └── /contests/:contestSlug/tasks/:taskCode
+```
