@@ -1,0 +1,38 @@
+.footer {
+  min-height: 200px;
+  border-top: 1px solid var(--border-primary);
+  margin: var(--space-1) 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-8);
+  padding: var(--space-4) var(--space-8);
+}
+.footer__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.footer__heading {
+  color: var(--text-primary);
+  font-weight: bold;
+  margin: 0 0 var(--space-1);
+}
+.footer__column a {
+  color: var(--text-sub);
+  text-decoration: none;
+}
+
+/* スマホ: 3カラムを縦に積み、タップ領域を確保する */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--space-6);
+    padding: var(--space-6) var(--space-4);
+  }
+  .footer__column a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}

@@ -16,7 +16,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./frontend:/frontend
-      - node_modules:/frontend/node_modules
+      - node_modules:/frontend/node_modules # pnpmのストアもこの中に入る(frontend/Dockerfile参照).
     command: pnpm dev --host # --hostはhostマシーンからも接続するための設定.
     ports:
       - "5173:5173"

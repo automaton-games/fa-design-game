@@ -1,0 +1,17 @@
+/* トップページのコンテスト・ランキング・お知らせで共通のレイアウト */
+.section {
+  display: flex;
+  flex-direction: column;
+}
+.section__title {
+  font-size: var(--font-xl);
+  margin: 0 0 var(--space-2);
+}
+.section__list {
+  padding-bottom: var(--space-2);
+}
+/* 「もっと見る」ボタンを右寄せにする */
+.section__more {
+  display: flex;
+  justify-content: flex-end;
+}
