@@ -1,0 +1,19 @@
+.news__item {
+  border-bottom: 1px solid var(--border-sub);
+  padding: var(--space-2) 0;
+  margin: var(--space-2);
+}
+.news__title{
+  font-size: var(--font-lg);
+  color: var(--text-primary);
+}
+/* 本文が長い場合は3行で省略する */
+.news__text {
+  color: var(--text-sub);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: var(--space-2) 0;
+}

@@ -23,6 +23,8 @@ Dockerfileに変更があった場合(pullで取り込んだ場合を含む)は�
 docker compose up -d --build
 ```
 
+> ⚠️ **`--build` だけでは足りない変更もあります。** `node_modules` などのボリュームは `docker compose down` では消えないため、ボリュームの中身に関わる変更(例: pnpmのストアの置き場所の変更)を取り込むときは、ボリュームごと作り直す必要があります。手順は[pnpmストアの置き場所](#pnpmストアの置き場所)を参照してください。
+
 # 開発の際に新たなパッケージを追加する場合
 開発環境はDocker Composeで統一しています。パッケージの追加・削除は**必ずコンテナ内で実行**してください。
 
@@ -87,3 +89,32 @@ docker compose exec frontend pnpm install --frozen-lockfile
 > **注意**: Goは足りない依存をビルド時に自動取得しますが、frontendは `pnpm install` を明示的に実行しないとボリューム内が古いままです。pull後にfrontendが起動しなくなったら、まずこれを疑ってください。
 
 `--frozen-lockfile` は「lockfileに書かれている通りにインストールし、不整合があればエラーで止める」オプションです。同期目的ではこれを付けることで、lockfileが意図せず書き換わるのを防げます(パッケージ追加時の `pnpm add` には不要です)。
+
+## pnpmストアの置き場所
+
+pnpmは、パッケージの実体を**ストア**に1つだけ置き、`node_modules` からはそこへの**ハードリンク**を張ります。同じパッケージを何度インストールしても実体が1つで済むのがpnpmの利点です。
+
+このリポジトリでは、ストアを **`node_modules` の中**(`/frontend/node_modules/.pnpm-store`)に置いています。設定は [`frontend/Dockerfile`](../frontend/Dockerfile) の以下の行です。
+
+```dockerfile
+RUN pnpm config set store-dir /frontend/node_modules/.pnpm-store --global
+```
+
+`node_modules` 自体がDockerボリュームなので、ストアもそのボリュームの中に永続化されます。専用のボリュームは要りません。
+
+### なぜ `node_modules` を消すとストアも消えるのか
+
+この構成の代償として、`docker volume rm ..._node_modules` をするとストアも一緒に消えます。次回の `pnpm install` で再ダウンロードが発生しますが、ハードリンクが効くこと(容量が1/7で済むこと)を優先しています。
+
+### なぜ `.npmrc` ではなくコンテナのグローバル設定なのか
+
+`frontend/.npmrc` はGitで管理されるため、**ホスト(macOS)のpnpmにも読まれます**。そこに `/pnpm-store` という絶対パスを書くと、ホストで `pnpm` を実行したときにルート直下を掘ろうとして壊れます。
+
+そのため `pnpm config set --global` でコンテナ内の設定ファイル(`/root/.config/pnpm/rc`)に書いています。これならイメージに焼かれて `exec` / `run --rm` の両方で効き、ホスト側には影響しません。
+
+現在の設定は次のコマンドで確認できます。
+
+```bash
+docker compose exec frontend pnpm store path
+# → /frontend/node_modules/.pnpm-store/v10
+```
