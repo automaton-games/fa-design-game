@@ -31,6 +31,14 @@ frontend/
 └── vite.config.ts
 ```
 
+## アーキテクチャとデザイン
+
+コードの置き場所や、コンポーネント・スタイルの設計方針は次のドキュメントを参照してください。
+
+- [フロントエンドのアーキテクチャ](frontend-architecture.md)：ディレクトリ構成（Feature-Sliced Design）と、コードの置き場所の判断基準
+- [Feature-Sliced Designとは](feature-sliced-design.md)：FSDという方法論そのものの解説
+- [デザインシステム](design-system.md)：デザイントークン、共通コンポーネント、レスポンシブの方針
+
 ## 依存パッケージの管理
 
 依存パッケージの追加や削除は、開発環境を統一するためコンテナ内で実行します。

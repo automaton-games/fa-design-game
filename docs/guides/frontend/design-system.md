@@ -4,7 +4,7 @@
 
 ## 概要
 
-見た目の統一とレビューのしやすさのために、色・文字サイズ・余白を CSS 変数（デザイントークン）として一箇所にまとめています。定義は [`frontend/src/app/styles/index.css`](../frontend/src/app/styles/index.css) にあります。
+見た目の統一とレビューのしやすさのために、色・文字サイズ・余白を CSS 変数（デザイントークン）として一箇所にまとめています。定義は [`frontend/src/app/styles/index.css`](../../../frontend/src/app/styles/index.css) にあります。
 
 **コンポーネントの CSS では原則としてトークンだけを使い、生の値（`#8843E1`、`16px` など）を直接書かない**というのが基本方針です。色を調整したくなったときに `index.css` だけを見れば済むようにするためです。
 
@@ -85,7 +85,7 @@
 
 ### フォント
 
-**Noto Sans JP** を Google Fonts から読み込んでいます（[`frontend/index.html`](../frontend/index.html)）。日本語と英数字が同じファミリで揃うので、和文欧文混在でも字面が崩れません。
+**Noto Sans JP** を Google Fonts から読み込んでいます（[`frontend/index.html`](../../../frontend/index.html)）。日本語と英数字が同じファミリで揃うので、和文欧文混在でも字面が崩れません。
 
 ### アイコン
 
@@ -207,7 +207,7 @@ CSS 変数は「要素に紐づく継承プロパティ」なので、特定の�
 
 | 幅 | 対象 |
 | --- | --- |
-| `768px` | [Top.css](../frontend/src/pages/top/ui/Top.css)（3カラム→縦積み、区切り線を左→上へ）、[Header.css](../frontend/src/shared/ui/header/Header.css)（ナビをハンバーガーメニューに）、[Footer.css](../frontend/src/shared/ui/footer/Footer.css)（3カラム→縦積み）、[Hero.css](../frontend/src/pages/top/ui/hero/Hero.css)（見出しと画像を縦積み） |
+| `768px` | [Top.css](../../../frontend/src/pages/top/ui/Top.css)（3カラム→縦積み、区切り線を左→上へ）、[Header.css](../../../frontend/src/shared/ui/header/Header.css)（ナビをハンバーガーメニューに）、[Footer.css](../../../frontend/src/shared/ui/footer/Footer.css)（3カラム→縦積み）、[Hero.css](../../../frontend/src/pages/top/ui/hero/Hero.css)（見出しと画像を縦積み） |
 
 ### ブレークポイントを使っていない箇所
 

@@ -7,7 +7,7 @@
 
 ## なぜ FSD にしたか
 
-[ページ構成](pages.md) の通り、今後6ページを実装していきます。「共通コンポーネントは `components/`、ページ固有は `features/`」という分け方だと、ページが増えるにつれて次の問題が出ます。
+[ページ構成](../../product/pages.md) の通り、今後6ページを実装していきます。「共通コンポーネントは `components/`、ページ固有は `features/`」という分け方だと、ページが増えるにつれて次の問題が出ます。
 
 - どちらに置くべきか判断がぶれる
 - あるページ用に作った部品を別のページから参照し始めると、依存が双方向になって追えなくなる
@@ -98,7 +98,7 @@ pages/top/                ← スライス
 | `store` | グローバルストア設定 | まだ無し |
 | `styles` | グローバルCSS | `styles/index.css` |
 
-**`main.tsx` は `app/` に置きます。** ビルドの入口なので `src/` 直下に置きたくなりますが、公式は `entrypoint` を `app` レイヤーのセグメントとして定義しています。[frontend/index.html](../frontend/index.html) の `<script src="/src/app/main.tsx">` がここを指しています。
+**`main.tsx` は `app/` に置きます。** ビルドの入口なので `src/` 直下に置きたくなりますが、公式は `entrypoint` を `app` レイヤーのセグメントとして定義しています。[frontend/index.html](../../../frontend/index.html) の `<script src="/src/app/main.tsx">` がここを指しています。
 
 ## 公開API（index.ts）
 
@@ -124,8 +124,8 @@ import Button from "@/shared/ui/button/Button";
 
 設定は2箇所にあり、**両方を揃える必要があります**。
 
-- [frontend/vite.config.ts](../frontend/vite.config.ts) の `resolve.alias`（実行時の解決）
-- [frontend/tsconfig.app.json](../frontend/tsconfig.app.json) の `paths`（型チェックとエディタ補完）
+- [frontend/vite.config.ts](../../../frontend/vite.config.ts) の `resolve.alias`（実行時の解決）
+- [frontend/tsconfig.app.json](../../../frontend/tsconfig.app.json) の `paths`（型チェックとエディタ補完）
 
 ## 命名規則
 
