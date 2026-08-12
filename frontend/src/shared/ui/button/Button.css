@@ -1,6 +1,8 @@
 .button {
   /* buttonはUAスタイルでfontが直接指定されるため、bodyからは継承されない。明示的に継承させる */
   font: inherit;
+  /* href付きのときは<a>で描画されるため、UAスタイルの下線を消す */
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: space-between;

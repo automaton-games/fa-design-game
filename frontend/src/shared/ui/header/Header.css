@@ -15,7 +15,9 @@
   gap: var(--space-4);
   margin-left: auto;
 }
-.header__nav a {
+/* 素の<a>セレクタにすると、href付きButtonが<a>で描画されたときにも当たってしまい、
+   .button--primary より詳細度が高いため文字色を奪ってしまう。クラスで限定する */
+.header__nav-link {
   color: var(--text-primary);
   text-decoration: none;
 }
@@ -61,7 +63,8 @@
     gap: var(--space-2);
     padding-bottom: var(--space-2);
   }
-  .header__nav a {
+  /* .buttonはpaddingで44pxを満たすため、ここは素のリンクだけを対象にする */
+  .header__nav-link {
     display: flex;
     align-items: center;
     min-height: 44px;

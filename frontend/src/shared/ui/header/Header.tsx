@@ -32,11 +32,11 @@ export default function Header() {
         id="header-nav"
         className={`header__nav${isMenuOpen ? " header__nav--open" : ""}`}
       >
-        <a href="#" onClick={() => setIsMenuOpen(false)}>Top</a>
-        <a href="#" onClick={() => setIsMenuOpen(false)}>遊び方</a>
-        <a href="#" onClick={() => setIsMenuOpen(false)}>コンテスト</a>
-        <Button icon="login">ログイン</Button>
-        <Button variant="sub">新規登録</Button>
+        <a className="header__nav-link" href="#" onClick={() => setIsMenuOpen(false)}>Top</a>
+        <a className="header__nav-link" href="#" onClick={() => setIsMenuOpen(false)}>遊び方</a>
+        <a className="header__nav-link" href="#" onClick={() => setIsMenuOpen(false)}>コンテスト</a>
+        <Button href="#" icon="login" onClick={() => setIsMenuOpen(false)}>ログイン</Button>
+        <Button href="#" variant="sub" onClick={() => setIsMenuOpen(false)}>新規登録</Button>
       </nav>
     </header>
   )

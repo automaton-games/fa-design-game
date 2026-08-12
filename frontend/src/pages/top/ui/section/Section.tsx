@@ -14,7 +14,7 @@ export default function Section({title, children}: SectionProps) {
       <h2 className="section__title">{title}</h2>
       <div className="section__list">{children}</div>
       <div className="section__more">
-        <Button variant="sub" icon="arrow_forward">もっと見る</Button>
+        <Button href="#" variant="sub" icon="arrow_forward">もっと見る</Button>
       </div>
     </div>
   )
