@@ -1,0 +1,50 @@
+name: "Setup frontend"
+description: "frontend/ の Node.js・pnpm をセットアップし、依存関係をインストールする"
+
+runs:
+  using: composite
+  steps:
+    # Node / pnpm のバージョンは frontend/Dockerfile を唯一の定義元とする.
+    # ローカル(Docker)とCIで環境がズレないようにするため、ここでは値を持たない.
+    - name: Read versions from Dockerfile
+      id: versions
+      shell: bash
+      working-directory: ./frontend
+      run: |
+        set -euo pipefail
+
+        semver='\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\)'
+        node_version="$(sed -n "s/^FROM node:${semver}.*/\1/p" Dockerfile | head -n 1)"
+        pnpm_version="$(sed -n "s/^RUN .*pnpm@${semver}.*/\1/p" Dockerfile | head -n 1)"
+
+        if [ -z "$node_version" ]; then
+          echo "::error file=frontend/Dockerfile::Node.js のバージョンを取得できませんでした。'FROM node:<x.y.z>' の書式で記述してください。"
+          exit 1
+        fi
+        if [ -z "$pnpm_version" ]; then
+          echo "::error file=frontend/Dockerfile::pnpm のバージョンを取得できませんでした。'RUN npm install -g pnpm@<x.y.z>' の書式で記述してください。"
+          exit 1
+        fi
+
+        echo "Node.js: ${node_version} / pnpm: ${pnpm_version}"
+        {
+          echo "node=${node_version}"
+          echo "pnpm=${pnpm_version}"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        version: ${{ steps.versions.outputs.pnpm }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: ${{ steps.versions.outputs.node }}
+        cache: "pnpm"
+        cache-dependency-path: ./frontend/pnpm-lock.yaml
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: ./frontend
+      run: pnpm install --frozen-lockfile
